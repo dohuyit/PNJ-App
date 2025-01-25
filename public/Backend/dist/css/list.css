@@ -1,0 +1,26 @@
+table :is(th, td) {
+    vertical-align: middle !important;
+}
+
+.switch-column {
+    width: 150px;
+}
+
+.custom-switch .custom-control-label::before {
+    width: 3.5rem !important;
+    height: 1.25rem !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #78dc50 !important;
+    border-color: #78dc50 !important;
+}
+
+.custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(2.25rem) !important;
+}
+
+.custom-switch .custom-control-label::after {
+    width: calc(1.25rem - 4px) !important;
+    height: calc(1.25rem - 4px) !important;
+}
