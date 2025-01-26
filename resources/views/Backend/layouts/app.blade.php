@@ -65,7 +65,7 @@
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 3000
+                timer: 3500
             });
 
             @if (session('success'))
@@ -80,46 +80,6 @@
                 });
             @endif
         });
-        // $(function() {
-        //     var Toast = Swal.mixin({
-        //         toast: true,
-        //         position: 'top-end',
-        //         showConfirmButton: false,
-        //         timer: 3000
-        //     });
-
-
-        //     $('.toastsDefaultTopLeft').click(function() {
-        //         $(document).Toasts('create', {
-        //             title: 'Toast Title',
-        //             position: 'topLeft',
-        //             body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-        //         })
-        //     });
-        //     $('.toastsDefaultBottomRight').click(function() {
-        //         $(document).Toasts('create', {
-        //             title: 'Toast Title',
-        //             position: 'bottomRight',
-        //             body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-        //         })
-        //     });
-        //     $('.toastsDefaultBottomLeft').click(function() {
-        //         $(document).Toasts('create', {
-        //             title: 'Toast Title',
-        //             position: 'bottomLeft',
-        //             body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-        //         })
-        //     });
-        //     $('.toastsDefaultAutohide').click(function() {
-        //         $(document).Toasts('create', {
-        //             title: 'Toast Title',
-        //             autohide: true,
-        //             delay: 750,
-        //             body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-        //         })
-        //     });
-
-        // });
     </script>
 
     @stack('script')

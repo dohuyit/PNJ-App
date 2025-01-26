@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\AttributeGroup;
 use App\Http\Requests\StoreAttributeGroupRequest;
 use App\Http\Requests\UpdateAttributeGroupRequest;
+use Illuminate\Support\Facades\DB;
+
 
 class AttributeGroupController extends Controller
 {
@@ -13,23 +16,30 @@ class AttributeGroupController extends Controller
      */
     public function index()
     {
-        //
+        $listAttributeGroups = AttributeGroup::all();
+        return view("Backend.pages.groupAttributes.list", compact("listAttributeGroups"));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreAttributeGroupRequest $request)
     {
-        //
+        try {
+            DB::transaction(function () use ($request) {
+                AttributeGroup::query()->create([
+                    "name" => $request->name,
+                ]);
+            });
+            return redirect()->route('attribute-group.index')->with('success', 'nhóm thuộc tính mới đã được thêm thành công!');
+        } catch (\Throwable $e) {
+            return redirect()->route('attribute-group.index')->with('error', 'Có lỗi xảy ra, vui lòng thử lại!');
+        }
     }
 
     /**
@@ -45,7 +55,7 @@ class AttributeGroupController extends Controller
      */
     public function edit(AttributeGroup $attributeGroup)
     {
-        //
+        return view("Backend.pages.groupAttributes.list", compact("attributeGroup"));
     }
 
     /**

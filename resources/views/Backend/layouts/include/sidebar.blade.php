@@ -49,7 +49,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item ml-3">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('attribute-group.index') }}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Nhóm thuộc tính</p>
                                     </a>
@@ -69,13 +69,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="{{ route('jewelry-line.index') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Dòng hàng</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="{{ route('collection.index') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Bộ sưu tập</p>
                             </a>

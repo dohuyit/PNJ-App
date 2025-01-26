@@ -1,18 +1,18 @@
 @extends('Backend.layouts.app')
 
-@section('title', 'Danh sách loại sản phẩm')
+@section('title', 'Bộ sưu tập')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Danh sách loại sản phẩm</h1>
+                    <h1>Bộ sưu tập</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Danh sách loại sản phẩm</li>
+                        <li class="breadcrumb-item active">Bộ sưu tập</li>
                     </ol>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('product-type.create') }}" class="btn btn-primary ">
+                            <a href="{{ route('collection.create') }}" class="btn btn-primary">
                                 <span><i class="fas fa-plus"></i></span>
                                 <span class="ml-2">Thêm mới dữ liệu</span>
                             </a>
@@ -36,49 +36,65 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Loại sản phẩm</th>
-                                        <th>Danh mục cha</th>
-                                        <th>Trạng thái size</th>
+                                        <th>Tên danh mục</th>
+                                        <th>Danh mục trang sức cưới</th>
+                                        <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listProductTypes as $index => $productType)
+                                    @foreach ($listCollections as $index => $Collection)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                @if ($productType->banner_image && \Storage::exists($productType->banner_image))
-                                                    <img src="{{ Storage::url($productType->banner_image) }}" alt="Banner"
+                                                @if ($Collection->banner_image && \Storage::exists($Collection->banner_image))
+                                                    <img src="{{ Storage::url($Collection->banner_image) }}" alt="Banner"
                                                         width="100">
                                                 @else
                                                     <span class="badge bg-warning">Chưa có ảnh</span>
                                                 @endif
 
                                             </td>
-                                            <td>{{ $productType->name }}</td>
-                                            <td>{{ $productType->category_name }}</td>
+                                            <td>{{ $Collection->name }}</td>
+                                            <td>
+                                                @if ($Collection->is_wedding_collection == 0)
+                                                    <p class="btn btn-outline-success m-0 p-2">
+                                                        <span class="mr-1">
+                                                            <i class="fas fa-check-circle"></i>
+                                                        </span>
+                                                        <span>Có</span>
+                                                    </p>
+                                                @else
+                                                    <p class="btn btn-outline-danger m-0 p-2">
+                                                        <span class="mr-1">
+                                                            <i class="fas fa-exclamation-circle"></i>
+                                                        </span>
+                                                        <span>Không</span>
+                                                    </p>
+                                                @endif
+                                            </td>
                                             <td class="switch-column ">
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $productType->id }}"
-                                                        {{ $productType->is_active ? '' : 'checked' }}
-                                                        data-id="{{ $productType->id }}" />
+                                                        id="customSwitch{{ $Collection->id }}"
+                                                        {{ $Collection->is_active ? '' : 'checked' }}
+                                                        data-id="{{ $Collection->id }}" />
                                                     <label class="custom-control-label"
-                                                        for="customSwitch{{ $productType->id }}"></label>
+                                                        for="customSwitch{{ $Collection->id }}"></label>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('product-type.edit', $productType) }}"
+                                                <a href="{{ route('collection.edit', $Collection) }}"
                                                     class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $productType->id }}">
+                                                    data-target="#modal-{{ $Collection->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $productType->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-{{ $Collection->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -90,13 +106,12 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Bạn có chắc chắn muốn xóa không?</p>
+                                                        <p>Bạn có chắc chắn muốn xóa danh mục này không?</p>
                                                     </div>
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form
-                                                            action="{{ route('product-type.destroy', $productType->id) }}"
+                                                        <form action="{{ route('collection.destroy', $Collection) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -109,20 +124,48 @@
                                             </div>
                                         </div>
                                     @endforeach
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
                                         <th>Tên danh mục</th>
-                                        <th>Mô tả</th>
+                                        <th>Danh mục trang sức cưới</th>
                                         <th>Trạng thái</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>
-
-
+                            {{-- <button type="button" class="btn btn-success swalDefaultSuccess">
+                                Launch Success Toast
+                            </button> --}}
+                            <div class="modal fade" id="modal-overlay">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="overlay">
+                                            <i class="fas fa-2x fa-sync fa-spin"></i>
+                                        </div>
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Default Modal</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>One fine body&hellip;</p>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!-- /.modal -->
                         </div>
                         <!-- /.card-body -->
                     </div>

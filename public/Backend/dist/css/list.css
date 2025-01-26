@@ -24,3 +24,28 @@ table :is(th, td) {
     width: calc(1.25rem - 4px) !important;
     height: calc(1.25rem - 4px) !important;
 }
+
+/* .jewelry-wedding-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 20px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.jewelry-wedding-badge.wedding {
+    background-color: #28a745; /* Màu xanh nổi bật */
+    border: 2px solid #1e7e34;
+}
+
+.jewelry-wedding-badge.not-wedding {
+    background-color: #dc3545; /* Màu đỏ nổi bật */
+    border: 2px solid #c82333;
+}
+
+.jewelry-wedding-badge i {
+    margin-right: 5px;
+} */

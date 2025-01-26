@@ -1,18 +1,18 @@
 @extends('Backend.layouts.app')
 
-@section('title', 'Danh sách loại sản phẩm')
+@section('title', 'Nhóm thuộc tính')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Danh sách loại sản phẩm</h1>
+                    <h1>Nhóm thuộc tính</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Danh sách loại sản phẩm</li>
+                        <li class="breadcrumb-item active">Nhóm thuộc tính</li>
                     </ol>
                 </div>
             </div>
@@ -24,10 +24,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('product-type.create') }}" class="btn btn-primary ">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add">
                                 <span><i class="fas fa-plus"></i></span>
                                 <span class="ml-2">Thêm mới dữ liệu</span>
-                            </a>
+                            </button>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -35,50 +35,28 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Loại sản phẩm</th>
-                                        <th>Danh mục cha</th>
-                                        <th>Trạng thái size</th>
+                                        <th>Tên</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listProductTypes as $index => $productType)
+                                    @foreach ($listAttributeGroups as $index => $AttributeGroup)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>
-                                                @if ($productType->banner_image && \Storage::exists($productType->banner_image))
-                                                    <img src="{{ Storage::url($productType->banner_image) }}" alt="Banner"
-                                                        width="100">
-                                                @else
-                                                    <span class="badge bg-warning">Chưa có ảnh</span>
-                                                @endif
-
-                                            </td>
-                                            <td>{{ $productType->name }}</td>
-                                            <td>{{ $productType->category_name }}</td>
-                                            <td class="switch-column ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $productType->id }}"
-                                                        {{ $productType->is_active ? '' : 'checked' }}
-                                                        data-id="{{ $productType->id }}" />
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch{{ $productType->id }}"></label>
-                                                </div>
-                                            </td>
+                                            <td>{{ $AttributeGroup->name }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('product-type.edit', $productType) }}"
-                                                    class="btn btn-warning text-light">
+                                                <a href="{{ route('attribute-group.edit', $AttributeGroup) }}"
+                                                    class="btn btn-warning text-light" data-toggle="modal"
+                                                    data-target="#modal-edit-{{ $AttributeGroup->id }}">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $productType->id }}">
+                                                    data-target="#modal-delete-{{ $AttributeGroup->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $productType->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-delete-{{ $AttributeGroup->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -90,13 +68,12 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Bạn có chắc chắn muốn xóa không?</p>
+                                                        <p>Bạn có chắc chắn muốn xóa danh mục này không?</p>
                                                     </div>
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form
-                                                            action="{{ route('product-type.destroy', $productType->id) }}"
+                                                        <form action="{{ route('jewelry-line.destroy', $AttributeGroup) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -108,23 +85,86 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="modal fade" id="modal-edit-{{ $AttributeGroup->id }}" tabindex="-1"
+                                            role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Chỉnh Sửa Nhóm Thuộc Tính</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form action="{{ route('attribute-group.update', $attributeGroup) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="name-{{ $attributeGroup->id }}">Tên Nhóm Thuộc
+                                                                    Tính</label>
+                                                                <input type="text" name="name"
+                                                                    id="name-{{ $attributeGroup->id }}"
+                                                                    class="form-control"
+                                                                    value="{{ $attributeGroup->name }}" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer d-flex justify-content-between">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Hủy</button>
+                                                            <button type="submit" class="btn btn-success">Lưu</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Tên danh mục</th>
-                                        <th>Mô tả</th>
-                                        <th>Trạng thái</th>
+                                        <th>Tên</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>
-
-
                         </div>
                         <!-- /.card-body -->
+                        <div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Thêm Nhóm Thuộc Tính</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="{{ route('attribute-group.store') }}" method="POST">
+                                        @csrf
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="name">Tên Nhóm Thuộc Tính</label>
+                                                <input type="text" name="name" id="name" class="form-control"
+                                                    placeholder="Nhập tên nhóm thuộc tính" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                                                <span><i class="fas fa-exclamation-circle"></i></span>
+                                                <span class="ml-2">Hủy bỏ</span></button>
+                                            <button type="submit" class="btn btn-outline-success">
+                                                <span><i class="fas fa-save"></i></span>
+                                                <span class="ml-2">Thêm mới dữ liệu</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- modal --}}
                     </div>
                     <!-- /.card -->
                 </div>
