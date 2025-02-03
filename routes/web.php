@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeGroupController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CollectionController;
@@ -26,3 +27,4 @@ Route::resource('admin/product-type', ProductTypeController::class);
 Route::resource('admin/jewelry-line', JewelryLineController::class);
 Route::resource('admin/collection', CollectionController::class);
 Route::resource('admin/attribute-group', AttributeGroupController::class);
+Route::resource('admin/attribute', AttributeController::class);

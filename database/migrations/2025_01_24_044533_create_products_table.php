@@ -23,14 +23,14 @@ return new class extends Migration
             $table->boolean('product_status')->default(0);
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('jewelry_line_id');
-            $table->unsignedBigInteger('collection_id');
+            $table->unsignedBigInteger('collection_id')->nullable();
             $table->unsignedBigInteger('product_type_id');
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
             $table->foreign('jewelry_line_id')->references('id')->on('jewelry_lines')->onDelete('cascade');
-            $table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
+            $table->foreign('collection_id')->references('id')->on('collections')->nullOnDelete();
             $table->foreign('product_type_id')->references('id')->on('product_types')->onDelete('cascade');
         });
     }

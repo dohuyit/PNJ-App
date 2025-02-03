@@ -1,18 +1,18 @@
 @extends('Backend.layouts.app')
 
-@section('title', 'Nhóm thuộc tính')
+@section('title', 'Thuộc tính sản phẩm')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Nhóm thuộc tính</h1>
+                    <h1>Thuộc tính sản phẩm</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Nhóm thuộc tính</li>
+                        <li class="breadcrumb-item active">Thuộc tính sản phẩm</li>
                     </ol>
                 </div>
             </div>
@@ -35,28 +35,62 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tên nhóm thuộc tính</th>
+                                        <th>Tên thuộc tính</th>
+                                        <th>Nhóm thuộc tính</th>
+                                        <th>Danh mục trang sức cưới</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listAttributeGroups as $index => $attributeGroup)
+                                    @foreach ($listAttributes as $index => $attribute)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $attributeGroup->name }}</td>
+                                            <td>{{ $attribute->name }}</td>
+                                            <td>
+                                                @if ($attribute->group_attribute_name == 'Size')
+                                                    <span class="badge badge-info">
+                                                        {{ $attribute->group_attribute_name }}
+                                                    </span>
+                                                @elseif ($attribute->group_attribute_name == 'Màu sắc')
+                                                    <span class="badge badge-danger">
+                                                        {{ $attribute->group_attribute_name }}
+                                                    </span>
+                                                @else
+                                                    <span class="badge badge-success">
+                                                        {{ $attribute->group_attribute_name }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($attribute->is_wedding == 0)
+                                                    <p class="btn btn-outline-success m-0 p-2">
+                                                        <span class="mr-1">
+                                                            <i class="fas fa-check-circle"></i>
+                                                        </span>
+                                                        <span>Có</span>
+                                                    </p>
+                                                @else
+                                                    <p class="btn btn-outline-danger m-0 p-2">
+                                                        <span class="mr-1">
+                                                            <i class="fas fa-exclamation-circle"></i>
+                                                        </span>
+                                                        <span>Không</span>
+                                                    </p>
+                                                @endif
+                                            </td>
                                             <td class="text-center">
-                                                <a href="{{ route('attribute-group.edit', $attributeGroup) }}"
+                                                <a href="{{ route('attribute-group.edit', $attribute) }}"
                                                     class="btn btn-warning text-light" data-toggle="modal"
-                                                    data-target="#modal-edit-{{ $attributeGroup->id }}">
+                                                    data-target="#modal-edit-{{ $attribute->id }}">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-delete-{{ $attributeGroup->id }}">
+                                                    data-target="#modal-delete-{{ $attribute->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-delete-{{ $attributeGroup->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-delete-{{ $attribute->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -68,13 +102,12 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Bạn có chắc chắn muốn xóa danh mục này không?</p>
+                                                        <p>Bạn có chắc chắn muốn xóa không?</p>
                                                     </div>
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form
-                                                            action="{{ route('attribute-group.destroy', $attributeGroup) }}"
+                                                        <form action="{{ route('attribute.destroy', $attribute) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -87,29 +120,52 @@
                                             </div>
                                         </div>
 
-                                        <div class="modal fade" id="modal-edit-{{ $attributeGroup->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-edit-{{ $attribute->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Chỉnh Sửa Nhóm Thuộc Tính</h4>
+                                                        <h4 class="modal-title">Chỉnh Sửa Thuộc Tính</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="{{ route('attribute-group.update', $attributeGroup) }}"
+                                                    <form action="{{ route('attribute.update', $attribute) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="name-{{ $attributeGroup->id }}">Tên Nhóm Thuộc
-                                                                    Tính</label>
-                                                                <input type="text" name="name"
-                                                                    id="name-{{ $attributeGroup->id }}"
-                                                                    class="form-control"
-                                                                    value="{{ $attributeGroup->name }}" required>
+                                                                <label for="name">Tên Thuộc Tính</label>
+                                                                <input type="text" name="name" id="name"
+                                                                    class="form-control" placeholder="Nhập tên thuộc tính"
+                                                                    value="{{ $attribute->name }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="name">Nhóm Thuộc Tính</label>
+                                                                <select name="group_attribute_id" class="form-control">
+                                                                    @foreach ($groupAttributes as $id => $name)
+                                                                        <option @selected($attribute->group_attribute_id == $id)
+                                                                            value="{{ $id }}">
+                                                                            {{ $name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="name">Thuộc tính trang sức cưới</label>
+                                                                <select name="is_wedding" id="isWedding"
+                                                                    class="form-control">
+                                                                    <option value="0"
+                                                                        {{ $attribute->is_wedding == 0 ? 'selected' : '' }}>
+                                                                        Có
+                                                                    </option>
+                                                                    <option value="1"
+                                                                        {{ $attribute->is_wedding == 1 ? 'selected' : '' }}>
+                                                                        Không
+                                                                    </option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer d-flex justify-content-between">
@@ -132,7 +188,9 @@
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tên nhóm thuộc tính</th>
+                                        <th>Tên thuộc tính</th>
+                                        <th>Nhóm thuộc tính</th>
+                                        <th>Danh mục trang sức cưới</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>
@@ -143,18 +201,40 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Thêm Nhóm Thuộc Tính</h4>
+                                        <h4 class="modal-title">Thêm Thuộc Tính</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form action="{{ route('attribute-group.store') }}" method="POST">
+                                    <form action="{{ route('attribute.store') }}" method="POST">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="name">Tên Nhóm Thuộc Tính</label>
+                                                <label for="name">Tên Thuộc Tính</label>
                                                 <input type="text" name="name" id="name" class="form-control"
-                                                    placeholder="Nhập tên nhóm thuộc tính" required>
+                                                    placeholder="Nhập tên thuộc tính" value="{{ old('name') }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Nhóm Thuộc Tính</label>
+                                                <select name="group_attribute_id" class="form-control">
+                                                    <option value="" hidden selected>-- Nhóm thuộc tính --</option>
+                                                    @foreach ($groupAttributes as $id => $name)
+                                                        <option value="{{ $id }}">
+                                                            {{ $name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Thuộc tính trang sức cưới</label>
+                                                <select name="is_wedding" id="isWedding" class="form-control">
+                                                    <option value="0" {{ old('is_wedding') == 0 ? 'selected' : '' }}>
+                                                        Có
+                                                    </option>
+                                                    <option value="1"
+                                                        {{ old('is_wedding', 1) == 1 ? 'selected' : '' }}>Không
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="modal-footer d-flex justify-content-between">

@@ -1,18 +1,18 @@
 @extends('Backend.layouts.app')
 
-@section('title', 'Dòng hàng trang sức')
+@section('title', 'Danh sách sản phẩm')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Dòng hàng trang sức</h1>
+                    <h1>Danh sách sản phẩm</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dòng hàng trang sức</li>
+                        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
                     </ol>
                 </div>
             </div>

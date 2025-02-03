@@ -63,7 +63,16 @@ class AttributeGroupController extends Controller
      */
     public function update(UpdateAttributeGroupRequest $request, AttributeGroup $attributeGroup)
     {
-        //
+        try {
+            DB::transaction(function () use ($attributeGroup, $request) {
+                $attributeGroup->update([
+                    "name" => $request->name,
+                ]);
+            });
+            return redirect()->route('attribute-group.index')->with('success', 'nhóm thuộc tính mới đã cập nhật thành công!');
+        } catch (\Throwable $e) {
+            return redirect()->route('attribute-group.index')->with('error', 'Có lỗi xảy ra, vui lòng thử lại!');
+        }
     }
 
     /**
@@ -71,6 +80,13 @@ class AttributeGroupController extends Controller
      */
     public function destroy(AttributeGroup $attributeGroup)
     {
-        //
+        try {
+            DB::transaction(function () use ($attributeGroup) {
+                $attributeGroup->delete();
+            });
+            return redirect()->route('attribute-group.index')->with('success', 'Xóa nhóm thuộc tính thành công!');
+        } catch (\Throwable $e) {
+            return redirect()->route('attribute-group.index')->with('error', 'Có lỗi xảy ra, vui lòng thử lại!');
+        }
     }
 }

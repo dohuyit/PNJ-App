@@ -36,7 +36,7 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tên danh mục</th>
+                                        <th>Tên bộ sưu tập</th>
                                         <th>Danh mục trang sức cưới</th>
                                         <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
@@ -130,7 +130,7 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tên danh mục</th>
+                                        <th>Tên bộ sưu tập</th>
                                         <th>Danh mục trang sức cưới</th>
                                         <th>Trạng thái</th>
                                         <th>Hành động</th>

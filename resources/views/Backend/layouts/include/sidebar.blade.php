@@ -55,7 +55,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item ml-3">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('attribute.index') }}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Thuộc tính</p>
                                     </a>
