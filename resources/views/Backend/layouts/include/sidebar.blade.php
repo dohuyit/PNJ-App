@@ -43,12 +43,6 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item ml-3">
-                                    <a href="{{ route('product-type.index') }}" class="nav-link">
-                                        <i class="far fa-dot-circle nav-icon"></i>
-                                        <p>Loại sản phẩm</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item ml-3">
                                     <a href="{{ route('attribute-group.index') }}" class="nav-link">
                                         <i class="far fa-dot-circle nav-icon"></i>
                                         <p>Nhóm thuộc tính</p>
@@ -69,6 +63,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('product-type.index') }}" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Loại sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('jewelry-line.index') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Dòng hàng</p>
@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index3.html" class="nav-link active">
+                            <a href="{{ route('product.index') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sản phẩm</p>
                             </a>

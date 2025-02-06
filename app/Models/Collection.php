@@ -16,4 +16,9 @@ class Collection extends Model
         'is_wedding_collection',
         'is_active',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

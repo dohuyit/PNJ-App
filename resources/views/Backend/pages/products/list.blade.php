@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('jewelry-line.create') }}" class="btn btn-primary">
+                            <a href="{{ route('product.create') }}" class="btn btn-primary">
                                 <span><i class="fas fa-plus"></i></span>
                                 <span class="ml-2">Thêm mới dữ liệu</span>
                             </a>
@@ -36,28 +36,35 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tên danh mục</th>
-                                        <th>Danh mục trang sức cưới</th>
+                                        <th>Thông tin sản phẩm</th>
+                                        <th>Giá sản phẩm</th>
+                                        <th>Trang sức cưới</th>
                                         <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listJewelryLines as $index => $JewelryLine)
+                                    @foreach ($listProducts as $index => $Product)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                @if ($JewelryLine->banner_image && \Storage::exists($JewelryLine->banner_image))
-                                                    <img src="{{ Storage::url($JewelryLine->banner_image) }}" alt="Banner"
+                                                @if ($Product->product_image && \Storage::exists($Product->product_image))
+                                                    <img src="{{ Storage::url($Product->product_image) }}" alt="Banner"
                                                         width="100">
                                                 @else
                                                     <span class="badge bg-warning">Chưa có ảnh</span>
                                                 @endif
-
                                             </td>
-                                            <td>{{ $JewelryLine->name }}</td>
                                             <td>
-                                                @if ($JewelryLine->is_wedding == 0)
+                                                <p><strong>Tên sản phẩm:</strong> {{ $Product->product_name }}</p>
+                                                {{-- <p><strong>Mô tả:</strong> {{ $product->product_desc }}</p> --}}
+                                            </td>
+                                            <td>
+                                                <p><strong>Giá gốc:</strong> {{ $Product->original_price }}</p>
+                                                <p><strong>Giá bán:</strong> {{ $Product->sale_price }}</p>
+                                            </td>
+                                            <td>
+                                                @if ($Product->is_wedding == 0)
                                                     <p class="btn btn-outline-success m-0 p-2">
                                                         <span class="mr-1">
                                                             <i class="fas fa-check-circle"></i>
@@ -76,25 +83,25 @@
                                             <td class="switch-column ">
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $JewelryLine->id }}"
-                                                        {{ $JewelryLine->is_active ? '' : 'checked' }}
-                                                        data-id="{{ $JewelryLine->id }}" />
+                                                        id="customSwitch{{ $Product->id }}"
+                                                        {{ $Product->product_status ? '' : 'checked' }}
+                                                        data-id="{{ $Product->id }}" />
                                                     <label class="custom-control-label"
-                                                        for="customSwitch{{ $JewelryLine->id }}"></label>
+                                                        for="customSwitch{{ $Product->id }}"></label>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('jewelry-line.edit', $JewelryLine) }}"
+                                                <a href="{{ route('product.edit', $Product) }}"
                                                     class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $JewelryLine->id }}">
+                                                    data-target="#modal-{{ $Product->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $JewelryLine->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-{{ $Product->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -111,7 +118,7 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('jewelry-line.destroy', $JewelryLine) }}"
+                                                        <form action="{{ route('product.destroy', $Product) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -124,48 +131,19 @@
                                             </div>
                                         </div>
                                     @endforeach
-
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tên danh mục</th>
-                                        <th>Danh mục trang sức cưới</th>
+                                        <th>Thông tin sản phẩm</th>
+                                        <th>Giá sản phẩm</th>
+                                        <th>Trang sức cưới</th>
                                         <th>Trạng thái</th>
-                                        <th>Hành động</th>
+                                        <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>
-                            {{-- <button type="button" class="btn btn-success swalDefaultSuccess">
-                                Launch Success Toast
-                            </button> --}}
-                            <div class="modal fade" id="modal-overlay">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="overlay">
-                                            <i class="fas fa-2x fa-sync fa-spin"></i>
-                                        </div>
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Default Modal</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>One fine body&hellip;</p>
-                                        </div>
-                                        <div class="modal-footer justify-content-between">
-                                            <button type="button" class="btn btn-default"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </div>
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
                         </div>
                         <!-- /.card-body -->
                     </div>

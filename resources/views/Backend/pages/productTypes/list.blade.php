@@ -38,7 +38,7 @@
                                         <th>Hình ảnh</th>
                                         <th>Loại sản phẩm</th>
                                         <th>Danh mục cha</th>
-                                        <th>Trạng thái size</th>
+                                        <th>Trạng thái hiển thị</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
@@ -116,13 +116,11 @@
                                         <th>Hình ảnh</th>
                                         <th>Tên danh mục</th>
                                         <th>Mô tả</th>
-                                        <th>Trạng thái</th>
+                                        <th>Trạng thái hiển thị</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>
-
-
                         </div>
                         <!-- /.card-body -->
                     </div>

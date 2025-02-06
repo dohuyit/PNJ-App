@@ -16,4 +16,14 @@ class Category extends Model
         'banner_image',
         'is_active',
     ];
+
+    public function productTypes()
+    {
+        return $this->hasMany(ProductType::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

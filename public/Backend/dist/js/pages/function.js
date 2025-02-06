@@ -27,3 +27,47 @@ document.querySelectorAll(".removeImage").forEach(function (checkbox) {
         }
     });
 });
+
+// document.addEventListener('DOMContentLoaded', function() {
+//             let variantIndex = 1;
+//             const container = document.getElementById('variants-container');
+//             const addButton = document.getElementById('add-variant');
+
+//             addButton.addEventListener('click', function() {
+//                         let newRow = document.createElement('div');
+//                         newRow.classList.add('variant-row', 'd-flex', 'gap-2', 'mb-2');
+
+//                         let selectHtml = '';
+//                         @foreach ($attributeGroups as $group)
+//                             selectHtml += `<div>
+//                 <label>{{ $group->name }}</label>
+//                 <select name="attributes[${variantIndex}][{{ $group->id }}]" class="form-control">
+//                     <option value="">Chọn {{ strtolower($group->name) }}</option>
+//                     @foreach ($group->attributes as $attribute)
+//                         selectHtml += ` < option value = "{{ $attribute->id }}" > {{ $attribute->name }} <
+//                                 /option>`;
+//                     @endforeach <
+//                     /select> < /
+//                     div > `;
+//             @endforeach
+
+//             newRow.innerHTML = selectHtml + ` <
+//                         input type = "number"
+//                     name = "price[${variantIndex}]"
+//                     placeholder = "Giá biến thể"
+//                     class = "form-control"
+//                     style = "width: 120px;" >
+//                         <
+//                         button type = "button"
+//                     class = "btn btn-danger remove-variant" > X < /button>
+//                     `;
+
+//             container.appendChild(newRow); variantIndex++;
+//         });
+
+//     container.addEventListener('click', function(e) {
+//         if (e.target.classList.contains('remove-variant')) {
+//             e.target.parentElement.remove();
+//         }
+//     });
+//     });
