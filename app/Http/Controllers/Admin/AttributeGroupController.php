@@ -17,7 +17,7 @@ class AttributeGroupController extends Controller
     public function index()
     {
         $listAttributeGroups = AttributeGroup::all();
-        return view("Backend.pages.groupAttributes.list", compact("listAttributeGroups"));
+        return view("backend.pages.groupAttributes.list", compact("listAttributeGroups"));
     }
 
     /**
@@ -55,7 +55,7 @@ class AttributeGroupController extends Controller
      */
     public function edit(AttributeGroup $attributeGroup)
     {
-        return view("Backend.pages.groupAttributes.list", compact("attributeGroup"));
+        return view("backend.pages.groupAttributes.list", compact("attributeGroup"));
     }
 
     /**

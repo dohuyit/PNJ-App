@@ -21,7 +21,7 @@ class AttributeController extends Controller
             ->get();
 
         $groupAttributes = AttributeGroup::query()->pluck('name', 'id')->all();
-        return view("Backend.pages.attributes.list", compact("listAttributes", "groupAttributes"));
+        return view("backend.pages.attributes.list", compact("listAttributes", "groupAttributes"));
     }
 
     /**
@@ -64,7 +64,7 @@ class AttributeController extends Controller
      */
     public function edit(Attribute $attribute)
     {
-        return view("Backend.pages.attributes.list", compact("attribute"));
+        return view("backend.pages.attributes.list", compact("attribute"));
     }
 
     /**

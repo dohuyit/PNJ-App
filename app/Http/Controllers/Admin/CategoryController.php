@@ -19,7 +19,7 @@ class CategoryController extends Controller
     {
         $listCategories = Category::all();
         // dd($listCategories);
-        return view("Backend.pages.categories.list", compact("listCategories"));
+        return view("backend.pages.categories.list", compact("listCategories"));
     }
 
     /**
@@ -27,7 +27,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("Backend.pages.categories.add");
+        return view("backend.pages.categories.add");
     }
 
     /**
@@ -70,7 +70,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view("Backend.pages.categories.edit", compact("category"));
+        return view("backend.pages.categories.edit", compact("category"));
     }
 
     /**

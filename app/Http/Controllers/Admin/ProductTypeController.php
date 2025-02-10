@@ -20,7 +20,7 @@ class ProductTypeController extends Controller
         $listProductTypes = ProductType::join('categories', 'product_types.category_id', '=', 'categories.id')
             ->select('product_types.*', 'categories.name as category_name')->orderBy('product_types.id', 'desc')
             ->get();
-        return view("Backend.pages.productTypes.list", compact("listProductTypes"));
+        return view("backend.pages.productTypes.list", compact("listProductTypes"));
     }
 
     /**
@@ -29,7 +29,7 @@ class ProductTypeController extends Controller
     public function create()
     {
         $Categories = Category::query()->pluck("name", "id")->all();
-        return view("Backend.pages.productTypes.add", compact("Categories"));
+        return view("backend.pages.productTypes.add", compact("Categories"));
     }
 
     /**
@@ -73,7 +73,7 @@ class ProductTypeController extends Controller
     public function edit(ProductType $productType)
     {
         $Categories = Category::query()->pluck("name", "id")->all();
-        return view('Backend.pages.productTypes.edit', compact('productType', 'Categories'));
+        return view('backend.pages.productTypes.edit', compact('productType', 'Categories'));
     }
 
     /**

@@ -24,7 +24,7 @@ class ProductController extends Controller
     public function index()
     {
         $listProducts = Product::all();
-        return view("Backend.pages.products.list", compact("listProducts"));
+        return view("backend.pages.products.list", compact("listProducts"));
     }
 
     /**
@@ -36,6 +36,8 @@ class ProductController extends Controller
             ->with('attributes')
             ->first();
 
+        // dd($sizeAttributes);
+
         $otherAttributeGroups = AttributeGroup::where('name', '!=', 'Size')
             ->with('attributes')
             ->get();
@@ -46,7 +48,7 @@ class ProductController extends Controller
         $productTypes = ProductType::query()->pluck('name', 'id')->all();
         $collections = Collection::query()->pluck('name', 'id')->all();
 
-        return view("Backend.pages.products.add", compact(
+        return view("backend.pages.products.add", compact(
             'categories',
             'sizeAttributes',
             'otherAttributeGroups',
@@ -175,7 +177,7 @@ class ProductController extends Controller
         $jewelryLines = JewelryLine::pluck('name', 'id');
         $productTypes = ProductType::pluck('name', 'id');
         $collections = Collection::pluck('name', 'id');
-        return view("Backend.pages.products.edit", compact(
+        return view("backend.pages.products.edit", compact(
             'product',
             'categories',
             'sizeAttributes',

@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeGroupController;
+use App\Http\Controllers\Admin\Auth\AuthAdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\JewelryLineController;
@@ -20,13 +22,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view("Backend.admin");
+
+// Route::resource('/', AdminController::class);
+Route::prefix('admin')->group(function () {
+    Route::get('login', [AuthAdminController::class, 'showLoginForm'])->name('login.form');
+    Route::post('login-process', [AuthAdminController::class, 'login'])->name('login.process');
+    Route::get('logout', [AuthAdminController::class, 'logout'])->name('logout.process');
+
+
+    Route::middleware('admin')->group(function () {
+        // Quản lí sản phẩm
+        Route::resource('/', AdminController::class);
+        Route::resource('category', CategoryController::class);
+        Route::resource('product-type', ProductTypeController::class);
+        Route::resource('jewelry-line', JewelryLineController::class);
+        Route::resource('collection', CollectionController::class);
+        Route::resource('attribute-group', AttributeGroupController::class);
+        Route::resource('attribute', AttributeController::class);
+        Route::resource('product', ProductController::class);
+    });
 });
-Route::resource('admin/category', CategoryController::class);
-Route::resource('admin/product-type', ProductTypeController::class);
-Route::resource('admin/jewelry-line', JewelryLineController::class);
-Route::resource('admin/collection', CollectionController::class);
-Route::resource('admin/attribute-group', AttributeGroupController::class);
-Route::resource('admin/attribute', AttributeController::class);
-Route::resource('admin/product', ProductController::class);

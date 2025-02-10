@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('districts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('city_id');
             $table->string('name');
-            $table->unsignedBigInteger('city_id'); // ID của thành phố
             $table->timestamps();
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });

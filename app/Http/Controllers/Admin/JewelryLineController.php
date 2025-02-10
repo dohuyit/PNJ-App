@@ -17,7 +17,7 @@ class JewelryLineController extends Controller
     public function index()
     {
         $listJewelryLines = JewelryLine::all();
-        return view("Backend.pages.jewelryLines.list", compact("listJewelryLines"));
+        return view("backend.pages.jewelryLines.list", compact("listJewelryLines"));
     }
 
     /**
@@ -25,7 +25,7 @@ class JewelryLineController extends Controller
      */
     public function create()
     {
-        return view("Backend.pages.jewelryLines.add");
+        return view("backend.pages.jewelryLines.add");
     }
 
     /**
@@ -70,7 +70,7 @@ class JewelryLineController extends Controller
      */
     public function edit(JewelryLine $jewelryLine)
     {
-        return view("Backend.pages.jewelryLines.edit", compact("jewelryLine"));
+        return view("backend.pages.jewelryLines.edit", compact("jewelryLine"));
     }
 
     /**

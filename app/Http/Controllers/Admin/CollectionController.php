@@ -17,7 +17,7 @@ class CollectionController extends Controller
     public function index()
     {
         $listCollections = Collection::all();
-        return view("Backend.pages.collections.list", compact("listCollections"));
+        return view("backend.pages.collections.list", compact("listCollections"));
     }
 
     /**
@@ -25,7 +25,7 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        return view("Backend.pages.collections.add");
+        return view("backend.pages.collections.add");
     }
 
     /**
@@ -67,7 +67,7 @@ class CollectionController extends Controller
      */
     public function edit(Collection $collection)
     {
-        return view('Backend.pages.collections.edit', compact('collection'));
+        return view('backend.pages.collections.edit', compact('collection'));
     }
 
     /**
