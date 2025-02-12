@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Thuộc tính sản phẩm')
+@section('title', 'Tài khoản quản trị')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Thuộc tính sản phẩm</h1>
+                    <h1>Tài khoản quản trị</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Thuộc tính sản phẩm</li>
+                        <li class="breadcrumb-item active">Tài khoản quản trị</li>
                     </ol>
                 </div>
             </div>
@@ -35,62 +35,59 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tên thuộc tính</th>
-                                        <th>Nhóm thuộc tính</th>
-                                        <th>Danh mục trang sức cưới</th>
+                                        <th>Hình ảnh</th>
+                                        <th>Họ và tên</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listAttributes as $index => $attribute)
+                                    @foreach ($listAccountAdmin as $index => $adminAccount)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $attribute->name }}</td>
                                             <td>
-                                                @if ($attribute->group_attribute_name == 'Size')
-                                                    <span class="badge badge-info">
-                                                        {{ $attribute->group_attribute_name }}
-                                                    </span>
-                                                @elseif ($attribute->group_attribute_name == 'Màu sắc')
-                                                    <span class="badge badge-danger">
-                                                        {{ $attribute->group_attribute_name }}
-                                                    </span>
+                                                @if ($adminAccount->avatar && \Storage::exists($adminAccount->avatar))
+                                                    <img src="{{ Storage::url($adminAccount->avatar) }}" alt="Banner"
+                                                        width="100">
                                                 @else
-                                                    <span class="badge badge-success">
-                                                        {{ $attribute->group_attribute_name }}
-                                                    </span>
+                                                    <span class="badge bg-warning">Chưa có ảnh</span>
                                                 @endif
                                             </td>
+                                            <td>{{ $adminAccount->username }}</td>
+                                            <td>{{ $adminAccount->email }}</td>
+                                            <td>{{ $adminAccount->phone ? $adminAccount->phone : 'Trống' }}</td>
                                             <td>
-                                                @if ($attribute->is_wedding == 0)
+                                                @if ($adminAccount->status == 0)
                                                     <p class="btn btn-outline-success m-0 p-2">
                                                         <span class="mr-1">
                                                             <i class="fas fa-check-circle"></i>
                                                         </span>
-                                                        <span>Có</span>
+                                                        <span>Đang hoạt động</span>
                                                     </p>
                                                 @else
                                                     <p class="btn btn-outline-danger m-0 p-2">
                                                         <span class="mr-1">
                                                             <i class="fas fa-exclamation-circle"></i>
                                                         </span>
-                                                        <span>Không</span>
+                                                        <span>Dừng hoạt động</span>
                                                     </p>
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('attribute-group.edit', $attribute) }}"
+                                                <a href="{{ route('employee-admin.edit', $adminAccount->id) }}"
                                                     class="btn btn-warning text-light" data-toggle="modal"
-                                                    data-target="#modal-edit-{{ $attribute->id }}">
+                                                    data-target="#modal-edit-{{ $adminAccount->id }}">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-delete-{{ $attribute->id }}">
+                                                    data-target="#modal-delete-{{ $adminAccount->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-delete-{{ $attribute->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-delete-{{ $adminAccount->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -107,7 +104,7 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('attribute.destroy', $attribute) }}"
+                                                        <form action="{{ route('account.destroy', $adminAccount) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -120,51 +117,44 @@
                                             </div>
                                         </div>
 
-                                        <div class="modal fade" id="modal-edit-{{ $attribute->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-edit-{{ $adminAccount->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title">Chỉnh Sửa Thuộc Tính</h4>
+                                                        <h4 class="modal-title">Chỉnh Sửa tài khoản quản trị</h4>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="{{ route('attribute.update', $attribute) }}"
+                                                    <form action="{{ route('employee-admin.update', $adminAccount) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="name">Tên Thuộc Tính</label>
-                                                                <input type="text" name="name" id="name"
-                                                                    class="form-control" placeholder="Nhập tên thuộc tính"
-                                                                    value="{{ $attribute->name }}">
+                                                                <label>Họ và tên</label>
+                                                                <input type="text" name="username" class="form-control"
+                                                                    placeholder="Họ và tên người quản trị..."
+                                                                    value="{{ $adminAccount->username }}">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="name">Nhóm Thuộc Tính</label>
-                                                                <select name="group_attribute_id" class="form-control">
-                                                                    @foreach ($groupAttributes as $id => $name)
-                                                                        <option @selected($attribute->group_attribute_id == $id)
-                                                                            value="{{ $id }}">
-                                                                            {{ $name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
+                                                                <label>Email</label>
+                                                                <input type="text" name="email" class="form-control"
+                                                                    placeholder="Email người quản trị..."
+                                                                    value="{{ $adminAccount->email }}">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="name">Thuộc tính trang sức cưới</label>
-                                                                <select name="is_wedding" id="isWedding"
+                                                                <label for="name">Vai trò</label>
+                                                                <select name="role_id" id="isWedding"
                                                                     class="form-control">
-                                                                    <option value="0"
-                                                                        {{ $attribute->is_wedding == 0 ? 'selected' : '' }}>
-                                                                        Có
-                                                                    </option>
-                                                                    <option value="1"
-                                                                        {{ $attribute->is_wedding == 1 ? 'selected' : '' }}>
-                                                                        Không
-                                                                    </option>
+                                                                    <option value="" hidden selected>-- Chọn vai trò
+                                                                        --</option>
+                                                                    @foreach ($listRoleIsAdmin as $role)
+                                                                        <option value="{{ $role->id }}">
+                                                                            {{ $role->name }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -188,9 +178,11 @@
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tên thuộc tính</th>
-                                        <th>Nhóm thuộc tính</th>
-                                        <th>Danh mục trang sức cưới</th>
+                                        <th>Hình ảnh</th>
+                                        <th>Họ và tên</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>
@@ -201,39 +193,32 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Thêm Thuộc Tính</h4>
+                                        <h4 class="modal-title">Thêm tài khoản</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form action="{{ route('attribute.store') }}" method="POST">
+                                    <form action="{{ route('employee-admin.store') }}" method="POST">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="name">Tên Thuộc Tính</label>
-                                                <input type="text" name="name" id="name" class="form-control"
-                                                    placeholder="Nhập tên thuộc tính" value="{{ old('name') }}">
+                                                <label>Họ và tên</label>
+                                                <input type="text" name="username" class="form-control"
+                                                    placeholder="Họ và tên người quản trị..."
+                                                    value="{{ old('username') }}">
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Nhóm Thuộc Tính</label>
-                                                <select name="group_attribute_id" class="form-control">
-                                                    <option value="" hidden selected>-- Nhóm thuộc tính --</option>
-                                                    @foreach ($groupAttributes as $id => $name)
-                                                        <option value="{{ $id }}">
-                                                            {{ $name }}
-                                                        </option>
+                                                <label>Email</label>
+                                                <input type="text" name="email" class="form-control"
+                                                    placeholder="Email người quản trị..." value="{{ old('username') }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Vai trò</label>
+                                                <select name="role_id" id="isWedding" class="form-control">
+                                                    <option value="" hidden selected>-- Chọn vai trò --</option>
+                                                    @foreach ($listRoleIsAdmin as $role)
+                                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                     @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="name">Thuộc tính trang sức cưới</label>
-                                                <select name="is_wedding" id="isWedding" class="form-control">
-                                                    <option value="0" {{ old('is_wedding') == 0 ? 'selected' : '' }}>
-                                                        Có
-                                                    </option>
-                                                    <option value="1"
-                                                        {{ old('is_wedding', 1) == 1 ? 'selected' : '' }}>Không
-                                                    </option>
                                                 </select>
                                             </div>
                                         </div>

@@ -1,4 +1,4 @@
-@extends('Backend.layouts.app')
+@extends('backend.layouts.app')
 
 @section('title', 'Cập nhật loại sản phẩm')
 

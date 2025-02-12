@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Danh sách loại sản phẩm')
+@section('title', 'Tài khoản người dùng')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Danh sách loại sản phẩm</h1>
+                    <h1>Tài khoản người dùng</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Danh sách loại sản phẩm</li>
+                        <li class="breadcrumb-item active">Tài khoản người dùng</li>
                     </ol>
                 </div>
             </div>
@@ -23,12 +23,6 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <a href="{{ route('product-type.create') }}" class="btn btn-primary ">
-                                <span><i class="fas fa-plus"></i></span>
-                                <span class="ml-2">Thêm mới dữ liệu</span>
-                            </a>
-                        </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
@@ -36,49 +30,58 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Loại sản phẩm</th>
-                                        <th>Danh mục cha</th>
-                                        <th>Trạng thái hiển thị</th>
+                                        <th>Họ và tên</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listProductTypes as $index => $productType)
+                                    @foreach ($listAccountCustomer as $index => $customerAccount)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                @if ($productType->banner_image && \Storage::exists($productType->banner_image))
-                                                    <img src="{{ Storage::url($productType->banner_image) }}" alt="Banner"
+                                                @if ($customerAccount->avatar && \Storage::exists($customerAccount->avatar))
+                                                    <img src="{{ Storage::url($customerAccount->avatar) }}" alt="Banner"
                                                         width="100">
                                                 @else
                                                     <span class="badge bg-warning">Chưa có ảnh</span>
                                                 @endif
-
                                             </td>
-                                            <td>{{ $productType->name }}</td>
-                                            <td>{{ $productType->category_name }}</td>
-                                            <td class="switch-column ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $productType->id }}"
-                                                        {{ $productType->is_active ? '' : 'checked' }}
-                                                        data-id="{{ $productType->id }}" />
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch{{ $productType->id }}"></label>
-                                                </div>
+                                            <td>{{ $customerAccount->username }}</td>
+                                            <td>{{ $customerAccount->email }}</td>
+                                            <td>{{ $customerAccount->phone ? $customerAccount->phone : 'Trống' }}</td>
+                                            <td>
+                                                @if ($customerAccount->status == 0)
+                                                    <p class="btn btn-outline-success m-0 p-2">
+                                                        <span class="mr-1">
+                                                            <i class="fas fa-check-circle"></i>
+                                                        </span>
+                                                        <span>Đang hoạt động</span>
+                                                    </p>
+                                                @else
+                                                    <p class="btn btn-outline-danger m-0 p-2">
+                                                        <span class="mr-1">
+                                                            <i class="fas fa-exclamation-circle"></i>
+                                                        </span>
+                                                        <span>Dừng hoạt động</span>
+                                                    </p>
+                                                @endif
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('product-type.edit', $productType) }}"
-                                                    class="btn btn-warning text-light">
+                                                <a href="{{ route('attribute-group.edit', $customerAccount) }}"
+                                                    class="btn btn-warning text-light" data-toggle="modal"
+                                                    data-target="#modal-edit-{{ $customerAccount->id }}">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $productType->id }}">
+                                                    data-target="#modal-delete-{{ $customerAccount->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $productType->id }}" tabindex="-1"
+                                        {{-- <div class="modal fade" id="modal-delete-{{ $customerAccount->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -95,8 +98,7 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form
-                                                            action="{{ route('product-type.destroy', $productType->id) }}"
+                                                        <form action="{{ route('attribute.destroy', $adminAccount) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -107,17 +109,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     @endforeach
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
                                         <th>Hình ảnh</th>
-                                        <th>Tên danh mục</th>
-                                        <th>Mô tả</th>
-                                        <th>Trạng thái hiển thị</th>
-                                        <th>Hành động</th>
+                                        <th>Họ và tên</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Trạng thái</th>
+                                        <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -138,8 +142,7 @@
 
 @push('link')
     <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
-    <link rel="stylesheet"
-        href="{{ asset('Backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} " />
+    <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} " />
     <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }} " />
     <link rel="stylesheet" href="{{ asset('Backend/dist/css/list.css') }} " />
 @endpush

@@ -133,7 +133,7 @@
                     <i class="fas fa-user mr-2"></i> Thông tin chi tiết
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="{{ route('logout.process') }}" class="dropdown-item">
+                <a href="{{ route('admin.logout.process') }}" class="dropdown-item">
                     <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
                 </a>
             </div>

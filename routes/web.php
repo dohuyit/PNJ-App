@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\JewelryLineController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
 use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,21 @@ Route::prefix('admin')->group(function () {
         Route::resource('attribute-group', AttributeGroupController::class);
         Route::resource('attribute', AttributeController::class);
         Route::resource('product', ProductController::class);
+
+        // Quản lí tài khoản khách hàng và admin
+        Route::prefix('account')->group(function () {
+            // Tài khoản quản trị
+            Route::get('employee-admin', [UserController::class, 'indexAdminAccounts'])->name('employee-admin.index');
+            Route::post('employee-admin/store', [UserController::class, 'storeAdminAccount'])->name('employee-admin.store');
+            Route::get('employee-admin/{id}/edit', [UserController::class, 'editAdminAccount'])->name('employee-admin.edit');
+            Route::put('employee-admin/update/{id}', [UserController::class, 'updateAdminAccount'])->name('employee-admin.update');
+
+
+            // Tài khoản người dùng
+            Route::get('customer', [UserController::class, 'indexCustomerAccounts'])->name('customer.index');
+
+            Route::delete('/{id}', [UserController::class, 'destroy'])->name('account.destroy');
+        });
     });
 });
 

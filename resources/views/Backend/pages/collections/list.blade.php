@@ -1,4 +1,4 @@
-@extends('Backend.layouts.app')
+@extends('backend.layouts.app')
 
 @section('title', 'Bộ sưu tập')
 
@@ -53,7 +53,6 @@
                                                 @else
                                                     <span class="badge bg-warning">Chưa có ảnh</span>
                                                 @endif
-
                                             </td>
                                             <td>{{ $Collection->name }}</td>
                                             <td>
