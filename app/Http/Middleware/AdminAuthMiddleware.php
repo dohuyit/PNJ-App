@@ -17,13 +17,13 @@ class AdminAuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            if (Auth::user()->role_id == '1' || Auth::user()->role_id == '3') {
+            if (Auth::user()->role_id != '2') {
                 return $next($request);
             } else {
-                return 'Đây là trang chủ client';
+                return redirect()->route('admin.login.form')->with('error', 'Tài khoản và mật khẩu không hợp lệ!');
             }
         } else {
-            return redirect()->route('login.form')->with('error', 'Vui lòng đăng nhập tài khoản của bạn!');
+            return redirect()->route('admin.login.form')->with('error', 'Vui lòng đăng nhập tài khoản của bạn!');
         }
     }
 }

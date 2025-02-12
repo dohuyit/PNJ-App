@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\JewelryLineController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
+use App\Http\Controllers\Client\Auth\AuthClientController;
+use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,12 +24,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-// Route::resource('/', AdminController::class);
+// ADMIN DASHBOARD
 Route::prefix('admin')->group(function () {
-    Route::get('login', [AuthAdminController::class, 'showLoginForm'])->name('login.form');
-    Route::post('login-process', [AuthAdminController::class, 'login'])->name('login.process');
-    Route::get('logout', [AuthAdminController::class, 'logout'])->name('logout.process');
+
+    // Authentication admin
+    Route::get('login', [AuthAdminController::class, 'showLoginForm'])->name('admin.login.form');
+    Route::post('login-process', [AuthAdminController::class, 'login'])->name('admin.login.process');
+    Route::get('logout', [AuthAdminController::class, 'logout'])->name('admin.logout.process');
 
 
     Route::middleware('admin')->group(function () {
@@ -41,4 +44,20 @@ Route::prefix('admin')->group(function () {
         Route::resource('attribute', AttributeController::class);
         Route::resource('product', ProductController::class);
     });
+});
+
+
+
+
+// Route::get('/', [HomeController::class, 'index'])->name('client.home');
+Route::middleware('client')->group(function () {
+    // CLIENT DASHBOARD
+    Route::get('/', [HomeController::class, 'index'])->name('client.home');
+
+    // Authentication client
+    Route::get('login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');
+    Route::get('register', [AuthClientController::class, 'showRegisterForm'])->name('client.register.form');
+    Route::post('login-process', [AuthClientController::class, 'login'])->name('client.login.process');
+    Route::post('register-process', [AuthClientController::class, 'register'])->name('client.register.process');
+    Route::get('logout', [AuthClientController::class, 'logout'])->name('client.logout.process');
 });

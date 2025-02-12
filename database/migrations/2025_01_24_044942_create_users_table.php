@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->string('password');
-            $table->string('last_name')->nullable();
-            $table->string('first_name')->nullable();
             $table->string('email')->unique();
             $table->boolean('gender')->default(0);
             $table->dateTime('birthday')->nullable();
             $table->string('avatar')->nullable();
             $table->string('phone')->nullable();
-            $table->string('remember_token');
+            $table->string('remember_token')->nullable();
             $table->string('activate_code')->nullable();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('city_id')->nullable(); // Thành phố

@@ -30,18 +30,18 @@
         </div> --}}
 
         <!-- Navbar -->
-        @include('Backend.layouts.include.header')
+        @include('backend.layouts.include.header')
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        @include('Backend.layouts.include.sidebar')
+        @include('backend.layouts.include.sidebar')
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @yield('content')
         </div>
         <!-- /.content-wrapper -->
-        @include('Backend.layouts.include.footer')
+        @include('backend.layouts.include.footer')
 
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">

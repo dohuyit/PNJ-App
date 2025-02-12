@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthLoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,10 +11,10 @@ class AuthAdminController extends Controller
 {
     public function showLoginForm()
     {
-        return view("Backend.auth.login");
+        return view("backend.auth.login");
     }
 
-    public function login(Request $request)
+    public function login(AuthLoginRequest $request)
     {
         $dataLogin = $request->only(["email", "password"]);
 
@@ -23,7 +24,7 @@ class AuthAdminController extends Controller
             if (Auth::user()->role_id == '1' || Auth::user()->role_id == '3') {
                 return redirect()->route("index")->with("success", "Đăng Nhập Thành Công!");
             } else {
-                return "Đây là trang chủ client";
+                return back()->with("error", "Email và mật khẩu không hợp lệ!");
             }
         } else {
             return back()->with("error", "Email hoặc Mật Khẩu không đúng!");
@@ -34,6 +35,6 @@ class AuthAdminController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('login.form')->with('success', 'Đăng xuất thành công');
+        return redirect()->route('admin.login.form')->with('success', 'Đăng xuất thành công');
     }
 }

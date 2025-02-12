@@ -23,9 +23,9 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="{{ route('login.process') }}" method="post">
+                <form action="{{ route('admin.login.process') }}" method="post">
                     @csrf
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-2">
                         <input type="email" name="email" class="form-control" placeholder="Email của bạn..."
                             value="{{ old('email') }}">
                         <div class="input-group-append">
@@ -34,7 +34,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
+                    @error('email')
+                        <p class="text-danger mb-2">{{ $message }}</p>
+                    @enderror
+                    <div class="input-group mb-2">
                         <input type="password" name="password" class="form-control" placeholder="Mật khẩu của bạn..."
                             value="{{ old('password') }}">
                         <div class="input-group-append">
@@ -43,6 +46,9 @@
                             </div>
                         </div>
                     </div>
+                    @error('password')
+                        <p class="text-danger mb-2">{{ $message }}</p>
+                    @enderror
                     <div class="remember-group">
                         <input type="checkbox" name="remember">
                         <label for="">Remember me</label>
