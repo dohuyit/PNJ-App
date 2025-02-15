@@ -172,7 +172,8 @@ class ProductController extends Controller
         $sizeVariants = $product->variants->whereIn('attribute_id', $sizeAttributes->attributes->pluck('id'));
 
         $otherAttributeGroups = AttributeGroup::where('name', '!=', 'Size')->with('attributes')->get();
-
+        $albumImages = ProductImage::where('product_id', $product->id)->get();
+        // dd($albumImages);
         $categories = Category::pluck('name', 'id');
         $jewelryLines = JewelryLine::pluck('name', 'id');
         $productTypes = ProductType::pluck('name', 'id');
@@ -181,8 +182,9 @@ class ProductController extends Controller
             'product',
             'categories',
             'sizeAttributes',
-            'sizeVariants', // Danh sách biến thể Size
+            'sizeVariants',
             'otherAttributeGroups',
+            'albumImages',
             'jewelryLines',
             'productTypes',
             'collections'
@@ -198,7 +200,7 @@ class ProductController extends Controller
     {
         try {
             DB::transaction(function () use ($product, $request) {
-                $listProducts = [
+                $dataProducts = [
                     'product_name'   => $request->product_name,
                     'original_price' => $request->original_price,
                     'sale_price'     => $request->sale_price,
@@ -212,15 +214,34 @@ class ProductController extends Controller
                     'product_type_id' => $request->product_type_id,
                 ];
 
-                if ($request->hasFile("product_image")) {
-                    $listProducts['product_image'] = Storage::put('Products', $request->file('product_image'));
+                if ($request->input('delete_product_image') == "1") {
+                    if ($product->product_image) {
+                        Storage::delete($product->product_image);
+                        $product->product_image = null;
+                    }
                 }
 
-                $product->update($listProducts);
 
-                // Xóa ảnh cũ nếu có ảnh mới
+                if ($request->hasFile('product_image')) {
+                    if (!empty($product->product_image)) {
+                        Storage::delete($product->product_image);
+                    }
+                    $dataProducts['product_image'] = Storage::put('Products', $request->file('product_image'));
+                }
+
+                $product->update($dataProducts);
+
+                if ($request->has('delete_images')) {
+                    $imagesToDelete = ProductImage::whereIn('id', $request->delete_images)->get();
+
+                    foreach ($imagesToDelete as $image) {
+                        Storage::delete($image->image_link);
+                    }
+                    ProductImage::whereIn('id', $request->delete_images)->delete();
+                }
+
+
                 if ($request->hasFile("album_images")) {
-                    ProductImage::where('product_id', $product->id)->delete();
                     foreach ($request->file('album_images') as $file) {
                         ProductImage::create([
                             'product_id'  => $product->id,

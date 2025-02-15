@@ -74,25 +74,57 @@
                     <div class="col-md-4">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Thêm hình ảnh</h3>
+                                <h3 class="card-title">Thêm ảnh đại diện</h3>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="categoryImage">Chọn hình ảnh</label>
+                                    <label>Chọn hình ảnh</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="categoryImage"
-                                                name="banner_image">
-                                            <label class="custom-file-label" for="categoryImage">Chọn tệp</label>
+                                            <input type="file" class="custom-file-input image-input"
+                                                name="image_thumbnail">
+                                            <label class="custom-file-label">Chọn tệp</label>
+                                        </div>
+                                    </div>
+                                    @error('avatar_image')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="container-img text-center position-relative d-none">
+                                    <img class="preview-image image_thumbnail rounded-2 img-fluid" src="#"
+                                        alt="Xem trước hình ảnh">
+                                    <button type="button"
+                                        class="btn btn-danger remove-image position-absolute rounded-circle ">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Thêm ảnh banner</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Chọn hình ảnh</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input image-input" name="banner_image">
+                                            <label class="custom-file-label">Chọn tệp</label>
                                         </div>
                                     </div>
                                     @error('banner_image')
-                                        <span class="text-danger mt-1">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group text-center">
-                                    <img id="newImage" src="#" alt="Xem trước hình ảnh"
-                                        style="max-width: 100%; height: auto; display: none;" />
+                                <div class="container-img text-center position-relative d-none">
+                                    <img class="preview-image image_banner rounded-2 w-100 " src="#"
+                                        alt="Xem trước hình ảnh">
+                                    <button type="button"
+                                        class="btn btn-danger remove-image position-absolute rounded-circle ">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -103,6 +135,9 @@
         </div>
     </section>
 @endsection
+@push('link')
+    <link rel="stylesheet" href="{{ asset('backend/dist/css/add.css') }}">
+@endpush
 @push('script')
-    <script src="{{ asset('Backend/dist/js/pages/function.js') }}"></script>
+    <script src="{{ asset('backend/dist/js/pages/function.js') }}"></script>
 @endpush

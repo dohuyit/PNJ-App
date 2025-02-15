@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Thêm loại sản phẩm')
+@section('title', 'Thêm thương hiệu mới')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Thêm loại sản phẩm</h1>
+                    <h1>Thêm thương hiệu mới</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Thêm loại sản phẩm</li>
+                        <li class="breadcrumb-item active">Thêm thương hiệu mới</li>
                     </ol>
                 </div>
             </div>
@@ -20,49 +20,36 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('product-type.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('brand.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <!-- Form nhập thông tin -->
                     <div class="col-md-8">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Nhập thông tin loại sản phẩm</h3>
+                                <h3 class="card-title">Nhập thông tin thương hiệu</h3>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="categoryName">Tên loại</label>
+                                    <label>Tên thương hiệu</label>
                                     <input type="text" class="form-control" name="name"
-                                        placeholder="Nhập tên danh mục" value="{{ old('name') }}">
+                                        placeholder="Nhập tên thương hiệu" value="{{ old('name') }}">
                                     @error('name')
                                         <span class="text-danger mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label>Mô tả danh mục</label>
+                                    <label>Mô tả</label>
                                     <textarea class="form-control" rows="4" name="description" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Danh mục</label>
-                                    <select name="category_id" class="form-control">
-                                        <option value="" hidden selected>---Danh mục---</option>
-                                        @foreach ($Categories as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('category_id')
-                                        <span class="text-danger mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="isActive">Trạng thái hiển thị</label>
-                                    <select name="is_active" id="isActive" class="form-control ">
+                                    <label>Trạng thái hiển thị</label>
+                                    <select name="is_active" class="form-control">
                                         <option value="0" {{ old('is_active', 0) == 0 ? 'selected' : '' }}>Hiển thị
                                         </option>
                                         <option value="1" {{ old('is_active') == 1 ? 'selected' : '' }}>Ẩn</option>
                                     </select>
                                 </div>
-
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-outline-primary d-flex align-items-center ">
@@ -131,7 +118,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </form>
 

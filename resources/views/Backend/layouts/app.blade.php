@@ -12,11 +12,11 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('Backend/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/dist/css/adminlte.min.css') }}">
     @stack('link')
 </head>
 
@@ -52,13 +52,13 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="{{ asset('Backend/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('backend/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
-    <script src="{{ asset('Backend/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('backend/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- SweetAlert2 -->
-    <script src="{{ asset('Backend/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('backend/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <!-- AdminLTE App -->
-    <script src="{{ asset('Backend/dist/js/adminlte.js') }}"></script>
+    <script src="{{ asset('backend/dist/js/adminlte.js') }}"></script>
     <script>
         $(function() {
             var Toast = Swal.mixin({

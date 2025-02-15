@@ -11,6 +11,7 @@ class ProductType extends Model
 
     protected $fillable = [
         "name",
+        'image_thumbnail',
         "banner_image",
         "description",
         "category_id",

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('jewelry_lines', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('image_thumbnail')->nullable();
             $table->string('banner_image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_wedding')->default(1);

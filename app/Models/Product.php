@@ -21,6 +21,7 @@ class Product extends Model
         'category_id',
         'jewelry_line_id',
         'collection_id',
+        'brand_id',
         'product_type_id',
     ];
 

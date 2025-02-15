@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Cập nhật danh mục sản phẩm')
+@section('title', 'Cập nhật danh mục')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Chỉnh sửa danh mục</h1>
+                    <h1>Cập nhật danh mục</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Chỉnh sửa danh mục</li>
+                        <li class="breadcrumb-item active">Cập nhật danh mục</li>
                     </ol>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 @method('PUT')
                 <div class="row">
                     <!-- Form nhập thông tin -->
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title">Nhập thông tin danh mục</h3>
@@ -62,45 +62,47 @@
                         </div>
                     </div>
                     <!-- Form thêm hình ảnh -->
-                    <div class="col-md-6">
-                        <div class="card card-info">
+                    <div class="col-md-4">
+                        <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Thêm hình ảnh</h3>
+                                <h3 class="card-title">Thêm ảnh banner</h3>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="categoryImage">Chọn hình ảnh</label>
+                                    <label>Chọn hình ảnh</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="categoryImage"
-                                                name="banner_image">
-                                            <label class="custom-file-label" for="categoryImage">Chọn tệp</label>
+                                            <input type="file" class="custom-file-input image-input" name="banner_image">
+                                            <label class="custom-file-label">Chọn tệp</label>
                                         </div>
-                                        @error('banner_image')
-                                            <span class="text-danger mt-1">{{ $message }}</span>
-                                        @enderror
                                     </div>
+                                    @error('banner_image')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <div class="form-group image-container">
-                                    @if ($category->banner_image)
-                                        <img src="{{ Storage::url($category->banner_image) }}" alt="Xem trước hình ảnh"
-                                            class="previewImage" style="max-width: 100%; height: auto;" id="newImage" />
-                                        <div class="form-check mt-2">
-                                            <input type="checkbox" class="form-check-input removeImage" name="remove_image"
-                                                value="1">
-                                            <label class="form-check-label">Xóa ảnh hiện tại</label>
-                                        </div>
-                                    @endif
+                                <input type="hidden" name="delete_banner_image" value="0">
+                                <div
+                                    class="container-img text-center position-relative {{ $category->banner_image ? '' : 'd-none' }}">
+                                    <img class="preview-image image_banner rounded-2 w-100 "
+                                        src="{{ $category->banner_image ? Storage::url($category->banner_image) : '#' }}"
+                                        alt="Xem trước hình ảnh">
+                                    <button type="button"
+                                        class="btn btn-danger remove-image position-absolute rounded-circle ">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
+
         </div>
     </section>
 @endsection
+@push('link')
+    <link rel="stylesheet" href="{{ asset('backend/dist/css/add.css') }}">
+@endpush
 @push('script')
-    <script src="{{ asset('Backend/dist/js/pages/function.js') }}"></script>
+    <script src="{{ asset('backend/dist/js/pages/function.js') }}"></script>
 @endpush

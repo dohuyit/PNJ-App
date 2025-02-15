@@ -50,6 +50,10 @@ class ProductTypeController extends Controller
                     $productTypes['banner_image'] = Storage::put('ProductTypes', $request->file('banner_image'));
                 }
 
+                if ($request->hasFile('image_thumbnail')) {
+                    $productTypes['image_thumbnail'] = Storage::put('ProductTypes', $request->file('image_thumbnail'));
+                }
+
                 // dd($productTypes);
                 ProductType::query()->create($productTypes);
             });
@@ -90,19 +94,31 @@ class ProductTypeController extends Controller
                     'category_id' => $request->category_id,
                 ];
 
-                if ($request->has('remove_image') && $request->remove_image == 1) {
-                    if ($productType->banner_image) {
+                if ($request->input('delete_banner_image') == "1" || $request->input('delete_thumbnail_image') == "1") {
+                    if ($request->input('delete_banner_image') == "1" && $productType->banner_image) {
                         Storage::delete($productType->banner_image);
-                        $dataProductTypes['banner_image'] = null;
+                        $productType->banner_image = null;
+                    }
+
+                    if ($request->input('delete_thumbnail_image') == "1" && $productType->image_thumbnail) {
+                        Storage::delete($productType->image_thumbnail);
+                        $productType->image_thumbnail = null;
                     }
                 }
 
+
                 if ($request->hasFile('banner_image')) {
-                    if ($productType->banner_image) {
-                        // Xóa ảnh cũ nếu tồn tại
+                    if (!empty($productType->banner_image)) {
                         Storage::delete($productType->banner_image);
                     }
                     $dataProductTypes['banner_image'] = Storage::put('ProductTypes', $request->file('banner_image'));
+                }
+
+                if ($request->hasFile('image_thumbnail')) {
+                    if (!empty($productType->image_thumbnail)) {
+                        Storage::delete($productType->image_thumbnail);
+                    }
+                    $dataProductTypes['image_thumbnail'] = Storage::put('ProductTypes', $request->file('image_thumbnail'));
                 }
                 $productType->update($dataProductTypes);
             });

@@ -16,4 +16,5 @@ class AttributeGroup extends Model
     {
         return $this->hasMany(Attribute::class, 'group_attribute_id');
     }
+
 }

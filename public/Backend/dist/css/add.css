@@ -1,0 +1,96 @@
+.container-img {
+    width: max-content !important;
+    position: relative;
+    display: inline-block;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.preview-image {
+    object-fit: cover !important;
+    cursor: pointer !important;
+}
+
+.container-img .image_banner {
+    width: 350px !important;
+}
+
+.container-img .image_thumbnail {
+    max-height: 300px !important;
+}
+
+/* Nút xóa ảnh */
+.remove-image {
+    top: 5px !important;
+    right: 5px !important;
+    z-index: 10 !important;
+    width: 25px !important;
+    height: 25px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.3s ease-in-out, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.image-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+}
+
+.full-image {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.full-image:hover {
+    transform: scale(1.05);
+}
+
+.album-container #imagePreviewContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.album-container .image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.album-container .image-wrapper img {
+    max-width: 120px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.album-container .remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

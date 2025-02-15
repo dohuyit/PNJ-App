@@ -87,16 +87,16 @@ class CategoryController extends Controller
                     'is_active' => $request->input('is_active', 0),
                 ];
 
-                if ($request->has('remove_image') && $request->remove_image == 1) {
+                if ($request->input('delete_banner_image') == "1") {
                     if ($category->banner_image) {
                         Storage::delete($category->banner_image);
-                        $dataCategories['banner_image'] = null;
+                        $category->banner_image = null;
                     }
                 }
 
+
                 if ($request->hasFile('banner_image')) {
-                    if ($category->banner_image) {
-                        // Xóa ảnh cũ nếu tồn tại
+                    if (!empty($category->banner_image)) {
                         Storage::delete($category->banner_image);
                     }
                     $dataCategories['banner_image'] = Storage::put('Categories', $request->file('banner_image'));

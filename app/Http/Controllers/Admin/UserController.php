@@ -66,22 +66,23 @@ class UserController extends Controller
     public function updateAdminAccount(UpdateUserAdminRequest $request, string $id)
     {
         try {
-            DB::transaction(function () use ($request) {
+            $user = User::findOrFail($id);
+            DB::transaction(function () use ($request, $user) {
                 $defaultPassword = ($request->role_id == 1) ? "adminpnj123" : "nvpnj456";
-
-                User::create([
+                $user->update([
                     'username' => $request->username,
                     'email' => $request->email,
-                    'password' => Hash::make($defaultPassword),
                     'role_id' => $request->role_id,
+                    'password' => Hash::make($defaultPassword), 
                 ]);
             });
-            return redirect()->back()->with('success', 'Tài khoản admin đã được thêm thành công.');
+
+            return redirect()->back()->with('success', 'Tài khoản admin đã được cập nhật thành công.');
         } catch (\Throwable $e) {
-            dd($e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại');
         }
     }
+
 
     /**
      * Display the specified resource.

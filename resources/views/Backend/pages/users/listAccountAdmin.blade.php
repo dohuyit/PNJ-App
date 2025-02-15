@@ -39,6 +39,7 @@
                                         <th>Họ và tên</th>
                                         <th>Email</th>
                                         <th>Số điện thoại</th>
+                                        <th>Vai trò</th>
                                         <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
@@ -58,6 +59,13 @@
                                             <td>{{ $adminAccount->username }}</td>
                                             <td>{{ $adminAccount->email }}</td>
                                             <td>{{ $adminAccount->phone ? $adminAccount->phone : 'Trống' }}</td>
+                                            <td>
+                                                @if ($adminAccount->role_id == 1)
+                                                    <span class="badge bg-danger">Quản trị viên</span>
+                                                @else
+                                                    <span class="badge bg-info">Nhân viên</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($adminAccount->status == 0)
                                                     <p class="btn btn-outline-success m-0 p-2">
@@ -152,7 +160,8 @@
                                                                     <option value="" hidden selected>-- Chọn vai trò
                                                                         --</option>
                                                                     @foreach ($listRoleIsAdmin as $role)
-                                                                        <option value="{{ $role->id }}">
+                                                                        <option @selected($adminAccount->role_id == $role->id)
+                                                                            value="{{ $role->id }}">
                                                                             {{ $role->name }}</option>
                                                                     @endforeach
                                                                 </select>
@@ -182,6 +191,7 @@
                                         <th>Họ và tên</th>
                                         <th>Email</th>
                                         <th>Số điện thoại</th>
+                                        <th>Vai trò</th>
                                         <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>

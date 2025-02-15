@@ -46,6 +46,10 @@ class CollectionController extends Controller
                     $dataCollections['banner_image'] = Storage::put('Collections', $request->file('banner_image'));
                 }
 
+                if ($request->hasFile("image_thumbnail")) {
+                    $dataCollections['image_thumbnail'] = Storage::put('Collections', $request->file('image_thumbnail'));
+                }
+
                 Collection::query()->create($dataCollections);
             });
             return redirect()->route('collection.index')->with('success', 'Bộ sưu tập mới đã được thêm thành công!');
@@ -80,25 +84,40 @@ class CollectionController extends Controller
                 $dataCollections = [
                     'name' => $request->name,
                     'description' => $request->description,
-                    'is_wedding' => $request->input('is_wedding_collection', 1),
+                    'is_wedding_collection' => $request->input('is_wedding_collection', 1),
                     'is_active' => $request->input('is_active', 0),
                 ];
 
-                if ($request->has('remove_image') && $request->remove_image == 1) {
-                    if ($collection->banner_image) {
+                if ($request->input('delete_banner_image') == "1" || $request->input('delete_thumbnail_image') == "1") {
+                    if ($request->input('delete_banner_image') == "1" && $collection->banner_image) {
                         Storage::delete($collection->banner_image);
-                        $dataCollections['banner_image'] = null;
+                        $collection->banner_image = null;
+                    }
+
+                    if ($request->input('delete_thumbnail_image') == "1" && $collection->image_thumbnail) {
+                        Storage::delete($collection->image_thumbnail);
+                        $collection->image_thumbnail = null;
                     }
                 }
 
+
                 if ($request->hasFile('banner_image')) {
-                    if ($collection->banner_image) {
+                    if (!empty($collection->banner_image)) {
                         Storage::delete($collection->banner_image);
                     }
-                    $dataCollections['banner_image'] = Storage::put('Categories', $request->file('banner_image'));
+                    $dataCollections['banner_image'] = Storage::put('Collections', $request->file('banner_image'));
                 }
+
+                if ($request->hasFile('image_thumbnail')) {
+                    if (!empty($collection->image_thumbnail)) {
+                        Storage::delete($collection->image_thumbnail);
+                    }
+                    $dataCollections['image_thumbnail'] = Storage::put('Collections', $request->file('image_thumbnail'));
+                }
+
                 $collection->update($dataCollections);
             });
+
             return redirect()->route('collection.index')->with('success', 'Bộ sưu tập đã được cập nhật thành công!');
         } catch (\Exception $e) {
             return redirect()->route('collection.index')->with('error', 'Có lỗi xảy ra, vui lòng thử lại!');

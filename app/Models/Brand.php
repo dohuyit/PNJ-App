@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductImage extends Model
+class Brand extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
-        'image_link',
+        'name',
+        'image_thumbnail',
+        'banner_image',
+        'description',
+        'is_active'
     ];
-
-    public function product()
-    {
-        $this->belongsTo(Product::class);
-    }
 }

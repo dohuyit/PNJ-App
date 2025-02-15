@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Cập nhật sản phẩm mới')
+@section('title', 'Cập nhật sản phẩm')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Cập nhật sản phẩm mới</h1>
+                    <h1>Cập nhật sản phẩm</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Cập nhật sản phẩm mới</li>
+                        <li class="breadcrumb-item active">Cập nhật sản phẩm</li>
                     </ol>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                             <div class="card-body">
                                 <div class="form-group col-12">
                                     <div id="variants-container">
-                                        @foreach ($sizeVariants as $variant)
+                                        @if ($sizeVariants->isEmpty())
                                             <div class="variant-row d-flex align-items-end mb-2 g-2">
                                                 <div class="select-item flex-grow-1 mr-2">
                                                     <label>Size</label>
@@ -143,24 +143,51 @@
                                                         <option value="" hidden>Chọn
                                                             {{ strtolower($sizeAttributes->name) }}</option>
                                                         @foreach ($sizeAttributes->attributes as $attribute)
-                                                            <option value="{{ $attribute->id }}"
-                                                                {{ $variant->attribute_id == $attribute->id ? 'selected' : '' }}>
-                                                                {{ $attribute->name }}
+                                                            <option value="{{ $attribute->id }}">{{ $attribute->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="input-item">
                                                     <label for="">Giá biến thể</label>
-                                                    <input type="text" name="price_variant[]"
-                                                        value="{{ $variant->price_variant }}" class="form-control">
+                                                    <input type="text" name="price_variant[]" value=""
+                                                        class="form-control" placeholder="Giá biến thể...">
                                                 </div>
                                                 <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
-                                        @endforeach
+                                        @else
+                                            @foreach ($sizeVariants as $variant)
+                                                <div class="variant-row d-flex align-items-end mb-2 g-2">
+                                                    <div class="select-item flex-grow-1 mr-2">
+                                                        <label>Size</label>
+                                                        <select name="attributes[{{ $sizeAttributes->id }}][]"
+                                                            class="form-control">
+                                                            <option value="" hidden>Chọn
+                                                                {{ strtolower($sizeAttributes->name) }}</option>
+                                                            @foreach ($sizeAttributes->attributes as $attribute)
+                                                                <option value="{{ $attribute->id }}"
+                                                                    {{ $variant->attribute_id == $attribute->id ? 'selected' : '' }}>
+                                                                    {{ $attribute->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="input-item">
+                                                        <label for="">Giá biến thể</label>
+                                                        <input type="text" name="price_variant[]"
+                                                            value="{{ $variant->price_variant }}" class="form-control">
+                                                    </div>
+                                                    <button type="button"
+                                                        class="btn btn-danger remove-variant h-100 ml-2">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
+
 
                                     <!-- Nút thêm biến thể -->
                                     <button type="button" id="add-variant"
@@ -206,33 +233,40 @@
                     <div class="col-md-4">
                         <div class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title">Thêm hình ảnh</h3>
+                                <h3 class="card-title">Thêm ảnh đại diện</h3>
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="productImage">Chọn hình ảnh</label>
+                                    <label>Chọn hình ảnh</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="productImage"
+                                            <input type="file" class="custom-file-input image-input"
                                                 name="product_image">
-                                            <label class="custom-file-label" for="productImage">Chọn tệp</label>
+                                            <label class="custom-file-label">Chọn tệp</label>
                                         </div>
                                     </div>
                                     @error('product_image')
-                                        <span class="text-danger mt-1">{{ $message }}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group text-center">
-                                    <img id="newImage" src="#" alt="Xem trước hình ảnh"
-                                        style="max-width: 100%; height: auto; display: none;" />
+                                <input type="hidden" name="delete_product_image" value="0">
+                                <div
+                                    class="container-img text-center position-relative {{ $product->product_image ? '' : 'd-none' }}">
+                                    <img class="preview-image image_thumbnail rounded-2 img-fluid"
+                                        src="{{ $product->product_image ? Storage::url($product->product_image) : '#' }}"
+                                        alt="Xem trước hình ảnh">
+                                    <button type="button"
+                                        class="btn btn-danger remove-image position-absolute rounded-circle ">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="card card-info">
+                        <div class="card card-info ">
                             <div class="card-header">
-                                <h3 class="card-title">Album hình ảnh</h3>
+                                <h3 class="card-title">Album Hình Ảnh</h3>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body album-container">
                                 <div class="form-group">
                                     <label for="albumImage">Chọn album hình ảnh</label>
                                     <div class="input-group">
@@ -244,8 +278,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group text-center">
-                                    <img id="newImage" src="#" alt="Xem trước hình ảnh"
-                                        style="max-width: 100%; height: auto; display: none;" />
+                                    <div id="imagePreviewContainer" data-edit-mode="true">
+                                        @foreach ($albumImages as $image)
+                                            <div class="image-wrapper">
+                                                <img src="{{ Storage::url($image->image_link) }}" alt="Product Image">
+
+                                                <input type="checkbox" name="delete_images[]"
+                                                    value="{{ $image->id }}" class="delete-checkbox" hidden>
+
+                                                <button type="button" class="remove-image btn btn-danger">
+                                                    <i class="fas fa-times-circle"></i>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -304,20 +350,22 @@
                     </div>
                 </div>
             </form>
+
         </div>
     </section>
 @endsection
 @push('link')
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('backend/dist/css/add.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
     <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/summernote/summernote-bs4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/summernote/summernote-bs4.min.css') }}">
     <!-- SimpleMDE -->
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/simplemde/simplemde.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/simplemde/simplemde.min.css') }}">
 @endpush
 @push('script')
     <!-- Summernote -->
-    <script src="{{ asset('Backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('Backend/dist/js/pages/function.js') }}"></script>
+    <script src="{{ asset('backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('backend/dist/js/pages/function.js') }}"></script>
     <script>
         $(function() {
             // Summernote
@@ -352,24 +400,24 @@
                 newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
 
                 newRow.innerHTML = `
-            <div class="select-item flex-grow-1 mr-2">
-                <label>Size</label>
-                <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
-                    <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
-                    @foreach ($sizeAttributes->attributes as $attribute)
-                        <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="input-item">
-                <label for="">Giá biến thể</label>
-                <input type="text" name="price_variant[]" placeholder="Giá biến thể"
-                class="form-control">
-            </div>
-            <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        `;
+             <div class="select-item flex-grow-1 mr-2">
+                 <label>Size</label>
+                 <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
+                     <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
+                     @foreach ($sizeAttributes->attributes as $attribute)
+                         <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                     @endforeach
+                 </select>
+             </div>
+             <div class="input-item">
+                 <label for="">Giá biến thể</label>
+                 <input type="text" name="price_variant[]" placeholder="Giá biến thể"
+                 class="form-control">
+             </div>
+             <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
+                 <i class="fas fa-trash-alt"></i>
+             </button>
+         `;
 
                 container.appendChild(newRow);
                 checkAddButton();

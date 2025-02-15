@@ -11,6 +11,7 @@ class Collection extends Model
 
     protected $fillable = [
         'name',
+        'image_thumbnail',
         'description',
         'banner_image',
         'is_wedding_collection',

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime('birthday')->nullable();
             $table->string('avatar')->nullable();
             $table->string('phone')->nullable();
+            $table->text('address')->nullable();
             $table->string('remember_token')->nullable();
             $table->string('activate_code')->nullable();
             $table->unsignedBigInteger('role_id');

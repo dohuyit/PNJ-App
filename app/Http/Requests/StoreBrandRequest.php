@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAttributeGroupRequest extends FormRequest
+class StoreBrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,6 +21,8 @@ class StoreAttributeGroupRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 }

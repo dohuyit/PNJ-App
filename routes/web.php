@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeGroupController;
 use App\Http\Controllers\Admin\Auth\AuthAdminController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\JewelryLineController;
@@ -41,6 +42,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('product-type', ProductTypeController::class);
         Route::resource('jewelry-line', JewelryLineController::class);
         Route::resource('collection', CollectionController::class);
+        Route::resource('brand', BrandController::class);
         Route::resource('attribute-group', AttributeGroupController::class);
         Route::resource('attribute', AttributeController::class);
         Route::resource('product', ProductController::class);

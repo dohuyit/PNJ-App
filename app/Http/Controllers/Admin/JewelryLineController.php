@@ -48,6 +48,10 @@ class JewelryLineController extends Controller
                     $dataJewelryLines['banner_image'] = Storage::put('JewelryLines', $request->file('banner_image'));
                 }
 
+                if ($request->hasFile('image_thumbnail')) {
+                    $dataJewelryLines['image_thumbnail'] = Storage::put('JewelryLines', $request->file('image_thumbnail'));
+                }
+
                 // dd($dataJewelryLines);
                 JewelryLine::query()->create($dataJewelryLines);
             });
@@ -87,18 +91,31 @@ class JewelryLineController extends Controller
                     'is_active' => $request->input('is_active', 0),
                 ];
 
-                if ($request->has('remove_image') && $request->remove_image == 1) {
-                    if ($jewelryLine->banner_image) {
+                if ($request->input('delete_banner_image') == "1" || $request->input('delete_thumbnail_image') == "1") {
+                    if ($request->input('delete_banner_image') == "1" && $jewelryLine->banner_image) {
                         Storage::delete($jewelryLine->banner_image);
-                        $dataJewelryLines['banner_image'] = null;
+                        $jewelryLine->banner_image = null;
+                    }
+
+                    if ($request->input('delete_thumbnail_image') == "1" && $jewelryLine->image_thumbnail) {
+                        Storage::delete($jewelryLine->image_thumbnail);
+                        $jewelryLine->image_thumbnail = null;
                     }
                 }
 
+
                 if ($request->hasFile('banner_image')) {
-                    if ($jewelryLine->banner_image) {
+                    if (!empty($jewelryLine->banner_image)) {
                         Storage::delete($jewelryLine->banner_image);
                     }
-                    $dataJewelryLines['banner_image'] = Storage::put('Categories', $request->file('banner_image'));
+                    $dataJewelryLines['banner_image'] = Storage::put('JewelryLines', $request->file('banner_image'));
+                }
+
+                if ($request->hasFile('image_thumbnail')) {
+                    if (!empty($jewelryLine->image_thumbnail)) {
+                        Storage::delete($jewelryLine->image_thumbnail);
+                    }
+                    $dataJewelryLines['image_thumbnail'] = Storage::put('JewelryLines', $request->file('image_thumbnail'));
                 }
                 $jewelryLine->update($dataJewelryLines);
             });

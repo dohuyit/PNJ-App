@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('collections', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('image_thumbnail')->nullable();
-            $table->text('description')->nullable();
             $table->string('banner_image')->nullable();
-            $table->boolean('is_wedding_collection')->default(1);
+            $table->text('description')->nullable();
             $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('collections');
+        Schema::dropIfExists('brands');
     }
 };

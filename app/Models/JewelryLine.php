@@ -10,6 +10,7 @@ class JewelryLine extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'image_thumbnail',
         'banner_image',
         'description',
         'is_wedding',
