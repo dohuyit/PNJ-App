@@ -20,270 +20,28 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('product.update', $product) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('customer.update', $customerAccount) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
-                    <!-- Form nhập thông tin -->
-                    <div class="col-md-8">
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Nhập thông tin sản phẩm</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="form-group col-12">
-                                        <label>Tên sản phẩm</label>
-                                        <input type="text" class="form-control" name="product_name"
-                                            placeholder="Nhập tên sản phẩm" value="{{ $product->product_name }}">
-                                        @error('product_name')
-                                            <span class="text-danger mt-1">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Giá sản phẩm</label>
-                                        <div class="input-group d-flex align-items-center">
-                                            <input type="text" class="form-control" name="original_price"
-                                                placeholder="Giá gốc sản phẩm" value="{{ $product->original_price }}">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">.00</span>
-                                            </div>
-                                        </div>
-                                        @error('original_price')
-                                            <span class="text-danger mt-1">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Giá khuyến mãi</label>
-                                        <div class="input-group d-flex align-items-center">
-                                            <input type="text" class="form-control" name="sale_price"
-                                                placeholder="Giá khuyến mãi" value="{{ $product->sale_price }}">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">.00</span>
-                                            </div>
-                                        </div>
-                                        @error('sale_price')
-                                            <span class="text-danger mt-1">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Danh mục sản phẩm</label>
-                                        <select name="category_id" class="form-control">
-                                            <option value="" hidden selected>-- Danh mục sản phẩm --</option>
-                                            @foreach ($categories as $id => $name)
-                                                <option @selected($product->category_id == $id) value="{{ $id }}">
-                                                    {{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')
-                                            <span class="text-danger mt-1">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Loại sản phẩm</label>
-                                        <select name="product_type_id" class="form-control">
-                                            <option value="" hidden selected>-- Loại sản phẩm --</option>
-                                            @foreach ($productTypes as $id => $name)
-                                                <option @selected($product->product_type_id == $id) value="{{ $id }}">
-                                                    {{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Sản phẩm nổi bật</label>
-                                        <select name="is_featured" class="form-control">
-                                            <option value="0" {{ $product->is_featured == 0 ? 'selected' : '' }}>Sản
-                                                phẩm
-                                                nổi bật
-                                            </option>
-                                            <option value="1" {{ $product->is_featured == 1 ? 'selected' : '' }}>
-                                                Mặc định
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Danh mục trang sức cưới</label>
-                                        <select name="is_wedding" class="form-control">
-                                            <option value="0" {{ $product->is_weedind == 0 ? 'selected' : '' }}>Có
-                                            </option>
-                                            <option value="1" {{ $product->is_weedind == 1 ? 'selected' : '' }}>
-                                                Không
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <label>Trạng thái sản phẩm</label>
-                                        <select name="product_status" class="form-control">
-                                            <option value="0" {{ $product->product_status == 0 ? 'selected' : '' }}>
-                                                Còn
-                                                hàng
-                                            </option>
-                                            <option value="1" {{ $product->product_status == 1 ? 'selected' : '' }}>
-                                                Hết hàng
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Biến thể sản phẩm</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group col-12">
-                                    <div id="variants-container">
-                                        @foreach ($sizeVariants as $variant)
-                                            <div class="variant-row d-flex align-items-end mb-2 g-2">
-                                                <div class="select-item flex-grow-1 mr-2">
-                                                    <label>Size</label>
-                                                    <select name="attributes[{{ $sizeAttributes->id }}][]"
-                                                        class="form-control">
-                                                        <option value="" hidden>Chọn
-                                                            {{ strtolower($sizeAttributes->name) }}</option>
-                                                        @foreach ($sizeAttributes->attributes as $attribute)
-                                                            <option value="{{ $attribute->id }}"
-                                                                {{ $variant->attribute_id == $attribute->id ? 'selected' : '' }}>
-                                                                {{ $attribute->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="input-item">
-                                                    <label for="">Giá biến thể</label>
-                                                    <input type="text" name="price_variant[]"
-                                                        value="{{ $variant->price_variant }}" class="form-control">
-                                                </div>
-                                                <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-                                    <!-- Nút thêm biến thể -->
-                                    <button type="button" id="add-variant"
-                                        class="btn btn-primary d-flex align-items-center mt-3">
-                                        <span><i class="fas fa-plus"></i></span>
-                                        <span class="ml-2">Thêm biến thể</span>
-                                    </button>
-                                </div>
-
-                                <!-- Hiển thị các nhóm thuộc tính khác (không có ô nhập giá) -->
-                                <div class="col-12 mt-3 d-flex align-items-center flex-wrap">
-                                    @foreach ($otherAttributeGroups as $group)
-                                        <div class="form-group flex-grow-1 mr-2">
-                                            <label>{{ $group->name }}</label>
-                                            <select name="attributes[{{ $group->id }}][]" class="form-control">
-                                                <option value="" hidden>Chọn {{ strtolower($group->name) }}</option>
-
-                                                @foreach ($group->attributes as $attribute)
-                                                    <option value="{{ $attribute->id }}" @selected($product->variants->contains('attribute_id', $attribute->id))>
-                                                        {{ $attribute->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="card ">
-                            <div class="card-header">
-                                <h3 class="card-title">Mô tả</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group col-12">
-                                    <textarea id="summernote" class="form-control" rows="20" name="description" placeholder="Nhập mô tả">{{ $product->description }}
-                                     </textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Form thêm hình ảnh -->
                     <div class="col-md-4">
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title">Thêm hình ảnh</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="productImage">Chọn hình ảnh</label>
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="productImage"
-                                                name="product_image">
-                                            <label class="custom-file-label" for="productImage">Chọn tệp</label>
-                                        </div>
-                                    </div>
-                                    @error('product_image')
-                                        <span class="text-danger mt-1">{{ $message }}</span>
-                                    @enderror
+                        <div class="card ">
+                            <div class="card-body container-avatar">
+                                <div class="image-preview">
+                                    @if ($customerAccount->avatar && Storage::exists($customerAccount->avatar))
+                                        <img src="{{ Storage::url($customerAccount->avatar) }}" id="image-main">
+                                    @else
+                                        <img src="{{ asset('backend/img/avt-default.jpg') }}" id="image-main">
+                                    @endif
                                 </div>
-                                <div class="form-group text-center">
-                                    <img id="newImage" src="#" alt="Xem trước hình ảnh"
-                                        style="max-width: 100%; height: auto; display: none;" />
+                                <div class="mt-4 text-center">
+                                    <label for="file-upload"
+                                        class="custom-upload-btn align-items-center btn btn-primary w-auto">
+                                        <span class="mr-2"><i class="fas fa-upload"></i></span>
+                                        <span>Chọn ảnh</span>
+                                    </label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title">Album hình ảnh</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="albumImage">Chọn album hình ảnh</label>
-                                    <div class="input-group">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="album_images[]"
-                                                id="albumImage" multiple>
-                                            <label class="custom-file-label" for="albumImage">Chọn tệp</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group text-center">
-                                    <img id="newImage" src="#" alt="Xem trước hình ảnh"
-                                        style="max-width: 100%; height: auto; display: none;" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title">Thêm dòng hàng</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="categoryImage">Chọn dòng hàng</label>
-                                    <select name="jewelry_line_id" id="" class="form-control">
-                                        <option value="" hidden selected>-- Dòng hàng --</option>
-                                        @foreach ($jewelryLines as $id => $name)
-                                            <option @selected($product->jewelry_line_id == $id) value="{{ $id }}">
-                                                {{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('jewelry_line_id')
-                                        <span class="text-danger mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title">Thêm bộ sưu tập mới</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label>Chọn bộ sưu tập</label>
-                                    <select name="collection_id" id="" class="form-control">
-                                        <option value="" hidden selected>-- Bộ sưu tập --</option>
-                                        @foreach ($collections as $id => $name)
-                                            <option @selected($product->collection_id == $id) value="{{ $id }}">
-                                                {{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                <input type="file" id="file-upload" name="avatar" hidden />
                             </div>
                         </div>
                         <div class="card ">
@@ -295,10 +53,120 @@
                                     <span><i class="fas fa-save"></i></span>
                                     <span class="ml-2">Cập nhật dữ liệu</span>
                                 </button>
-                                <button type="submit" class="btn btn-outline-danger d-flex align-items-center ">
+                                <a href="{{ route('customer.index') }}"
+                                    class="btn btn-outline-danger d-flex align-items-center ">
                                     <span><i class="fas fa-undo"></i></span>
-                                    <span class="ml-2">Reset</span>
-                                </button>
+                                    <span class="ml-2">Quay lại</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form nhập thông tin -->
+                    <div class="col-md-8">
+                        <div class="card ">
+                            <div class="card-header">
+                                <h3 class="card-title fw-bold">Nhập thông tin sản phẩm</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-12">
+                                        <label>Tên người dùng</label>
+                                        <input type="text" class="form-control" name="username"
+                                            placeholder="Nhập tên người dùng" value="{{ $customerAccount->username }}">
+                                        @error('username')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Email người dùng</label>
+                                        <input type="text" class="form-control" name="email"
+                                            placeholder="Nhập email người dùng" value="{{ $customerAccount->email }}">
+                                        @error('email')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Số điện thoại</label>
+                                        <input type="text" class="form-control" name="phone"
+                                            placeholder="Nhập số điện thoại" value="{{ $customerAccount->phone }}">
+                                        @error('phone')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Giới tính</label>
+                                        <select name="gender" class="form-control">
+                                            <option value="0" {{ $customerAccount->gender == 0 ? 'selected' : '' }}>
+                                                Nam
+                                            </option>
+                                            <option value="1" {{ $customerAccount->gender == 1 ? 'selected' : '' }}>
+                                                Nữ
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Ngày sinh</label>
+                                        <input type="date" class="form-control" name="birthday"
+                                            value="{{ \Carbon\Carbon::parse($customerAccount->birthday)->format('Y-m-d') }}">
+                                        @error('birthday')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Địa chỉ</label>
+                                        <input type="text" class="form-control" name="address"
+                                            placeholder="Nhập địa chỉ cụ thể của bạn..."
+                                            value="{{ $customerAccount->address }}">
+                                        @error('address')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Tỉnh / Thành Phố</label>
+                                        <select name="city_id" id="city" class="form-control">
+                                            <option value="" hidden selected>-- Tỉnh / Thành Phố --</option>
+                                            @foreach ($cities as $city)
+                                                <option value="{{ $city->id }}" @selected($customerAccount->city_id == $city->id)>
+                                                    {{ $city->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Quận / Huyện</label>
+                                        <select name="district_id" id="district" class="form-control">
+                                            <option value="" hidden selected>-- Xã / Phường --</option>
+                                            @foreach ($districts as $district)
+                                                <option value="{{ $district->id }}" @selected($customerAccount->district_id == $district->id)>
+                                                    {{ $district->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Xã / Phường</label>
+                                        <select name="ward_id" id="ward" class="form-control">
+                                            <option value="" hidden selected>-- Quận / Huyện --</option>
+                                            @foreach ($wards as $ward)
+                                                <option value="{{ $ward->id }}" @selected($customerAccount->ward_id == $ward->id)>
+                                                    {{ $ward->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label>Trạng thái </label>
+                                        <select name="status" class="form-control">
+                                            <option value="0" {{ $customerAccount->status == 0 ? 'selected' : '' }}>
+                                                Họa động
+                                            </option>
+                                            <option value="1" {{ $customerAccount->status == 1 ? 'selected' : '' }}>
+                                                Dừng hoạt động
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -308,16 +176,17 @@
     </section>
 @endsection
 @push('link')
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
     <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/summernote/summernote-bs4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/summernote/summernote-bs4.min.css') }}">
     <!-- SimpleMDE -->
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/simplemde/simplemde.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/simplemde/simplemde.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/dist/css/edit.css') }}">
 @endpush
 @push('script')
     <!-- Summernote -->
-    <script src="{{ asset('Backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('Backend/dist/js/pages/function.js') }}"></script>
+    <script src="{{ asset('backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('backend/dist/js/pages/function.js') }}"></script>
     <script>
         $(function() {
             // Summernote
@@ -331,5 +200,72 @@
                 theme: "monokai"
             });
         })
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const citySelect = document.getElementById("city");
+            const districtSelect = document.getElementById("district");
+            const wardSelect = document.getElementById("ward");
+
+            const selectedDistrict = districtSelect.value;
+            const selectedWard = wardSelect.value;
+
+            // Khi chọn thành phố -> Load quận/huyện
+            citySelect.addEventListener("change", function() {
+                const cityId = this.value;
+                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+                wardSelect.innerHTML = '<option value="">Chọn Xã/Phường</option>';
+                wardSelect.disabled = true;
+
+                if (cityId) {
+                    fetch(`/admin/account/customer/districts/${cityId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(district => {
+                                const option = document.createElement("option");
+                                option.value = district.id;
+                                option.textContent = district.name;
+                                if (district.id == selectedDistrict) option.selected = true;
+                                districtSelect.appendChild(option);
+                            });
+                            districtSelect.disabled = false;
+                            districtSelect.dispatchEvent(new Event("change"));
+                        })
+                        .catch(error => console.error("Lỗi khi tải Quận/Huyện:", error));
+                } else {
+                    districtSelect.disabled = true;
+                    wardSelect.disabled = true;
+                }
+            });
+
+            // Khi chọn quận/huyện -> Load xã/phường
+            districtSelect.addEventListener("change", function() {
+                const districtId = this.value;
+                wardSelect.innerHTML = '<option value="">Chọn Xã/Phường</option>';
+
+                if (districtId) {
+                    fetch(`/admin/account/customer/wards/${districtId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(ward => {
+                                const option = document.createElement("option");
+                                option.value = ward.id;
+                                option.textContent = ward.name;
+                                if (ward.id == selectedWard) option.selected = true;
+                                wardSelect.appendChild(option);
+                            });
+                            wardSelect.disabled = false;
+                        })
+                        .catch(error => console.error("Lỗi khi tải Xã/Phường:", error));
+                } else {
+                    wardSelect.disabled = true;
+                }
+            });
+
+            // Tự động tải quận/huyện khi trang load
+            if (citySelect.value) {
+                citySelect.dispatchEvent(new Event("change"));
+            }
+        });
     </script>
 @endpush

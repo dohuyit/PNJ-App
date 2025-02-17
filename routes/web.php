@@ -58,6 +58,14 @@ Route::prefix('admin')->group(function () {
 
             // Tài khoản người dùng
             Route::get('customer', [UserController::class, 'indexCustomerAccounts'])->name('customer.index');
+            Route::get('customer/{id}/edit', [UserController::class, 'editCustomerAccount'])->name('customer.edit');
+            Route::put('customer/update/{id}', [UserController::class, 'updateCustomerAccount'])->name('customer.update');
+
+            // API lấy quận/huyện theo thành phố
+            Route::get('customer/districts/{city_id}', [UserController::class, 'getDistricts'])->name('customer.districts');
+
+            // API lấy xã/phường theo quận/huyện
+            Route::get('customer/wards/{district_id}', [UserController::class, 'getWards'])->name('customer.wards');
 
             Route::delete('/{id}', [UserController::class, 'destroy'])->name('account.destroy');
         });

@@ -72,11 +72,11 @@ class ProductController extends Controller
                     'sale_price' => $request->sale_price,
                     'description' => $request->description,
                     'is_featured' => $request->input("is_feature", 1),
-                    'is_wedding' => $request->input("is_wedding", 1),
                     'product_status' => $request->input("product_status", 0),
                     'category_id' => $request->category_id,
                     'jewelry_line_id' => $request->jewelry_line_id,
                     'collection_id' => $request->collection_id,
+                    'brand_id' => $request->brand_id,
                     'product_type_id' => $request->product_type_id,
                 ];
 
@@ -97,33 +97,6 @@ class ProductController extends Controller
                         ]);
                     }
                 }
-                // dd($request->all());
-                // dd($product);
-                // if ($request->has('attributes')) {
-
-                //     $dataAttributes = $request->input('attributes');
-                //     // dd($dataAttributes);
-
-
-                //     // dd('abc');
-                //     $priceVariants = $request->price_variant ?? [];
-
-                //     // dd($priceVariants);
-
-                //     foreach ($dataAttributes as $group_id => $attribute_ids) {
-                //         foreach ($attribute_ids as $index => $attribute_id) {
-                //             if (!empty($attribute_id)) {
-                //                 $listVariants = [
-                //                     'product_id' => $product->id,
-                //                     'attribute_id' => $attribute_id,
-                //                     'price_variant' => (!empty($priceVariants[$index]) ? $priceVariants[$index] : $product->sale_price),
-                //                 ];
-                //                 Variant::create($listVariants);
-                //             }
-                //         }
-                //     }
-                // }
-
                 if ($request->has('attributes')) {
                     $dataAttributes = $request->input('attributes');
                     $priceVariants = $request->price_variant ?? [];
@@ -206,11 +179,11 @@ class ProductController extends Controller
                     'sale_price'     => $request->sale_price,
                     'description'    => $request->description,
                     'is_featured'    => $request->input("is_feature", 1),
-                    'is_wedding'     => $request->input("is_wedding", 1),
                     'product_status' => $request->input("product_status", 0),
                     'category_id'    => $request->category_id,
                     'jewelry_line_id' => $request->jewelry_line_id,
                     'collection_id'  => $request->collection_id,
+                    'brand_id' => $request->brand_id,
                     'product_type_id' => $request->product_type_id,
                 ];
 

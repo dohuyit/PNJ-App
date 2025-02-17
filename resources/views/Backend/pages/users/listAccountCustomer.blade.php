@@ -70,9 +70,8 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('attribute-group.edit', $customerAccount) }}"
-                                                    class="btn btn-warning text-light" data-toggle="modal"
-                                                    data-target="#modal-edit-{{ $customerAccount->id }}">
+                                                <a href="{{ route('customer.edit', $customerAccount) }}"
+                                                    class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
@@ -81,7 +80,7 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        {{-- <div class="modal fade" id="modal-delete-{{ $customerAccount->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-delete-{{ $customerAccount->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -98,7 +97,7 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('attribute.destroy', $adminAccount) }}"
+                                                        <form action="{{ route('account.destroy', $customerAccount) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -109,7 +108,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     @endforeach
 
                                 </tbody>
@@ -142,7 +141,8 @@
 
 @push('link')
     <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} " />
+    <link rel="stylesheet"
+        href="{{ asset('Backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} " />
     <link rel="stylesheet" href="{{ asset('Backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }} " />
     <link rel="stylesheet" href="{{ asset('Backend/dist/css/list.css') }} " />
 @endpush

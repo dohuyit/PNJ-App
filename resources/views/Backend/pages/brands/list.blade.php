@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Bộ sưu tập')
+@section('title', 'Thương hiệu')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Bộ sưu tập</h1>
+                    <h1>Thương hiệu</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Bộ sưu tập</li>
+                        <li class="breadcrumb-item active">Thương hiệu</li>
                     </ol>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('collection.create') }}" class="btn btn-primary">
+                            <a href="{{ route('brand.create') }}" class="btn btn-primary">
                                 <span><i class="fas fa-plus"></i></span>
                                 <span class="ml-2">Thêm mới dữ liệu</span>
                             </a>
@@ -35,74 +35,56 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Ảnh đại diện</th>
+                                        <th>Logo thương hiệu</th>
+                                        <th>Tên thương hiệu</th>
                                         <th>Ảnh banner</th>
-                                        <th>Tên bộ sưu tập</th>
-                                        <th>Danh mục trang sức cưới</th>
                                         <th>Trạng thái</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listCollections as $index => $Collection)
+                                    @foreach ($listBrands as $index => $Brand)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                @if ($Collection->image_thumbnail && \Storage::exists($Collection->image_thumbnail))
-                                                    <img src="{{ Storage::url($Collection->image_thumbnail) }}"
-                                                        alt="Banner" width="100">
+                                                @if ($Brand->logo_brand && \Storage::exists($Brand->logo_brand))
+                                                    <img src="{{ Storage::url($Brand->logo_brand) }}" alt="Banner"
+                                                        width="100">
                                                 @else
                                                     <span class="badge bg-secondary">Chưa có ảnh</span>
                                                 @endif
                                             </td>
+                                            <td>{{ $Brand->name }}</td>
                                             <td>
-                                                @if ($Collection->banner_image && \Storage::exists($Collection->banner_image))
-                                                    <img src="{{ Storage::url($Collection->banner_image) }}" alt="Banner"
+                                                @if ($Brand->banner_image && \Storage::exists($Brand->banner_image))
+                                                    <img src="{{ Storage::url($Brand->banner_image) }}" alt="Banner"
                                                         width="200">
                                                 @else
                                                     <span class="badge bg-warning">Chưa có ảnh</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $Collection->name }}</td>
-                                            <td>
-                                                @if ($Collection->is_wedding_collection == 0)
-                                                    <p class="btn btn-outline-success m-0 p-2">
-                                                        <span class="mr-1">
-                                                            <i class="fas fa-check-circle"></i>
-                                                        </span>
-                                                        <span>Có</span>
-                                                    </p>
-                                                @else
-                                                    <p class="btn btn-outline-danger m-0 p-2">
-                                                        <span class="mr-1">
-                                                            <i class="fas fa-exclamation-circle"></i>
-                                                        </span>
-                                                        <span>Không</span>
-                                                    </p>
-                                                @endif
-                                            </td>
                                             <td class="switch-column ">
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $Collection->id }}"
-                                                        {{ $Collection->is_active ? '' : 'checked' }}
-                                                        data-id="{{ $Collection->id }}" />
+                                                        id="customSwitch{{ $Brand->id }}"
+                                                        {{ $Brand->is_active ? '' : 'checked' }}
+                                                        data-id="{{ $Brand->id }}" />
                                                     <label class="custom-control-label"
-                                                        for="customSwitch{{ $Collection->id }}"></label>
+                                                        for="customSwitch{{ $Brand->id }}"></label>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('collection.edit', $Collection) }}"
+                                                <a href="{{ route('brand.edit', $Brand) }}"
                                                     class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $Collection->id }}">
+                                                    data-target="#modal-{{ $Brand->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $Collection->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-{{ $Brand->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -119,8 +101,8 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('collection.destroy', $Collection) }}"
-                                                            method="POST" class="d-inline">
+                                                        <form action="{{ route('brand.destroy', $Brand) }}" method="POST"
+                                                            class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-success">
@@ -137,11 +119,11 @@
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Tên bộ sưu tập</th>
-                                        <th>Danh mục trang sức cưới</th>
+                                        <th>Logo thương hiệu</th>
+                                        <th>Tên thương hiệu</th>
+                                        <th>Ảnh banner</th>
                                         <th>Trạng thái</th>
-                                        <th>Hành động</th>
+                                        <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>

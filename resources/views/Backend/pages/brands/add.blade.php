@@ -63,6 +63,34 @@
                     <div class="col-md-4">
                         <div class="card card-primary">
                             <div class="card-header">
+                                <h3 class="card-title">Thêm logo thương hiệu</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Chọn hình ảnh</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input image-input" name="logo_brand">
+                                            <label class="custom-file-label">Chọn tệp</label>
+                                        </div>
+                                    </div>
+                                    @error('logo_brand')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="container-img text-center position-relative d-none">
+                                    <img class="preview-image image_banner rounded-2 w-100 " src="#"
+                                        alt="Xem trước hình ảnh">
+                                    <button type="button"
+                                        class="btn btn-danger remove-image position-absolute rounded-circle ">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-primary">
+                            <div class="card-header">
                                 <h3 class="card-title">Thêm ảnh đại diện</h3>
                             </div>
                             <div class="card-body">

@@ -25,7 +25,7 @@ table :is(th, td) {
     height: calc(1.25rem - 4px) !important;
 }
 
-/* .jewelry-wedding-badge {
+.jewelry-wedding-badge {
     display: inline-flex;
     align-items: center;
     padding: 5px 10px;
@@ -48,4 +48,5 @@ table :is(th, td) {
 
 .jewelry-wedding-badge i {
     margin-right: 5px;
-} */
+}
+

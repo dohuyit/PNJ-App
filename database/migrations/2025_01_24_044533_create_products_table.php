@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('product_image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_featured')->default(0);
-            $table->boolean('is_wedding')->default(false);
             $table->boolean('product_status')->default(0);
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('jewelry_line_id');

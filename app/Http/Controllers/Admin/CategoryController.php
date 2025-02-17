@@ -82,7 +82,7 @@ class CategoryController extends Controller
         try {
             DB::transaction(function () use ($request, $category) {
                 $dataCategories = [
-                    'name_category' => $request->name,
+                    'category' => $request->name,
                     'description' => $request->description,
                     'is_active' => $request->input('is_active', 0),
                 ];

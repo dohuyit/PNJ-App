@@ -69,6 +69,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('product.index') }}" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sản phẩm</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('jewelry-line.index') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Dòng hàng</p>
@@ -81,11 +87,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('product.index') }}" class="nav-link active">
+                            <a href="{{ route('brand.index') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Sản phẩm</p>
+                                <p>Thương hiệu</p>
                             </a>
                         </li>
+
                     </ul>
                 </li>
                 <li class="nav-item menu-close">
