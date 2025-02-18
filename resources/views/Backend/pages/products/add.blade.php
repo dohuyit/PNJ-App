@@ -81,9 +81,9 @@
                                         <label>Loại sản phẩm</label>
                                         <select name="product_type_id" class="form-control">
                                             <option value="" hidden selected>-- Loại sản phẩm --</option>
-                                            @foreach ($productTypes as $id => $name)
+                                            {{-- @foreach ($productTypes as $id => $name)
                                                 <option value="{{ $id }}">{{ $name }}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
@@ -94,16 +94,6 @@
                                             </option>
                                             <option value="1" {{ old('is_featured', 1) == 1 ? 'selected' : '' }}>
                                                 Mặc định
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label>Danh mục trang sức cưới</label>
-                                        <select name="is_wedding" class="form-control">
-                                            <option value="0" {{ old('is_wedding') == 0 ? 'selected' : '' }}>Có
-                                            </option>
-                                            <option value="1" {{ old('is_wedding', 1) == 1 ? 'selected' : '' }}>
-                                                Không
                                             </option>
                                         </select>
                                     </div>
@@ -129,7 +119,7 @@
                                 <h3 class="card-title">Biến thể sản phẩm</h3>
                             </div>
                             <div class="card-body">
-                                <div class="form-group col-12">
+                                <div class="form-group col-12 size-variant">
                                     <div id="variants-container">
                                         <div class="variant-row d-flex align-items-end mb-2 g-2">
                                             <div class="select-item flex-grow-1 mr-2">
@@ -278,6 +268,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Thương hiệu</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Chọn thương hiệu</label>
+                                    <select name="collection_id" id="" class="form-control">
+                                        <option value="" hidden selected>-- Thương hiệu --</option>
+                                        @foreach ($brands as $id => $name)
+                                            <option value="{{ $id }}">{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card ">
                             <div class="card-header">
                                 <h3 class="card-title">Thao tác</h3>
@@ -325,59 +331,163 @@
             });
         })
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let container = document.getElementById('variants-container');
-            let addButton = document.getElementById('add-variant');
-            let maxVariants = {{ count($sizeAttributes->attributes) }}; // Lấy số lượng thuộc tính từ PHP
 
-            // Kiểm tra và tắt nút "Thêm" nếu đã đủ số dòng
-            function checkAddButton() {
-                if (container.children.length >= maxVariants) {
-                    addButton.disabled = true; // Tắt nút nếu số dòng >= số thuộc tính
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('variants-container');
+        const addButton = document.getElementById('add-variant');
+        const maxVariants = {{ count($sizeAttributes->attributes) }};
+        let selectedSizes = new Set(); // Dùng Set để theo dõi các size đã chọn
+
+        // Hàm cập nhật trạng thái disabled của các option
+        function updateSizeOptions() {
+            // Lấy tất cả các select size trong container
+            const allSelects = container.querySelectorAll('select[name^="attributes[{{ $sizeAttributes->id }}]"]');
+            
+            // Cập nhật selectedSizes từ các select hiện tại
+            selectedSizes.clear();
+            allSelects.forEach(select => {
+                if (select.value) {
+                    selectedSizes.add(select.value);
+                }
+            });
+
+            // Cập nhật trạng thái disabled cho tất cả các select
+            allSelects.forEach(select => {
+                Array.from(select.options).forEach(option => {
+                    if (option.value) { // Bỏ qua option placeholder
+                        const isCurrentlySelected = select.value === option.value;
+                        option.disabled = selectedSizes.has(option.value) && !isCurrentlySelected;
+                    }
+                });
+            });
+
+            // Kiểm tra và cập nhật trạng thái nút thêm
+            checkAddButton();
+        }
+
+        // Kiểm tra và cập nhật trạng thái nút "Thêm"
+        function checkAddButton() {
+            addButton.disabled = container.children.length >= maxVariants;
+        }
+
+        // Xử lý sự kiện thêm variant mới
+        addButton.addEventListener('click', function() {
+            let newRow = document.createElement('div');
+            newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
+
+            newRow.innerHTML = `
+                <div class="select-item flex-grow-1 mr-2">
+                    <label>Size</label>
+                    <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
+                        <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
+                        @foreach ($sizeAttributes->attributes as $attribute)
+                            <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="input-item">
+                    <label for="">Giá biến thể</label>
+                    <input type="text" name="price_variant[]" placeholder="Giá biến thể" class="form-control">
+                </div>
+                <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            `;
+
+            container.appendChild(newRow);
+            
+            // Thêm event listener cho select mới
+            const newSelect = newRow.querySelector('select');
+            newSelect.addEventListener('change', updateSizeOptions);
+            
+            updateSizeOptions();
+        });
+
+        // Xử lý sự kiện xóa variant
+        container.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-variant')) {
+                e.target.closest('.variant-row').remove();
+                updateSizeOptions();
+            }
+        });
+
+        // Xử lý sự kiện thay đổi giá trị select
+        container.addEventListener('change', function(e) {
+            if (e.target.tagName === 'SELECT') {
+                updateSizeOptions();
+            }
+        });
+
+        // Khởi tạo ban đầu
+        updateSizeOptions();
+    });
+</script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const productTypeSelect = document.querySelector('select[name="product_type_id"]');
+            const sizeVariantDiv = document.querySelector('.size-variant'); // Ô biến thể Size
+            const sizeSelect = document.querySelector('.size-select'); // Sửa selector thành .size-select
+            const addVariantButton = document.querySelector("#add-variant"); // Nút thêm biến thể
+
+            const validProductTypes = ["Nhẫn", "Vòng", "Dây chuyền", "Dây cổ", "Lắc"];
+            let selectedSizes = []; // Lưu các size đã chọn
+
+            // Khi chọn danh mục, load loại sản phẩm
+            categorySelect.addEventListener("change", function() {
+                const categoryId = this.value;
+                if (!categoryId) {
+                    productTypeSelect.innerHTML = '<option value="">-- Loại sản phẩm --</option>';
+                    return;
+                }
+
+                fetch(`/admin/get-product-types/${categoryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        productTypeSelect.innerHTML = '<option value="">-- Loại sản phẩm --</option>';
+                        data.forEach(productType => {
+                            productTypeSelect.innerHTML +=
+                                `<option value="${productType.id}">${productType.name}</option>`;
+                        });
+                    })
+                    .catch(error => console.error("Lỗi khi lấy loại sản phẩm:", error));
+            });
+
+            // Khi chọn loại sản phẩm, hiển thị/ẩn biến thể size
+            productTypeSelect.addEventListener("change", function() {
+                const selectedText = this.options[this.selectedIndex].text;
+
+                // Kiểm tra nếu loại sản phẩm là một trong các loại đã có hoặc có hậu tố "cưới"
+                if (validProductTypes.includes(selectedText) || selectedText.endsWith("cưới")) {
+                    sizeVariantDiv.style.display = "block";
                 } else {
-                    addButton.disabled = false; // Bật nút nếu số dòng nhỏ hơn số thuộc tính
+                    sizeVariantDiv.style.display = "none";
+                }
+            });
+
+            // Khi bấm thêm biến thể, disable các size đã chọn
+            addVariantButton.addEventListener("click", function() {
+                const selectedSize = sizeSelect.value;
+                if (selectedSize && !selectedSizes.includes(selectedSize)) {
+                    selectedSizes.push(selectedSize);
+                    updateSizeOptions();
+                }
+            });
+
+            // Cập nhật danh sách size (disable những size đã chọn)
+            function updateSizeOptions() {
+                const options = sizeSelect.options;
+                for (let i = 0; i < options.length; i++) {
+                    if (selectedSizes.includes(options[i].value)) {
+                        options[i].disabled = true;
+                    } else {
+                        options[i].disabled = false;
+                    }
                 }
             }
-
-            addButton.addEventListener('click', function() {
-                let newRow = document.createElement('div');
-                newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
-
-                newRow.innerHTML = `
-            <div class="select-item flex-grow-1 mr-2">
-                <label>Size</label>
-                <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
-                    <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
-                    @foreach ($sizeAttributes->attributes as $attribute)
-                        <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="input-item">
-                <label for="">Giá biến thể</label>
-                <input type="text" name="price_variant[]" placeholder="Giá biến thể"
-                class="form-control">
-            </div>
-            <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        `;
-
-                container.appendChild(newRow);
-                checkAddButton(); // Kiểm tra lại nút "Thêm" sau khi thêm dòng
-            });
-
-            // Xóa dòng khi ấn nút "Xóa"
-            container.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-variant')) {
-                    e.target.closest('.variant-row').remove();
-                    checkAddButton(); // Kiểm tra lại nút "Thêm" sau khi xóa dòng
-                }
-            });
-
-            // Kiểm tra nút "Thêm" khi tải trang lần đầu
-            checkAddButton();
         });
     </script>
 @endpush

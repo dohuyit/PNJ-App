@@ -102,16 +102,6 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-6">
-                                        <label>Danh mục trang sức cưới</label>
-                                        <select name="is_wedding" class="form-control">
-                                            <option value="0" {{ $product->is_weedind == 0 ? 'selected' : '' }}>Có
-                                            </option>
-                                            <option value="1" {{ $product->is_weedind == 1 ? 'selected' : '' }}>
-                                                Không
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12">
                                         <label>Trạng thái sản phẩm</label>
                                         <select name="product_status" class="form-control">
                                             <option value="0" {{ $product->product_status == 0 ? 'selected' : '' }}>
@@ -131,15 +121,15 @@
                             <div class="card-header">
                                 <h3 class="card-title">Biến thể sản phẩm</h3>
                             </div>
-                            <div class="card-body">
-                                <div class="form-group col-12">
+                            <div class="card-body ">
+                                <div class="form-group col-12 size-variant">
                                     <div id="variants-container">
                                         @if ($sizeVariants->isEmpty())
                                             <div class="variant-row d-flex align-items-end mb-2 g-2">
                                                 <div class="select-item flex-grow-1 mr-2">
                                                     <label>Size</label>
                                                     <select name="attributes[{{ $sizeAttributes->id }}][]"
-                                                        class="form-control">
+                                                        class=" form-control">
                                                         <option value="" hidden>Chọn
                                                             {{ strtolower($sizeAttributes->name) }}</option>
                                                         @foreach ($sizeAttributes->attributes as $attribute)
@@ -159,7 +149,8 @@
                                             </div>
                                         @else
                                             @foreach ($sizeVariants as $variant)
-                                                <div class="variant-row d-flex align-items-end mb-2 g-2">
+                                                <div class="variant-row d-flex align-items-end mb-2 g-2"
+                                                    data-variant-id="{{ $variant->id }}">
                                                     <div class="select-item flex-grow-1 mr-2">
                                                         <label>Size</label>
                                                         <select name="attributes[{{ $sizeAttributes->id }}][]"
@@ -175,8 +166,9 @@
                                                         </select>
                                                     </div>
                                                     <div class="input-item">
-                                                        <label for="">Giá biến thể</label>
-                                                        <input type="text" name="price_variant[]"
+                                                        <label>Giá biến thể</label>
+                                                        <input type="text"
+                                                            name="price_variant[{{ $sizeAttributes->id }}][]"
                                                             value="{{ $variant->price_variant }}" class="form-control">
                                                     </div>
                                                     <button type="button"
@@ -185,10 +177,12 @@
                                                     </button>
                                                 </div>
                                             @endforeach
+                                            <input type="hidden" name="delete_variants" id="delete_variants"
+                                                value="">
+                                            <input type="hidden" name="delete_all_variants" id="delete_all_variants"
+                                                value="0">
                                         @endif
                                     </div>
-
-
                                     <!-- Nút thêm biến thể -->
                                     <button type="button" id="add-variant"
                                         class="btn btn-primary d-flex align-items-center mt-3">
@@ -332,6 +326,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Thương hiệu</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Chọn thương hiệu</label>
+                                    <select name="brand_id" id="" class="form-control">
+                                        <option value="" hidden selected>-- Thương hiệu --</option>
+                                        @foreach ($brands as $id => $name)
+                                            <option @selected($product->brand_id == $id) value="{{ $id }}">
+                                                {{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card ">
                             <div class="card-header">
                                 <h3 class="card-title">Thao tác</h3>
@@ -367,70 +378,162 @@
     <script src="{{ asset('backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('backend/dist/js/pages/function.js') }}"></script>
     <script>
-        $(function() {
-            // Summernote
-            $('#summernote').summernote({
-                height: 300,
-            })
-
-            // CodeMirror
-            CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
-                mode: "htmlmixed",
-                theme: "monokai"
-            });
-        })
-    </script>
-    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let container = document.getElementById('variants-container');
-            let addButton = document.getElementById('add-variant');
-            let maxVariants = {{ count($sizeAttributes->attributes) }}; // Lấy số lượng thuộc tính từ PHP
+            const container = document.getElementById('variants-container');
+            const variantSection = document.querySelector('.size-variant');
+            const addButton = document.getElementById('add-variant');
+            const deleteVariantsInput = document.getElementById('delete_variants');
+            const deleteAllVariantsInput = document.getElementById('delete_all_variants');
+            const maxVariants = {{ count($sizeAttributes->attributes) }};
+            let selectedSizes = new Set();
+            let deletedVariants = [];
 
-            // Kiểm tra và tắt nút "Thêm" nếu đã đủ số dòng
-            function checkAddButton() {
-                if (container.children.length >= maxVariants) {
-                    addButton.disabled = true; // Tắt nút nếu số dòng >= số thuộc tính
-                } else {
-                    addButton.disabled = false; // Bật nút nếu số dòng nhỏ hơn số thuộc tính
+            // Các biến cho product type
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const productTypeSelect = document.querySelector('select[name="product_type_id"]');
+            const validProductTypes = ["Nhẫn", "Vòng", "Dây chuyền", "Dây cổ", "Lắc"];
+
+            // Summernote initialization
+            $('#summernote').summernote({
+                height: 300
+            });
+
+            function updateSizeOptions() {
+                const allSelects = container.querySelectorAll(
+                    `select[name^="attributes[{{ $sizeAttributes->id }}]"]`);
+                selectedSizes.clear();
+
+                // Cập nhật selectedSizes từ các select hiện tại
+                allSelects.forEach(select => {
+                    if (select.value) {
+                        selectedSizes.add(select.value);
+                    }
+                });
+
+                // Cập nhật trạng thái disabled cho tất cả các select
+                allSelects.forEach(select => {
+                    Array.from(select.options).forEach(option => {
+                        if (option.value) { // Bỏ qua option placeholder
+                            const isCurrentlySelected = select.value === option.value;
+                            option.disabled = selectedSizes.has(option.value) && !
+                                isCurrentlySelected;
+                        }
+                    });
+                });
+
+                // Chỉ disable nút thêm khi số lượng variant rows bằng maxVariants
+                addButton.disabled = container.querySelectorAll('.variant-row').length >= maxVariants;
+            }
+
+            function checkProductTypeHasSize(productTypeName) {
+                if (!productTypeName) return false;
+                const normalizedName = productTypeName.trim();
+                return validProductTypes.includes(normalizedName) || normalizedName.endsWith("cưới");
+            }
+
+            function toggleVariantContainer(show) {
+                if (variantSection) {
+                    variantSection.style.display = show ? "block" : "none";
+                    deleteAllVariantsInput.value = show ? "0" : "1";
                 }
             }
 
-            addButton.addEventListener('click', function() {
-                let newRow = document.createElement('div');
-                newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
-
-                newRow.innerHTML = `
-             <div class="select-item flex-grow-1 mr-2">
-                 <label>Size</label>
-                 <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
-                     <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
-                     @foreach ($sizeAttributes->attributes as $attribute)
-                         <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                     @endforeach
-                 </select>
-             </div>
-             <div class="input-item">
-                 <label for="">Giá biến thể</label>
-                 <input type="text" name="price_variant[]" placeholder="Giá biến thể"
-                 class="form-control">
-             </div>
-             <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
-                 <i class="fas fa-trash-alt"></i>
-             </button>
-         `;
-
-                container.appendChild(newRow);
-                checkAddButton();
-            });
-
             container.addEventListener('click', function(e) {
-                if (e.target.closest('.remove-variant')) {
-                    e.target.closest('.variant-row').remove();
-                    checkAddButton();
+                const removeButton = e.target.closest('.remove-variant');
+                if (removeButton) {
+                    const variantRow = removeButton.closest('.variant-row');
+                    const variantId = variantRow.dataset.variantId;
+
+                    if (variantId) {
+                        deletedVariants.push(variantId);
+                        deleteVariantsInput.value = deletedVariants.join(',');
+                    }
+
+                    variantRow.remove();
+                    updateSizeOptions();
+                    reindexVariants();
                 }
             });
 
-            checkAddButton();
+            function reindexVariants() {
+                const variantRows = container.querySelectorAll('.variant-row');
+                variantRows.forEach((row, index) => {
+                    const priceInput = row.querySelector('input[name^="price_variant"]');
+                    if (priceInput) {
+                        priceInput.name = `price_variant[{{ $sizeAttributes->id }}][${index}]`;
+                    }
+                });
+            }
+
+            addButton.addEventListener('click', function() {
+                const variantCount = container.querySelectorAll('.variant-row').length;
+                const newRow = document.createElement('div');
+                newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
+
+                newRow.innerHTML = `
+                    <div class="select-item flex-grow-1 mr-2">
+                        <label>Size</label>
+                        <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
+                            <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
+                            @foreach ($sizeAttributes->attributes as $attribute)
+                                <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="input-item">
+                        <label>Giá biến thể</label>
+                        <input type="text" 
+                            name="price_variant[{{ $sizeAttributes->id }}][${variantCount}]" 
+                            value=""
+                            class="form-control" 
+                            placeholder="Giá biến thể">
+                    </div>
+                    <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+
+                container.appendChild(newRow);
+                const newSelect = newRow.querySelector('select');
+                newSelect.addEventListener('change', updateSizeOptions);
+                updateSizeOptions();
+            });
+
+            categorySelect.addEventListener("change", function() {
+                const categoryId = this.value;
+                if (!categoryId) {
+                    productTypeSelect.innerHTML = '<option value="">-- Loại sản phẩm --</option>';
+                    return;
+                }
+
+                fetch(`/admin/get-product-types/${categoryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        productTypeSelect.innerHTML = '<option value="">-- Loại sản phẩm --</option>';
+                        data.forEach(productType => {
+                            productTypeSelect.innerHTML +=
+                                `<option value="${productType.id}">${productType.name}</option>`;
+                        });
+                    })
+                    .catch(error => console.error("Lỗi khi lấy loại sản phẩm:", error));
+            });
+
+            productTypeSelect.addEventListener("change", function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const selectedText = selectedOption ? selectedOption.text : '';
+                const hasSize = checkProductTypeHasSize(selectedText);
+                toggleVariantContainer(hasSize);
+            });
+
+            const selectedOption = productTypeSelect.options[productTypeSelect.selectedIndex];
+            if (selectedOption) {
+                const selectedText = selectedOption.text;
+                const hasSize = checkProductTypeHasSize(selectedText);
+                toggleVariantContainer(hasSize);
+            }
+
+            updateSizeOptions();
+            reindexVariants();
         });
     </script>
 @endpush

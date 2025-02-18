@@ -46,6 +46,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('attribute-group', AttributeGroupController::class);
         Route::resource('attribute', AttributeController::class);
         Route::resource('product', ProductController::class);
+        Route::get('/get-product-types/{categoryId}', [ProductController::class, 'getProductTypes']);
+        // Route::delete('/product/{productId}/variants/delete-all', [ProductController::class, 'deleteAllSizeVariants']);
 
         // Quản lí tài khoản khách hàng và admin
         Route::prefix('account')->group(function () {

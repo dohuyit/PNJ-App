@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Attribute;
 use App\Models\AttributeGroup;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
 use App\Models\JewelryLine;
 use App\Models\ProductImage;
 use App\Models\ProductType;
 use App\Models\Variant;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,6 +50,7 @@ class ProductController extends Controller
         $jewelryLines = JewelryLine::query()->pluck('name', 'id')->all();
         $productTypes = ProductType::query()->pluck('name', 'id')->all();
         $collections = Collection::query()->pluck('name', 'id')->all();
+        $brands = Brand::query()->pluck('name', 'id')->all();
 
         return view("backend.pages.products.add", compact(
             'categories',
@@ -55,6 +59,7 @@ class ProductController extends Controller
             'jewelryLines',
             'productTypes',
             'collections',
+            'brands',
         ));
     }
 
@@ -79,6 +84,7 @@ class ProductController extends Controller
                     'brand_id' => $request->brand_id,
                     'product_type_id' => $request->product_type_id,
                 ];
+                // dd($listProducts);
 
                 if ($request->hasFile("product_image")) {
                     $listProducts['product_image'] = Storage::put('Products', $request->file('product_image'));
@@ -99,10 +105,12 @@ class ProductController extends Controller
                 }
                 if ($request->has('attributes')) {
                     $dataAttributes = $request->input('attributes');
+
                     $priceVariants = $request->price_variant ?? [];
 
                     foreach ($dataAttributes as $group_id => $attribute_ids) {
                         foreach ($attribute_ids as $index => $attribute_id) {
+
                             if (!empty($attribute_id)) {
                                 $price = ($group_id == 1 && !empty($priceVariants[$index]))
                                     ? $priceVariants[$index]
@@ -113,7 +121,7 @@ class ProductController extends Controller
                                     'attribute_id'  => $attribute_id,
                                     'price_variant' => $price,
                                 ];
-                                Variant::create($listVariants);
+                                Variant::insert($listVariants);
                             }
                         }
                     }
@@ -151,6 +159,7 @@ class ProductController extends Controller
         $jewelryLines = JewelryLine::pluck('name', 'id');
         $productTypes = ProductType::pluck('name', 'id');
         $collections = Collection::pluck('name', 'id');
+        $brands = Brand::pluck('name', 'id');
         return view("backend.pages.products.edit", compact(
             'product',
             'categories',
@@ -160,7 +169,8 @@ class ProductController extends Controller
             'albumImages',
             'jewelryLines',
             'productTypes',
-            'collections'
+            'collections',
+            'brands'
         ));
     }
 
@@ -173,30 +183,32 @@ class ProductController extends Controller
     {
         try {
             DB::transaction(function () use ($product, $request) {
+                // Cập nhật thông tin sản phẩm
                 $dataProducts = [
-                    'product_name'   => $request->product_name,
-                    'original_price' => $request->original_price,
-                    'sale_price'     => $request->sale_price,
-                    'description'    => $request->description,
-                    'is_featured'    => $request->input("is_feature", 1),
-                    'product_status' => $request->input("product_status", 0),
-                    'category_id'    => $request->category_id,
+                    'product_name'    => $request->product_name,
+                    'original_price'  => $request->original_price,
+                    'sale_price'      => $request->sale_price,
+                    'description'     => $request->description,
+                    'is_featured'     => $request->input("is_feature", 1),
+                    'product_status'  => $request->input("product_status", 0),
+                    'category_id'     => $request->category_id,
                     'jewelry_line_id' => $request->jewelry_line_id,
-                    'collection_id'  => $request->collection_id,
-                    'brand_id' => $request->brand_id,
+                    'collection_id'   => $request->collection_id,
+                    'brand_id'        => $request->brand_id,
                     'product_type_id' => $request->product_type_id,
                 ];
 
+                // Xóa ảnh chính nếu người dùng yêu cầu
                 if ($request->input('delete_product_image') == "1") {
-                    if ($product->product_image) {
+                    if ($product->product_image && Storage::exists($product->product_image)) {
                         Storage::delete($product->product_image);
                         $product->product_image = null;
                     }
                 }
 
-
+                // Cập nhật ảnh chính nếu có ảnh mới
                 if ($request->hasFile('product_image')) {
-                    if (!empty($product->product_image)) {
+                    if ($product->product_image && Storage::exists($product->product_image)) {
                         Storage::delete($product->product_image);
                     }
                     $dataProducts['product_image'] = Storage::put('Products', $request->file('product_image'));
@@ -204,16 +216,18 @@ class ProductController extends Controller
 
                 $product->update($dataProducts);
 
+                // Xóa ảnh trong album nếu được chọn
                 if ($request->has('delete_images')) {
                     $imagesToDelete = ProductImage::whereIn('id', $request->delete_images)->get();
-
                     foreach ($imagesToDelete as $image) {
-                        Storage::delete($image->image_link);
+                        if (Storage::exists($image->image_link)) {
+                            Storage::delete($image->image_link);
+                        }
                     }
                     ProductImage::whereIn('id', $request->delete_images)->delete();
                 }
 
-
+                // Thêm ảnh vào album nếu có
                 if ($request->hasFile("album_images")) {
                     foreach ($request->file('album_images') as $file) {
                         ProductImage::create([
@@ -223,27 +237,64 @@ class ProductController extends Controller
                     }
                 }
 
-                // Xử lý biến thể
-                if ($request->has('attributes')) {
-                    $dataAttributes = $request->input('attributes');
-                    $priceVariants  = $request->price_variant ?? [];
+                // Xử lý variants
+                if ($request->input('delete_all_variants') === "1") {
+                    // Xóa tất cả variants thuộc nhóm size của sản phẩm
+                    $sizeGroupId = AttributeGroup::where('name', 'Size')->value('id');
+                    $sizeAttributeIds = Attribute::where('group_attribute_id', $sizeGroupId)->pluck('id');
 
-                    // Xóa biến thể cũ trước khi thêm mới
-                    Variant::where('product_id', $product->id)->delete();
+                    $deleted = Variant::where('product_id', $product->id)
+                        ->whereIn('attribute_id', $sizeAttributeIds)
+                        ->delete();
+                } else {
+                    // Xử lý xóa variants đã chọn
+                    if ($request->filled('delete_variants')) {
+                        $variantIds = explode(',', $request->delete_variants);
+                        $deleted = Variant::where('product_id', $product->id)
+                            ->whereIn('id', $variantIds)
+                            ->delete();
+                    }
 
-                    foreach ($dataAttributes as $group_id => $attribute_ids) {
-                        foreach ($attribute_ids as $index => $attribute_id) {
-                            if (!empty($attribute_id)) {
-                                // Chỉ nhóm "Size" (id = 1) mới có giá biến thể
-                                $price = ($group_id == 1 && isset($priceVariants[$index]))
-                                    ? $priceVariants[$index]
-                                    : $product->sale_price;
+                    // Xử lý cập nhật/thêm mới variants
+                    if ($request->has('attributes')) {
+                        $dataAttributes = $request->input('attributes', []);
+                        $priceVariants = $request->input('price_variant', []);
 
-                                Variant::create([
-                                    'product_id'    => $product->id,
-                                    'attribute_id'  => $attribute_id,
-                                    'price_variant' => $price,
-                                ]);
+                        $sizeGroupId = AttributeGroup::where('name', 'Size')->value('id');
+
+                        foreach ($dataAttributes as $group_id => $attribute_ids) {
+                            foreach ($attribute_ids as $index => $attribute_id) {
+                                if (!empty($attribute_id)) {
+                                    // Mặc định giá là sale_price
+                                    $price = $product->sale_price;
+
+                                    // Kiểm tra và lấy giá biến thể cho nhóm Size
+                                    if ((string)$group_id === (string)$sizeGroupId) {
+                                        // Lấy giá biến thể nếu có
+                                        if (
+                                            isset($priceVariants[$group_id][$index]) &&
+                                            !empty($priceVariants[$group_id][$index])
+                                        ) {
+                                            $price = $priceVariants[$group_id][$index];
+                                            // \Log::info('Using variant price:', ['price' => $price]);
+                                        }
+                                    }
+
+                                    // Debug log trước khi lưu
+                                    // \Log::info('Saving variant:', [
+                                    //     'product_id' => $product->id,
+                                    //     'attribute_id' => $attribute_id,
+                                    //     'price' => $price
+                                    // ]);
+
+                                    Variant::updateOrCreate(
+                                        [
+                                            'product_id'   => $product->id,
+                                            'attribute_id' => $attribute_id,
+                                        ],
+                                        ['price_variant' => $price]
+                                    );
+                                }
                             }
                         }
                     }
@@ -255,6 +306,7 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
+
 
 
     /**
@@ -281,5 +333,11 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('product.index')->with('error', 'Có lỗi xảy ra, vui lòng thử lại!');
         }
+    }
+
+    public function getProductTypes($categoryId)
+    {
+        $productTypes = ProductType::where('category_id', $categoryId)->get();
+        return response()->json($productTypes);
     }
 }
