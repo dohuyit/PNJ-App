@@ -29,8 +29,8 @@
                             <div class="card-header">
                                 <h3 class="card-title">Nhập thông tin bộ sưu tập</h3>
                             </div>
-                            <div class="card-body">
-                                <div class="form-group">
+                            <div class="card-body row">
+                                <div class="form-group col-12">
                                     <label>Tên bộ sưu tập</label>
                                     <input type="text" class="form-control" name="name"
                                         placeholder="Nhập tên bộ sưu tập" value="{{ old('name') }}">
@@ -38,30 +38,37 @@
                                         <span class="text-danger mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+
+                                <div class="form-group col-6">
+                                    <label for="isWedding">Danh mục trang sức cưới</label>
+                                    <select name="is_wedding_collection" id="isWedding" class="form-control">
+                                        <option value="0" {{ old('is_wedding_collection') == 0 ? 'selected' : '' }}>Có
+                                        </option>
+                                        <option value="1" {{ old('is_wedding_collection', 1) == 1 ? 'selected' : '' }}>
+                                            Không
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-6">
+                                    <label>Thương hiệu phụ thuộc</label>
+                                    <select name="brand_id" class="form-control">
+                                        <option value="" hidden selected>-- Chọn thương hiệu --</option>
+                                        @foreach ($brands as $id => $name)
+                                            <option value="{{ $id }}">{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label for="isActive">Trạng thái hiển thị</label>
+                                    <select name="is_active" id="isActive" class="form-control">
+                                        <option value="0" {{ old('is_active', 0) == 0 ? 'selected' : '' }}>Hiển thị
+                                        </option>
+                                        <option value="1" {{ old('is_active') == 1 ? 'selected' : '' }}>Ẩn</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-12">
                                     <label>Mô tả</label>
                                     <textarea class="form-control" rows="4" name="description" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
-                                </div>
-                                <div class="container-select row">
-                                    <div class="form-group col-6">
-                                        <label for="isWedding">Danh mục trang sức cưới</label>
-                                        <select name="is_wedding_collection" id="isWedding" class="form-control">
-                                            <option value="0"
-                                                {{ old('is_wedding_collection') == 0 ? 'selected' : '' }}>Có
-                                            </option>
-                                            <option value="1"
-                                                {{ old('is_wedding_collection', 1) == 1 ? 'selected' : '' }}>Không
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-6">
-                                        <label for="isActive">Trạng thái hiển thị</label>
-                                        <select name="is_active" id="isActive" class="form-control">
-                                            <option value="0" {{ old('is_active', 0) == 0 ? 'selected' : '' }}>Hiển thị
-                                            </option>
-                                            <option value="1" {{ old('is_active') == 1 ? 'selected' : '' }}>Ẩn</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                             <div class="card-footer">

@@ -31,7 +31,7 @@ return new class extends Migration
 
             $table->foreign('jewelry_line_id')->references('id')->on('jewelry_lines')->onDelete('cascade');
             $table->foreign('collection_id')->references('id')->on('collections')->nullOnDelete();
-            $table->foreign('brand_id')->references('id')->on('collections')->nullOnDelete();
+            $table->foreign('brand_id')->references('id')->on('brands')->nullOnDelete();
             $table->foreign('product_type_id')->references('id')->on('product_types')->nullOnDelete();
         });
     }

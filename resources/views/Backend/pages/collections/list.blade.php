@@ -137,17 +137,15 @@
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
+                                        <th>Ảnh đại diện</th>
+                                        <th>Ảnh banner</th>
                                         <th>Tên bộ sưu tập</th>
                                         <th>Danh mục trang sức cưới</th>
                                         <th>Trạng thái</th>
-                                        <th>Hành động</th>
+                                        <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>
                             </table>
-                            {{-- <button type="button" class="btn btn-success swalDefaultSuccess">
-                                Launch Success Toast
-                            </button> --}}
                             <div class="modal fade" id="modal-overlay">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

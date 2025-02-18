@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Collection;
 use App\Http\Requests\StoreCollectionRequest;
 use App\Http\Requests\UpdateCollectionRequest;
+use App\Models\Brand;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,7 +26,8 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        return view("backend.pages.collections.add");
+        $brands = Brand::query()->pluck('name', 'id')->all();
+        return view("backend.pages.collections.add", compact('brands'));
     }
 
     /**
@@ -38,6 +40,7 @@ class CollectionController extends Controller
                 $dataCollections = [
                     "name" => $request->name,
                     "description" => $request->description,
+                    "brand_id" => $request->brand_id,
                     "is_wedding_collection" => $request->input("is_wedding_collection", 1),
                     "is_active" => $request->input("is_active", 0),
                 ];
@@ -71,7 +74,8 @@ class CollectionController extends Controller
      */
     public function edit(Collection $collection)
     {
-        return view('backend.pages.collections.edit', compact('collection'));
+        $brands = Brand::pluck('name', 'id');
+        return view('backend.pages.collections.edit', compact('collection', 'brands'));
     }
 
     /**
@@ -84,6 +88,7 @@ class CollectionController extends Controller
                 $dataCollections = [
                     'name' => $request->name,
                     'description' => $request->description,
+                    'brand_id' => $request->brand_id,
                     'is_wedding_collection' => $request->input('is_wedding_collection', 1),
                     'is_active' => $request->input('is_active', 0),
                 ];

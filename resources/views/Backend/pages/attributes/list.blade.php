@@ -51,7 +51,7 @@
                                                     <span class="badge badge-info">
                                                         {{ $attribute->group_attribute_name }}
                                                     </span>
-                                                @elseif ($attribute->group_attribute_name == 'Màu sắc')
+                                                @elseif ($attribute->group_attribute_name == 'Giới tính')
                                                     <span class="badge badge-danger">
                                                         {{ $attribute->group_attribute_name }}
                                                     </span>

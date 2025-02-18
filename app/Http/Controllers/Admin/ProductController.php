@@ -265,28 +265,16 @@ class ProductController extends Controller
                         foreach ($dataAttributes as $group_id => $attribute_ids) {
                             foreach ($attribute_ids as $index => $attribute_id) {
                                 if (!empty($attribute_id)) {
-                                    // Mặc định giá là sale_price
                                     $price = $product->sale_price;
 
-                                    // Kiểm tra và lấy giá biến thể cho nhóm Size
                                     if ((string)$group_id === (string)$sizeGroupId) {
-                                        // Lấy giá biến thể nếu có
                                         if (
                                             isset($priceVariants[$group_id][$index]) &&
                                             !empty($priceVariants[$group_id][$index])
                                         ) {
                                             $price = $priceVariants[$group_id][$index];
-                                            // \Log::info('Using variant price:', ['price' => $price]);
                                         }
                                     }
-
-                                    // Debug log trước khi lưu
-                                    // \Log::info('Saving variant:', [
-                                    //     'product_id' => $product->id,
-                                    //     'attribute_id' => $attribute_id,
-                                    //     'price' => $price
-                                    // ]);
-
                                     Variant::updateOrCreate(
                                         [
                                             'product_id'   => $product->id,
@@ -303,7 +291,8 @@ class ProductController extends Controller
 
             return redirect()->route('product.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
         } catch (\Throwable $e) {
-            return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            dd($e->getMessage());
+            return redirect()->back()->with('error', 'Có lỗi xảy ra vui lòng thử lại ');
         }
     }
 

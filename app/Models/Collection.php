@@ -14,6 +14,7 @@ class Collection extends Model
         'image_thumbnail',
         'description',
         'banner_image',
+        'brand_id',
         'is_wedding_collection',
         'is_active',
     ];
