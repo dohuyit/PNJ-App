@@ -15,7 +15,7 @@ class Product extends Model
         'sale_price',
         'product_image',
         'description',
-        'is_feature',
+        'is_featured',
         'product_status',
         'category_id',
         'jewelry_line_id',

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
+use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,6 +82,10 @@ Route::prefix('admin')->group(function () {
 Route::middleware('client')->group(function () {
     // CLIENT DASHBOARD
     Route::get('/', [HomeController::class, 'index'])->name('client.home');
+    Route::get('get-products/{type}/{id}', [HomeController::class, 'getProducts'])->name('client.home.getProducts');
+    Route::get('detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
+
+
 
     // Authentication client
     Route::get('login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');

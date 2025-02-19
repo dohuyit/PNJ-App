@@ -85,6 +85,9 @@
                                                 <option value="{{ $id }}">{{ $name }}</option>
                                             @endforeach --}}
                                         </select>
+                                        @error('product_type_id')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group col-6">
                                         <label>Sản phẩm nổi bật</label>
@@ -97,7 +100,7 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-12">
+                                    <div class="form-group col-6">
                                         <label>Trạng thái sản phẩm</label>
                                         <select name="product_status" class="form-control">
                                             <option value="0" {{ old('product_status', 0) == 0 ? 'selected' : '' }}>
@@ -166,7 +169,11 @@
                                             </select>
                                         </div>
                                     @endforeach
+
                                 </div>
+                                @error('attributes')
+                                    <span class="text-danger mt-1">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -265,6 +272,9 @@
                                             <option value="{{ $id }}">{{ $name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('collection_id')
+                                        <span class="text-danger mt-1">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -275,12 +285,15 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Chọn thương hiệu</label>
-                                    <select name="collection_id" id="" class="form-control">
+                                    <select name="brand_id" id="" class="form-control">
                                         <option value="" hidden selected>-- Thương hiệu --</option>
                                         @foreach ($brands as $id => $name)
                                             <option value="{{ $id }}">{{ $name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('collection_id')
+                                        <span class="text-danger mt-1">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -318,125 +331,108 @@
     <script src="{{ asset('backend/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script src="{{ asset('backend/dist/js/pages/function.js') }}"></script>
     <script>
-        $(function() {
-            // Summernote
+        document.addEventListener('DOMContentLoaded', function() {
+            // Các biến cho variant size
+            const container = document.getElementById('variants-container');
+            const variantSection = document.querySelector('.size-variant');
+            const addButton = document.getElementById('add-variant');
+            const maxVariants = {{ count($sizeAttributes->attributes) }};
+            let selectedSizes = new Set();
+
+            // Các biến cho product type
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const productTypeSelect = document.querySelector('select[name="product_type_id"]');
+            const validProductTypes = ["Nhẫn", "Vòng", "Dây chuyền", "Dây cổ", "Lắc"];
+
+            // Ẩn khối size ngay khi trang load
+            if (variantSection) {
+                variantSection.style.display = 'none';
+            }
+
+            // Summernote initialization
             $('#summernote').summernote({
-                height: 300,
-            })
-
-            // CodeMirror
-            CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
-                mode: "htmlmixed",
-                theme: "monokai"
+                height: 300
             });
-        })
-    </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const container = document.getElementById('variants-container');
-        const addButton = document.getElementById('add-variant');
-        const maxVariants = {{ count($sizeAttributes->attributes) }};
-        let selectedSizes = new Set(); // Dùng Set để theo dõi các size đã chọn
+            function updateSizeOptions() {
+                const allSelects = container.querySelectorAll(
+                    `select[name^="attributes[{{ $sizeAttributes->id }}]"]`);
+                selectedSizes.clear();
 
-        // Hàm cập nhật trạng thái disabled của các option
-        function updateSizeOptions() {
-            // Lấy tất cả các select size trong container
-            const allSelects = container.querySelectorAll('select[name^="attributes[{{ $sizeAttributes->id }}]"]');
-            
-            // Cập nhật selectedSizes từ các select hiện tại
-            selectedSizes.clear();
-            allSelects.forEach(select => {
-                if (select.value) {
-                    selectedSizes.add(select.value);
+                // Cập nhật selectedSizes từ các select hiện tại
+                allSelects.forEach(select => {
+                    if (select.value) {
+                        selectedSizes.add(select.value);
+                    }
+                });
+
+                // Cập nhật trạng thái disabled cho tất cả các select
+                allSelects.forEach(select => {
+                    Array.from(select.options).forEach(option => {
+                        if (option.value) { // Bỏ qua option placeholder
+                            const isCurrentlySelected = select.value === option.value;
+                            option.disabled = selectedSizes.has(option.value) && !
+                                isCurrentlySelected;
+                        }
+                    });
+                });
+
+                // Kiểm tra và cập nhật trạng thái nút thêm
+                addButton.disabled = container.querySelectorAll('.variant-row').length >= maxVariants;
+            }
+
+            function checkProductTypeHasSize(productTypeName) {
+                if (!productTypeName) return false;
+                const normalizedName = productTypeName.trim();
+                return validProductTypes.includes(normalizedName) || normalizedName.endsWith("cưới");
+            }
+
+            function toggleVariantContainer(show) {
+                if (variantSection) {
+                    variantSection.style.display = show ? "block" : "none";
+                }
+            }
+
+            // Xử lý sự kiện click để xóa variant
+            container.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-variant')) {
+                    e.target.closest('.variant-row').remove();
+                    updateSizeOptions();
                 }
             });
 
-            // Cập nhật trạng thái disabled cho tất cả các select
-            allSelects.forEach(select => {
-                Array.from(select.options).forEach(option => {
-                    if (option.value) { // Bỏ qua option placeholder
-                        const isCurrentlySelected = select.value === option.value;
-                        option.disabled = selectedSizes.has(option.value) && !isCurrentlySelected;
-                    }
-                });
+            // Xử lý sự kiện thêm variant mới
+            addButton.addEventListener('click', function() {
+                const variantCount = container.querySelectorAll('.variant-row').length;
+                const newRow = document.createElement('div');
+                newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
+
+                newRow.innerHTML = `
+                    <div class="select-item flex-grow-1 mr-2">
+                        <label>Size</label>
+                        <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
+                            <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
+                            @foreach ($sizeAttributes->attributes as $attribute)
+                                <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="input-item">
+                        <label>Giá biến thể</label>
+                        <input type="text" name="price_variant[]" placeholder="Giá biến thể" class="form-control">
+                    </div>
+                    <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+
+                container.appendChild(newRow);
+                const newSelect = newRow.querySelector('select');
+                newSelect.addEventListener('change', updateSizeOptions);
+                updateSizeOptions();
             });
 
-            // Kiểm tra và cập nhật trạng thái nút thêm
-            checkAddButton();
-        }
-
-        // Kiểm tra và cập nhật trạng thái nút "Thêm"
-        function checkAddButton() {
-            addButton.disabled = container.children.length >= maxVariants;
-        }
-
-        // Xử lý sự kiện thêm variant mới
-        addButton.addEventListener('click', function() {
-            let newRow = document.createElement('div');
-            newRow.classList.add('variant-row', 'd-flex', 'align-items-end', 'mb-2', 'g-2');
-
-            newRow.innerHTML = `
-                <div class="select-item flex-grow-1 mr-2">
-                    <label>Size</label>
-                    <select name="attributes[{{ $sizeAttributes->id }}][]" class="form-control">
-                        <option value="" hidden selected>Chọn {{ strtolower($sizeAttributes->name) }}</option>
-                        @foreach ($sizeAttributes->attributes as $attribute)
-                            <option value="{{ $attribute->id }}">{{ $attribute->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="input-item">
-                    <label for="">Giá biến thể</label>
-                    <input type="text" name="price_variant[]" placeholder="Giá biến thể" class="form-control">
-                </div>
-                <button type="button" class="btn btn-danger remove-variant h-100 ml-2">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-            `;
-
-            container.appendChild(newRow);
-            
-            // Thêm event listener cho select mới
-            const newSelect = newRow.querySelector('select');
-            newSelect.addEventListener('change', updateSizeOptions);
-            
-            updateSizeOptions();
-        });
-
-        // Xử lý sự kiện xóa variant
-        container.addEventListener('click', function(e) {
-            if (e.target.closest('.remove-variant')) {
-                e.target.closest('.variant-row').remove();
-                updateSizeOptions();
-            }
-        });
-
-        // Xử lý sự kiện thay đổi giá trị select
-        container.addEventListener('change', function(e) {
-            if (e.target.tagName === 'SELECT') {
-                updateSizeOptions();
-            }
-        });
-
-        // Khởi tạo ban đầu
-        updateSizeOptions();
-    });
-</script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const categorySelect = document.querySelector('select[name="category_id"]');
-            const productTypeSelect = document.querySelector('select[name="product_type_id"]');
-            const sizeVariantDiv = document.querySelector('.size-variant'); // Ô biến thể Size
-            const sizeSelect = document.querySelector('.size-select'); // Sửa selector thành .size-select
-            const addVariantButton = document.querySelector("#add-variant"); // Nút thêm biến thể
-
-            const validProductTypes = ["Nhẫn", "Vòng", "Dây chuyền", "Dây cổ", "Lắc"];
-            let selectedSizes = []; // Lưu các size đã chọn
-
-            // Khi chọn danh mục, load loại sản phẩm
+            // Xử lý sự kiện thay đổi category
             categorySelect.addEventListener("change", function() {
                 const categoryId = this.value;
                 if (!categoryId) {
@@ -456,38 +452,24 @@
                     .catch(error => console.error("Lỗi khi lấy loại sản phẩm:", error));
             });
 
-            // Khi chọn loại sản phẩm, hiển thị/ẩn biến thể size
+            // Xử lý sự kiện thay đổi product type
             productTypeSelect.addEventListener("change", function() {
-                const selectedText = this.options[this.selectedIndex].text;
-
-                // Kiểm tra nếu loại sản phẩm là một trong các loại đã có hoặc có hậu tố "cưới"
-                if (validProductTypes.includes(selectedText) || selectedText.endsWith("cưới")) {
-                    sizeVariantDiv.style.display = "block";
-                } else {
-                    sizeVariantDiv.style.display = "none";
-                }
+                const selectedOption = this.options[this.selectedIndex];
+                const selectedText = selectedOption ? selectedOption.text : '';
+                const hasSize = checkProductTypeHasSize(selectedText);
+                toggleVariantContainer(hasSize);
             });
 
-            // Khi bấm thêm biến thể, disable các size đã chọn
-            addVariantButton.addEventListener("click", function() {
-                const selectedSize = sizeSelect.value;
-                if (selectedSize && !selectedSizes.includes(selectedSize)) {
-                    selectedSizes.push(selectedSize);
-                    updateSizeOptions();
-                }
-            });
-
-            // Cập nhật danh sách size (disable những size đã chọn)
-            function updateSizeOptions() {
-                const options = sizeSelect.options;
-                for (let i = 0; i < options.length; i++) {
-                    if (selectedSizes.includes(options[i].value)) {
-                        options[i].disabled = true;
-                    } else {
-                        options[i].disabled = false;
-                    }
-                }
+            // Khởi tạo trạng thái ban đầu của product type
+            const selectedOption = productTypeSelect.options[productTypeSelect.selectedIndex];
+            if (selectedOption) {
+                const selectedText = selectedOption.text;
+                const hasSize = checkProductTypeHasSize(selectedText);
+                toggleVariantContainer(hasSize);
             }
+
+            // Khởi tạo các options và trạng thái ban đầu
+            updateSizeOptions();
         });
     </script>
 @endpush

@@ -189,7 +189,7 @@ class ProductController extends Controller
                     'original_price'  => $request->original_price,
                     'sale_price'      => $request->sale_price,
                     'description'     => $request->description,
-                    'is_featured'     => $request->input("is_feature", 1),
+                    'is_featured'     => $request->input("is_featured", 0),
                     'product_status'  => $request->input("product_status", 0),
                     'category_id'     => $request->category_id,
                     'jewelry_line_id' => $request->jewelry_line_id,

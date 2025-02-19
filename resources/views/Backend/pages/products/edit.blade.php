@@ -88,16 +88,18 @@
                                                     {{ $name }}</option>
                                             @endforeach
                                         </select>
+                                        @error('product_type_id')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group col-6">
                                         <label>Sản phẩm nổi bật</label>
                                         <select name="is_featured" class="form-control">
-                                            <option value="0" {{ $product->is_featured == 0 ? 'selected' : '' }}>Sản
-                                                phẩm
-                                                nổi bật
+                                            <option value="0" {{ $product->is_featured == 0 ? 'selected' : '' }}>Mặc
+                                                định
                                             </option>
                                             <option value="1" {{ $product->is_featured == 1 ? 'selected' : '' }}>
-                                                Mặc định
+                                                Sản phẩm nổi bật
                                             </option>
                                         </select>
                                     </div>
@@ -208,7 +210,9 @@
                                         </div>
                                     @endforeach
                                 </div>
-
+                                @error('attributes')
+                                    <span class="text-danger mt-1">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="card ">
@@ -270,6 +274,9 @@
                                             <label class="custom-file-label" for="albumImage">Chọn tệp</label>
                                         </div>
                                     </div>
+                                    @error('album_images')
+                                        <span class="text-danger mt-1">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="form-group text-center">
                                     <div id="imagePreviewContainer" data-edit-mode="true">
@@ -340,6 +347,9 @@
                                                 {{ $name }}</option>
                                         @endforeach
                                     </select>
+                                    @error('brand_id')
+                                        <span class="text-danger mt-1">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

@@ -56,12 +56,17 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <p><strong>Tên sản phẩm:</strong> {{ $Product->product_name }}</p>
-                                                {{-- <p><strong>Mô tả:</strong> {{ $product->product_desc }}</p> --}}
+                                                <p> {{ $Product->product_name }}</p>
                                             </td>
                                             <td>
-                                                <p><strong>Giá gốc:</strong> {{ $Product->original_price }}</p>
-                                                <p><strong>Giá bán:</strong> {{ $Product->sale_price }}</p>
+                                                <p>
+                                                    <strong>Giá gốc:</strong>
+                                                    <span
+                                                        class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->original_price) }}</span>
+                                                </p>
+                                                @if ($Product->sale_price)
+                                                    <p><strong>Giá bán:</strong> {{ $Product->sale_price }}</p>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($Product->is_wedding == 0)
