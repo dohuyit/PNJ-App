@@ -263,14 +263,14 @@
                                                     </h5>
                                                     <div
                                                         class="card-text product-price mb-2 d-flex align-items-center justify-content-center gap-2">
-                                                        @if ($product->sale_price)
+                                                        @if ($product->sale_price != $product->sale_price)
                                                             <span
                                                                 class="original-price text-decoration-line-through fst-italic">{{ formatPrice($product->original_price) }}</span>
                                                             <span
                                                                 class="sale-price">{{ formatPrice($product->sale_price) }}</span>
                                                         @else
                                                             <span
-                                                                class="sale-price">{{ formatPrice($product->original_price) }}</span>
+                                                                class="sale-price">{{ formatPrice($product->sale_price) }}</span>
                                                         @endif
                                                     </div>
                                                     <div
@@ -371,10 +371,9 @@
                     <div class="col-12 px-5 position-relative mb-4 body-slider-collection">
                         <div class="swiper sliderCollection">
                             <div class="swiper-wrapper">
-                                @foreach ($dataAllCollections as $item)
-                                    <div class="swiper-slide collection-item"
-                                        data-type="{{ isset($item->brand_id) ? 'brand' : 'collection' }}"
-                                        data-id="{{ isset($item->brand_id) ? $item->brand_id : $item->collection_id }}">
+                                @foreach ($dataCollections as $index => $item)
+                                    <div class="swiper-slide collection-item" data-id="{{ $item->id }}"
+                                        @if ($index === 0) data-active="true" @endif>
                                         <img src="{{ Storage::url($item->image_thumbnail) }}" class="img-fluid"
                                             alt="{{ $item->name }}" />
                                     </div>
@@ -444,30 +443,10 @@
                             </div>
                             <div class="col-7 content-main">
                                 <div class="list-tags d-flex flex-wrap gap-2">
-                                    <a href="#" class="btn active lh-lg item-tags fw-bold text-capitalize">Trang sức
-                                        kim tiền</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức tín
-                                        ngưỡng</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức
-                                        ECZ</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức CZ</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức đính
-                                        kim cương</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức dây
-                                        chuyền</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức đá
-                                        màu</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức
-                                        bạc</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức ngọc
-                                        trai</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức ý</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức
-                                        vỏi</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức không
-                                        gắn đá</a>
-                                    <a href="#" class="btn lh-lg item-tags fw-bold text-capitalize">Trang sức nhẫn
-                                        cưới</a>
+                                    @foreach ($dataJewelryLines as $jewelryLine)
+                                        <button href="#"
+                                            class="btn lh-lg item-tags fw-bold text-capitalize">{{ $jewelryLine->name }}</button>
+                                    @endforeach
                                 </div>
                                 <div class="desc-for-tag mt-4 fst-italic text-primary">
                                     <p>
@@ -670,12 +649,12 @@
         <section class="py-5" id="group-media">
             <div class="container">
                 <div class="title-group">
-                    <img src="./image/title-group-media.webp" class="w-100" alt="" />
+                    <img src="{{ asset('frontend/image/title-group-media.webp') }}" class="w-100" alt="" />
                 </div>
 
                 <div class="body-group mt-5">
-                    <video src="video/video-pnj-media.mp4" class="w-100 rounded-3" poster="./image/thumbnail hires.png"
-                        controls loop></video>
+                    <video src="{{ asset('frontend/video/video-pnj-media.mp4') }}" class="w-100 rounded-3"
+                        poster="{{ asset('frontend/image/thumbnail hires.png') }}" controls loop></video>
                 </div>
             </div>
         </section>
@@ -743,64 +722,9 @@
 @endpush
 
 @push('script')
+    <script>
+        var storageUrl = "{{ Storage::url('') }}";
+    </script>
     <script src="{{ asset('frontend/js/helper.js') }}"></script>
     <script src="{{ asset('frontend/js/client.js') }}"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Lấy tất cả các item collection và brand
-            const featuredItems = document.querySelectorAll(".collection-item");
-
-            // Gán sự kiện click cho từng item
-            featuredItems.forEach((item) => {
-                item.addEventListener("click", function() {
-                    let type = this.getAttribute("data-type"); // 'brand' hoặc 'collection'
-                    let id = this.getAttribute("data-id"); // ID của brand hoặc collection
-
-                    // Gọi API lấy sản phẩm
-                    fetch(`/get-products/${type}/${id}`)
-                        .then((response) => response.json())
-                        .then((products) => {
-                            console.log(products);
-                            let productContainer = document.querySelector("#product-list");
-                            productContainer.innerHTML = ""; // Xóa sản phẩm cũ
-
-                            if (products.length === 0) {
-                                productContainer.innerHTML = "<p>Không có sản phẩm nào.</p>";
-                                return;
-                            }
-
-                            // Thêm sản phẩm mới vào danh sách
-                            products.forEach((product) => {
-                                let productHTML = `
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="${product.image}" class="card-img-top" alt="${product.name}" />
-                                    <img class="img-sub-fast" src="/frontend/image/PNJfast-Giaotrong3h.svg" alt="" />
-                                    <img class="img-sub-icon" src="/frontend/image/icon-tragop-2.svg" alt="" />
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="/product/${product.id}">${product.name}</a>
-                                    </h5>
-                                    <p class="card-text product-price">${product.price.toLocaleString()}đ</p>
-                                    <div class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span><i class="fa-solid fa-star text-warning"></i></span>
-                                            <span>${product.rating || 'N/A'}</span>
-                                        </div>
-                                        <div class="item-order">
-                                            <span>${product.sold || 0}+ đã bán</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                                productContainer.innerHTML += productHTML;
-                            });
-                        })
-                        .catch((error) => console.error("Lỗi khi tải sản phẩm:", error));
-                });
-            });
-        });
-    </script>
 @endpush

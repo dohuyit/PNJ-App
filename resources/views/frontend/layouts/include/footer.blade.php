@@ -3,7 +3,7 @@
         <div class="row py-4">
             <!-- Logo -->
             <div class="col-12 mb-4 logo-footer">
-                <img src="./image/pnj.com.vn.png" alt="PNJ Logo" />
+                <img src="{{ asset('frontend/image/pnj.com.vn.png') }}" alt="PNJ Logo" />
             </div>
 
             <!-- Company Info -->
@@ -112,19 +112,19 @@
             <div class="col-12 col-md-9 content-footer text-end">
                 <h5 class="fw-bold mb-3 header-payment">Phương thức thanh toán</h5>
                 <ul class="list-unstyled list-payment d-flex gap-2 justify-content-end">
-                    <li><img src="./image/visa.svg" alt="visa"></li>
-                    <li><img src="./image/mastercard.svg" alt="mastercard"></li>
-                    <li><img src="./image/jcb.svg" alt="jcb"></li>
-                    <li><img src="./image/thanhtoantienmat.svg" alt="cash"></li>
-                    <li><img src="./image/internetBanking.svg" alt="internet banking"></li>
-                    <li><img src="./image/tragop.svg" alt="installment"></li>
+                    <li><img src="{{ asset('frontend/image/visa.svg') }}" alt="visa"></li>
+                    <li><img src="{{ asset('frontend/image/mastercard.svg') }}" alt="mastercard"></li>
+                    <li><img src="{{ asset('frontend/image/jcb.svg') }}" alt="jcb"></li>
+                    <li><img src="{{ asset('frontend/image/thanhtoantienmat.svg') }}" alt="cash"></li>
+                    <li><img src="{{ asset('frontend/image/internetBanking.svg') }}" alt="internet banking"></li>
+                    <li><img src="{{ asset('frontend/image/tragop.svg') }}" alt="installment"></li>
                 </ul>
             </div>
 
             <!-- Certification -->
             <div class="col-12 col-md-3 content-footer certification">
                 <h5 class="fw-bold mb-3">Chứng nhận</h5>
-                <img src="./image/op-da-thong-bao-bo-cong-thuong-183x60.png" alt="certification">
+                <img src="{{ asset('frontend/image/op-da-thong-bao-bo-cong-thuong-183x60.png') }}" alt="certification">
             </div>
         </div>
     </div>

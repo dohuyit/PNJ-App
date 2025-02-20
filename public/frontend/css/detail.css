@@ -29,6 +29,17 @@ body {
     --color-sale: #eb4d4e;
 }
 
+.btn-outline-primary {
+    --bs-btn-color: #003468;
+    --bs-btn-border-color: #003468;
+    --bs-btn-hover-color: var(--bg-default);
+    --bs-btn-hover-bg: #003468;
+    --bs-btn-hover-border-color: #003468;
+    --bs-btn-active-color: var(--bg-default);
+    --bs-btn-active-bg: #003468;
+    --bs-btn-active-border-color: #003468;
+}
+
 .btn-primary {
     background-color: var(--accent-color) !important;
 }
@@ -78,15 +89,15 @@ input {
     height: 40px;
 }
 
-.auth-group p span:first-child{
+.auth-group p span:first-child {
     font-size: 12px;
     font-weight: 600;
     color: var(--accent-color);
- }
- 
- .auth-group p span:last-child{
+}
+
+.auth-group p span:last-child {
     font-size: 14px;
- }
+}
 
 /* .header-top :is(.function-outer, .user-outer) a {
   display: flex;

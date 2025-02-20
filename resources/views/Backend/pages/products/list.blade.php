@@ -52,20 +52,31 @@
                                                     <img src="{{ Storage::url($Product->product_image) }}" alt="Banner"
                                                         width="100">
                                                 @else
-                                                    <span class="badge bg-warning">Chưa có ảnh</span>
+                                                    <span class="badge bg-secondary">Chưa có ảnh</span>
                                                 @endif
                                             </td>
                                             <td>
                                                 <p> {{ $Product->product_name }}</p>
                                             </td>
                                             <td>
-                                                <p>
-                                                    <strong>Giá gốc:</strong>
-                                                    <span
-                                                        class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->original_price) }}</span>
-                                                </p>
-                                                @if ($Product->sale_price)
-                                                    <p><strong>Giá bán:</strong> {{ $Product->sale_price }}</p>
+
+                                                @if ($Product->original_price != $Product->sale_price)
+                                                    <p>
+                                                        <strong>Giá gốc:</strong>
+                                                        <span
+                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->original_price) }}</span>
+                                                    </p>
+                                                    <p>
+                                                        <strong>Giá bán:</strong>
+                                                        <span
+                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->sale_price) }}</span>
+                                                    </p>
+                                                @else
+                                                    <p>
+                                                        <strong>Giá bán:</strong>
+                                                        <span
+                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->sale_price) }}</span>
+                                                    </p>
                                                 @endif
                                             </td>
                                             <td>

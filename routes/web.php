@@ -82,7 +82,8 @@ Route::prefix('admin')->group(function () {
 Route::middleware('client')->group(function () {
     // CLIENT DASHBOARD
     Route::get('/', [HomeController::class, 'index'])->name('client.home');
-    Route::get('get-products/{type}/{id}', [HomeController::class, 'getProducts'])->name('client.home.getProducts');
+    Route::get('/get-product-by-collections/{id}', [HomeController::class, 'getProductByCollections'])
+        ->name('client.home.getProductclt');
     Route::get('detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
 
 

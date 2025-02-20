@@ -74,7 +74,7 @@ class ProductController extends Controller
                 $listProducts = [
                     'product_name' => $request->product_name,
                     'original_price' => $request->original_price,
-                    'sale_price' => $request->sale_price,
+                    'sale_price' => $request->sale_price ? $request->sale_price : $request->original_price,
                     'description' => $request->description,
                     'is_featured' => $request->input("is_feature", 1),
                     'product_status' => $request->input("product_status", 0),
@@ -103,6 +103,7 @@ class ProductController extends Controller
                         ]);
                     }
                 }
+
                 if ($request->has('attributes')) {
                     $dataAttributes = $request->input('attributes');
 
@@ -121,7 +122,7 @@ class ProductController extends Controller
                                     'attribute_id'  => $attribute_id,
                                     'price_variant' => $price,
                                 ];
-                                Variant::insert($listVariants);
+                                Variant::create($listVariants);
                             }
                         }
                     }

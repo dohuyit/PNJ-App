@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\AttributeGroup;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -23,10 +24,12 @@ class DetailController extends Controller
             }
         ])->find($id);
 
+        $albumImageProduct = ProductImage::query()->where('product_id', $id)->get();
+        // dd($albumImageProduct);
         if (!$dataDetail) {
             abort(404);
         }
         // dd($dataDetail);
-        return view('frontend.detail', compact('dataDetail'));
+        return view('frontend.detail', compact('dataDetail', 'albumImageProduct'));
     }
 }

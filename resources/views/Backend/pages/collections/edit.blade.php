@@ -55,7 +55,7 @@
                                 <div class="form-group col-6">
                                     <label>Thương hiệu phụ thuộc</label>
                                     <select name="brand_id" class="form-control">
-                                        <option value="" hidden selected>-- Chọn thương hiệu --</option>
+                                        <option value="" selected>-- Chọn thương hiệu --</option>
                                         @foreach ($brands as $id => $name)
                                             <option @selected($collection->brand_id == $id) value="{{ $id }}">
                                                 {{ $name }}</option>

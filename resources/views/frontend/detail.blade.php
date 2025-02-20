@@ -13,36 +13,13 @@
                                     <div class="position-relative py-3">
                                         <div class="swiper albumCarousel ">
                                             <div class="swiper-wrapper d-flex align-items-center flex-column">
-                                                <div class="swiper-slide bg-light">
-                                                    <img class="img-thumbnail"
-                                                        src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-01.png"
-                                                        alt="img-thumbnail">
-                                                </div>
-                                                <div class="swiper-slide bg-light">
-                                                    <img class="img-thumbnail"
-                                                        src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-02.png"
-                                                        alt="img-thumbnail">
-                                                </div>
-                                                <div class="swiper-slide bg-light">
-                                                    <img class="img-thumbnail"
-                                                        src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-03.png"
-                                                        alt="img-thumbnail">
-                                                </div>
-                                                <div class="swiper-slide bg-light">
-                                                    <img class="img-thumbnail"
-                                                        src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-04.jpg"
-                                                        alt="img-thumbnail">
-                                                </div>
-                                                <div class="swiper-slide bg-light">
-                                                    <img class="img-thumbnail"
-                                                        src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-05.jpg"
-                                                        alt="img-thumbnail">
-                                                </div>
-                                                <div class="swiper-slide bg-light">
-                                                    <img class="img-thumbnail"
-                                                        src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-06.jpg"
-                                                        alt="img-thumbnail">
-                                                </div>
+                                                @foreach ($albumImageProduct as $image)
+                                                    <div class="swiper-slide bg-light">
+                                                        <img class="img-thumbnail"
+                                                            src="{{ Storage::url($image->image_link) }}"
+                                                            alt="img-thumbnail">
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                         <div class="swiper-button-prev"></div>
@@ -52,11 +29,11 @@
                             </div>
                             <div class="block-main-image">
                                 <div class="image bg-light">
-                                    <img src="./image/products/gnxmxmw002401-nhan-vang-trang-y-18k-dinh-da-cz-pnj-01.png"
-                                        alt="">
+                                    <img src="{{ Storage::url($dataDetail->product_image) }}" alt="">
                                 </div>
                                 <div class="icon-image mt-3">
-                                    <img width="30" height="25" src="./image/anh.svg" alt="icon-anh">
+                                    <img width="30" height="25" src="{{ asset('frontend/image/anh.svg') }}"
+                                        alt="icon-anh">
                                     <p class="text-center fs-6 py-1">Hình ảnh</p>
                                 </div>
                             </div>
@@ -119,10 +96,9 @@
                     <div class="col-sm-12 col-md-12 col-lg-5 product-detail-right">
                         <div class="title-section">
                             <div class="d-flex align-items-center gap-2">
-                                <img class="img-fluid" src="./image/PNJfast-Giaotrong3h.svg" alt="icon-pnj-fast"
-                                    width="55" height="35">
-                                <h1 class="product-title text-primary m-0">Dây chuyền Vàng trắng Ý 18K PNJ
-                                    0000W001071
+                                <img class="img-fluid" src="{{ asset('frontend/image/PNJfast-Giaotrong3h.svg') }}"
+                                    alt="icon-pnj-fast" width="55" height="35">
+                                <h1 class="product-title text-primary m-0">{{ $dataDetail->product_name }}
                                 </h1>
                             </div>
                             <p class="text-muted small d-flex justify-content-between py-2">
@@ -159,7 +135,8 @@
                         </div>
                         <div class="stock-status-section my-3 text-primary">
                             <span class="fw-bold">Còn hàng - </span>
-                            <a href="#"><img width="24" height="24" src="./image/zalo.svg" alt="icon-zalo"></a>
+                            <a href="#"><img width="24" height="24"
+                                    src="{{ asset('frontend/image/zalo.svg') }}" alt="icon-zalo"></a>
                             <span>nhấn để được tư vấn và nhận ưu đãi</span>
                         </div>
 
@@ -197,15 +174,18 @@
                         <div
                             class="benefits-section d-flex justify-content-between text-center mb-2 bg-light p-1 rounded-2">
                             <div class="benefit-item">
-                                <img src="./image/shipping-icon.svg" alt="Delivery" width="30" height="30">
+                                <img src="{{ asset('frontend/image/shipping-icon.svg') }}" alt="Delivery" width="30"
+                                    height="30">
                                 <p class="small">MIỄN PHÍ giao trong 3 giờ</p>
                             </div>
                             <div class="benefit-item">
-                                <img src="./image/shopping 247-icon.svg" alt="Service" width="30" height="30">
+                                <img src="{{ asset('frontend/image/shopping 247-icon.svg') }}" alt="Service" width="30"
+                                    height="30">
                                 <p class="small">Phục vụ 24/7</p>
                             </div>
                             <div class="benefit-item">
-                                <img src="./image/thudoi-icon.svg" alt="Return" width="30" height="30">
+                                <img src="{{ asset('frontend/image/thudoi-icon.svg') }}" alt="Return" width="30"
+                                    height="30">
                                 <p class="small">Thu đổi 48h</p>
                             </div>
                         </div>
@@ -630,3 +610,12 @@
         </section>
     </main>
 @endsection
+
+@push('link')
+    <link rel="stylesheet" href="{{ asset('frontend/css/detail.css') }}" />
+@endpush
+
+@push('script')
+    <script src="{{ asset('frontend/js/helper.js') }}"></script>
+    <script src="{{ asset('frontend/js/client.js') }}"></script>
+@endpush
