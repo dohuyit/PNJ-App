@@ -653,7 +653,7 @@
                 </div>
 
                 <div class="body-group mt-5">
-                    <video src="{{ asset('frontend/video/video-pnj-media.mp4') }}" class="w-100 rounded-3"
+                    <video src="{{ asset('frontend/video/video-pnj.mp4') }}" class="w-100 rounded-3"
                         poster="{{ asset('frontend/image/thumbnail hires.png') }}" controls loop></video>
                 </div>
             </div>
