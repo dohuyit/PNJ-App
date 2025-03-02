@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="col-lg-4 py-3 align-items-center text-center">
-                    <a href="#" class="py-2 logo-outer">
+                    <a href="{{ route('client.home') }}" class="py-2 logo-outer">
                         <img src="{{ asset('frontend/image/pnj.com.vn.png') }}" class="img-fluid" alt="logo-pnj" />
                     </a>
                 </div>

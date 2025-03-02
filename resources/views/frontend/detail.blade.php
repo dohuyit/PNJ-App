@@ -4,207 +4,366 @@
 @section('content')
     <main>
         <section id="detail-product" class="py-5">
-            <div class="container">
-                <div class="row d-flex justify-content-evenly">
-                    <div class="col-sm-12 col-md-12 col-lg-6 product-detail-left">
-                        <div class="product-image d-flex align-items-center justify-content-between">
-                            <div class="block-album text-center">
-                                <div class="py-4 pe-2">
-                                    <div class="position-relative py-3">
-                                        <div class="swiper albumCarousel ">
-                                            <div class="swiper-wrapper d-flex align-items-center flex-column">
-                                                @foreach ($albumImageProduct as $image)
-                                                    <div class="swiper-slide bg-light">
-                                                        <img class="img-thumbnail"
-                                                            src="{{ Storage::url($image->image_link) }}"
-                                                            alt="img-thumbnail">
-                                                    </div>
-                                                @endforeach
+            <form action="{{ route('client.cart.add') }}" method="post">
+                @csrf;
+                <input type="hidden" name="quanlity" min="1" value="1">
+                <input type="hidden" name="id_product" value="{{ $dataDetail->id }}">
+                <div class="container">
+                    <div class="row d-flex justify-content-evenly">
+                        <div class="col-sm-12 col-md-12 col-lg-6 product-detail-left">
+                            <div class="product-image d-flex align-items-center justify-content-between">
+                                <div class="block-album text-center">
+                                    <div class="py-4 pe-2">
+                                        <div class="position-relative py-3">
+                                            <div class="swiper albumCarousel ">
+                                                <div class="swiper-wrapper d-flex align-items-center flex-column">
+                                                    @foreach ($albumImageProduct as $image)
+                                                        <div class="swiper-slide bg-light">
+                                                            <img class="img-thumbnail"
+                                                                src="{{ Storage::url($image->image_link) }}"
+                                                                alt="img-thumbnail">
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
+                                            <div class="swiper-button-prev"></div>
+                                            <div class="swiper-button-next"></div>
                                         </div>
-                                        <div class="swiper-button-prev"></div>
-                                        <div class="swiper-button-next"></div>
+                                    </div>
+                                </div>
+                                <div class="block-main-image">
+                                    <div class="image bg-light">
+                                        <img src="{{ Storage::url($dataDetail->product_image) }}" alt="">
+                                    </div>
+                                    <div class="icon-image mt-3">
+                                        <img width="30" height="25" src="{{ asset('frontend/image/anh.svg') }}"
+                                            alt="icon-anh">
+                                        <p class="text-center fs-6 py-1">Hình ảnh</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="block-main-image">
-                                <div class="image bg-light">
-                                    <img src="{{ Storage::url($dataDetail->product_image) }}" alt="">
-                                </div>
-                                <div class="icon-image mt-3">
-                                    <img width="30" height="25" src="{{ asset('frontend/image/anh.svg') }}"
-                                        alt="icon-anh">
-                                    <p class="text-center fs-6 py-1">Hình ảnh</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-description mt-2">
-                            <div class="desc-heading">
+                            <div class="product-description mt-2">
                                 <ul
                                     class="list-group p-0 d-flex flex-row justify-content-center align-items-center text-center">
-                                    <li class="w-100 fw-bold list-group-item py-2 px-3 active">Mô tả sản phẩm</li>
-                                    <li class="w-100 fw-bold list-group-item py-2 px-3">Chính sách hậu đãi</li>
-                                    <li class="w-100 fw-bold list-group-item py-2 px-3">Câu hỏi thường gặp</li>
+                                    <li class="w-100 fw-bold list-group-item py-2 px-3 active" data-bs-toggle="tab"
+                                        data-bs-target="#desc-product">Mô tả sản phẩm</li>
+                                    <li class="w-100 fw-bold list-group-item py-2 px-3" data-bs-toggle="tab"
+                                        data-bs-target="#service-policy">Chính sách hậu đãi</li>
+                                    <li class="w-100 fw-bold list-group-item py-2 px-3" data-bs-toggle="tab"
+                                        data-bs-target="#faq-accordion">Câu hỏi thường gặp</li>
                                 </ul>
-                                <div class="desc-content py-4">
-                                    <table class="table table-borderless mb-3 table-striped">
-                                        <tbody>
-                                            <tr>
-                                                <td>Trọng lượng tham khảo:</td>
-                                                <td>18.28982</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Hàm lượng chất liệu:</td>
-                                                <td>7500</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loại đá chính:</td>
-                                                <td>Không gắn đá</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Loại đá phụ:</td>
-                                                <td>Không gắn đá</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Giới tính:</td>
-                                                <td>Nữ</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Thương hiệu:</td>
-                                                <td>PNJ</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <p>
-                                        Bằng việc kết hợp chất liệu <a href="#">Vàng Ý 18K</a>
-                                        cùng thiết kế tinh tế, sợi
-                                        <a href="#">dây chuyền vàng</a> chính là điểm nhấn nổi
-                                        bật, tô điểm thêm vẻ đẹp thanh
-                                        lịch và duyên dáng cho nàng. Dây đeo mảnh thích hợp với những bộ trang phục
-                                        có nhiều họa tiết, đồng thời tạo
-                                        điểm nhấn cân bằng với các phụ kiện to bản khác.
+                                <div class="tab-content py-4">
+                                    <div class="tab-pane fade show active" id="desc-product">
+                                        <div class="table-desc mb-3">
+                                            {!! $dataDetail->description !!}
+                                        </div>
+                                        <p>
+                                            Bằng việc kết hợp chất liệu Vàng Ý 18K
+                                            cùng thiết kế tinh tế, sợi
+                                            dây chuyền vàng chính là điểm nhấn nổi
+                                            bật, tô điểm thêm vẻ đẹp thanh
+                                            lịch và duyên dáng cho nàng. Dây đeo mảnh thích hợp với những bộ trang phục
+                                            có nhiều họa tiết, đồng thời tạo
+                                            điểm nhấn cân bằng với các phụ kiện to bản khác.
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane fade" id="faq-accordion">
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="accordion-item mb-3">
+                                                <h2 class="accordion-header" id="heading1">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse1"
+                                                        aria-expanded="true" aria-controls="collapse1">
+                                                        Mua Online có ưu đãi gì đặc biệt cho tôi?
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse1" class="accordion-collapse collapse"
+                                                    aria-labelledby="heading1" data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        PNJ mang đến nhiều trải nghiệm mua sắm hiện đại khi mua Online:
+                                                        - Ưu đãi độc quyền Online với hình thức thanh toán đa dạng.
+                                                        - Đặt giữ hàng Online, nhận tại cửa hàng.
+                                                        - Miễn phí giao hàng từ 1-7 ngày trên toàn quốc và giao hàng trong 3
+                                                        giờ
+                                                        tại một số khu vực
+                                                        trung tâm với các sản phẩm có gắn nhãn.
+                                                        - Trả góp 0% lãi suất với đơn hàng từ 3 triệu.
+                                                        - Làm sạch trang sức trọn đời, khắc tên miễn phí theo yêu cầu (tùy
+                                                        kết
+                                                        cấu sản phẩm) và
+                                                        chính sách bảo hành, đổi trả dễ dàng tại hệ thống PNJ trên toàn
+                                                        quốc.
+                                                        PNJ hân hạnh phục vụ quý khách qua Hotline 1800 5454 57
+                                                        (08:00-21:00,
+                                                        miễn phí cuộc gọi).
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="accordion-item mb-3">
+                                                <h2 class="accordion-header" id="heading2">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse2"
+                                                        aria-expanded="false" aria-controls="collapse2">
+                                                        PNJ có thu mua lại trang sức không?
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse2" class="accordion-collapse collapse"
+                                                    aria-labelledby="heading2" data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        PNJ có dịch vụ thu đổi trang sức PNJ tại hệ thống cửa hàng trên toàn
+                                                        quốc.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="accordion-item mb-3">
+                                                <h2 class="accordion-header" id="heading3">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse3"
+                                                        aria-expanded="false" aria-controls="collapse3">
+                                                        Sản phẩm đeo lâu có xỉn màu không, bảo hành như thế nào?
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse3" class="accordion-collapse collapse"
+                                                    aria-labelledby="heading3" data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        Do tính chất hóa học, sản phẩm có khả năng oxy hóa, xuống màu. PNJ
+                                                        có
+                                                        chính sách bảo hành
+                                                        miễn phí về lỗi kỹ thuật, nước xi:
+                                                        - Trang sức vàng: 6 tháng.
+                                                        - Trang sức bạc: 3 tháng.
+                                                        Ngoài ra, PNJ cũng cung cấp dịch vụ siêu âm làm sạch bằng máy chuyên
+                                                        dụng (siêu âm, không
+                                                        xi) miễn phí trọn đời tại hệ thống cửa hàng.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="accordion-item mb-3">
+                                                <h2 class="accordion-header" id="heading4">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse4"
+                                                        aria-expanded="false" aria-controls="collapse4">
+                                                        Nếu đặt mua Online mà sản phẩm không đeo vừa thì có được đổi không?
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse4" class="accordion-collapse collapse"
+                                                    aria-labelledby="heading4" data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        PNJ có chính sách thu đổi trang sức vàng trong vòng 48 giờ, đổi ni/
+                                                        size
+                                                        trang sức bạc trong vòng 72 giờ. Quý khách sẽ được áp dụng đổi trên
+                                                        hệ
+                                                        thống PNJ toàn quốc.
+                                                        • Sản phẩm đeo lâu có xỉn màu không, bảo hành như thế nào?
+                                                        Do tính chất hóa học, sản phẩm có khả năng oxy hóa, xuống màu. PNJ
+                                                        có
+                                                        chính sách bảo hành miễn phí về lỗi kỹ thuật, nước xi:
+                                                        - Trang sức vàng: 6 tháng.
+                                                        - Trang sức bạc: 3 tháng.
+                                                        Ngoài ra, PNJ cũng cung cấp dịch vụ siêu âm làm sạch bằng máy chuyên
+                                                        dụng (siêu âm, không xi) miễn phí trọn đời tại hệ thống cửa hàng.
+                                                        • Tôi muốn xem trực tiếp, cửa hàng nào còn hàng?
+                                                        Với hệ thống cửa hàng trải rộng khắp toàn quốc, quý khách vui lòng
+                                                        liên
+                                                        hệ Hotline 1800 5454 57 (08:00-21:00, miễn phí cuộc gọi) để kiểm tra
+                                                        cửa
+                                                        hàng còn hàng và tư vấn chương trình khuyến mãi Online trước khi đến
+                                                        cửa
+                                                        hàng.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="service-policy">
+                                        <ul>
+                                            <div class="item-policy mb-3">
+                                                <h5>Miễn phí bảo hành 6 tháng</h5>
+                                                <li>Bảo hành 6 tháng lỗi kỹ thuật, nước xi.</li>
+                                            </div>
+                                            <div class="item-policy mb-3">
+                                                <h5>Miễn phí siêu âm và đánh bóng bằng máy chuyên dụng trọn đời</h5>
+                                                <li>Đối với sản phẩm bị oxy hóa, xuống màu, sẽ được siêu âm làm sạch bằng
+                                                    máy
+                                                    chuyên dụng (siêu
+                                                    âm,
+                                                    không xi) miễn phí trọn đời tại cửa hàng.</li>
+                                                <li> Miễn phí đánh bóng, siêu âm trọn đời.</li>
+                                                <li>Đối với nhẫn cưới được làm mới, đánh bóng, xi miễn phí trọn đời.
+                                                </li>
+                                            </div>
+                                            <div class="item-policy mb-3">
+                                                <h5>Miễn phí thay đá ECZ, CZ và đá tổng hợp</h5>
+                                                <li>Miễn phí thay đá tổng hợp, ECZ và CZ trong suốt thời gian bảo hành.</li>
+                                            </div>
+                                            <div class="item-policy mb-3">
+                                                <h5>
+                                                    Không áp dụng bảo hành cho các trường hợp sau:</h5>
+                                                <li>Dây chuyền, lắc chế tác bị đứt gãy.</li>
+                                                <li>Sản phẩm bị lỗi do tác động bên ngoài, do quá trình sử dụng hoặc sử dụng
+                                                    không đúng cách dẫn
+                                                    đến sản
+                                                    phẩm bị biến dạng hoặc hư hỏng.</li>
+                                                <li>Không bảo hành kiềng, vòng, nữ trang 22K, 24K, dây chuyền, dây cổ chế
+                                                    tác,
+                                                    lắc chế tác bị
+                                                    đứt, gãy
+                                                    và sản phẩm bị lỗi do tác động bên ngoài.</li>
+                                                <li>Khách hàng cung cấp thông tin truy lục hóa đơn không chính xác.</li>
+                                            </div>
+                                            <div class="item-policy mb-3">
+                                                <h5>Lưu ý về chính sách bảo hành:</h5>
+                                                <li>PNJ bảo hành các sản phẩm thuộc hệ thống cửa hàng kênh lẻ và online của
+                                                    PNJ.
+                                                </li>
+                                                <li>
+                                                    Chế độ bảo hành sản phẩm có thể thay đổi theo chính sách của PNJ đối với
+                                                    các
+                                                    dòng hàng và
+                                                    chương
+                                                    trình khuyến mãi vào từng thời điểm.</li>
+                                                <li> Xem thông tin chi tiết về chính sách bảo hành vui lòng truy cập tại
+                                                    đây.
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-5 product-detail-right">
+                            <div class="title-section">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img class="img-fluid" src="{{ asset('frontend/image/PNJfast-Giaotrong3h.svg') }}"
+                                        alt="icon-pnj-fast" width="55" height="35">
+                                    <h1 class="product-title text-primary m-0">{{ $dataDetail->product_name }}
+                                    </h1>
+                                </div>
+                                <p class="text-muted small d-flex justify-content-between py-2">
+                                    <span>Mã: {{ strtoupper('PNJ' . Str::random(8) . mt_rand(1000, 9999)) }}
+
+                                    </span>
+                                    <span>(0) 132 đã bán</span>
+                                </p>
+                            </div>
+
+                            <!-- Price Section -->
+                            <div class="price-section">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <p class="fs-4 text-primary" id="salePrice">{{ formatPrice($dataDetail->sale_price) }}
                                     </p>
-                                    <p>
-                                        Dù diện lên bộ cánh dạ tiệc hay đơn giản là outfit thường ngày, chiếc dây
-                                        chuyền sẽ tạo điểm nhấn tuyệt đối
-                                        xung quanh xương quai xanh và khơi gợi ánh nhìn xung quanh.
+                                    <p class="text-secondary">
+                                        Chỉ cần trả <span
+                                            class="text-primary">{{ formatPrice($dataDetail->sale_price * 0.05) }}</span>/tháng
                                     </p>
+                                </div>
+                                <p class="price-note text-secondary fst-italic">
+                                    (Giá sản phẩm thay đổi tuỳ trọng lượng vàng và đá)
+                                </p>
+                            </div>
+
+
+                            <!-- Size Selection -->
+                            @if ($dataDetail->variants->isNotEmpty())
+                                <div class="size-section">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span>Chọn kích cỡ</span>
+                                        <span class="fst-italic text-decoration-underline text-secondary">Cách đo size
+                                            nhẫn</span>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        @foreach ($dataDetail->variants as $variant)
+                                            @if ($variant->attribute && $variant->attribute->attributegroups->name === 'Size')
+                                                <input type="hidden" name="id_variant_product"
+                                                    value="{{ $variant->id }}">
+                                                <button type="button" class="size-btn rounded-2 btn btn-outline-primary"
+                                                    data-size-id="{{ $variant->attribute->id }}"
+                                                    data-price-variant="{{ formatPrice($variant->price_variant) }}">
+                                                    {{ $variant->attribute->name }}
+                                                </button>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="stock-status-section my-3 text-primary">
+                                <span class="fw-bold">Còn hàng - </span>
+                                <a href="#"><img width="24" height="24"
+                                        src="{{ asset('frontend/image/zalo.svg') }}" alt="icon-zalo"></a>
+                                <span>nhấn để được tư vấn và nhận ưu đãi</span>
+                            </div>
+
+                            <!-- Promotions Section -->
+                            <div class="promotions-section bg-light rounded-2 mb-2 shadow">
+                                <h6 class="mb-1 fs-6 p-2">Ưu đãi:</h6>
+                                <ul class="list-unstyled p-2 rounded-bottom-2">
+                                    <li class="promotion-item d-flex align-items-start mb-2 gap-2">
+                                        <span class="icon-check rounded-circle text-light">
+                                            <i class="fa-solid fa-check"></i>
+                                        </span>
+                                        <span>Giảm đến 300K khi thanh toán bằng VNPAY-QR</span>
+                                    </li>
+                                    <li class="promotion-item d-flex align-items-start mb-2 gap-2">
+                                        <span class="icon-check rounded-circle text-light">
+                                            <i class="fa-solid fa-check"></i>
+                                        </span>
+                                        <span>
+                                            Ưu đãi thêm lên đến 1.5tr khi thanh toán bằng thẻ TECHCOMBANK
+                                        </span>
+                                    </li>
+                                    <li class="promotion-item d-flex align-items-start mb-2 gap-2">
+                                        <span class="icon-check rounded-circle text-light">
+                                            <i class="fa-solid fa-check"></i>
+                                        </span>
+                                        <span>
+                                            Giảm 200.000₫ khi thanh toán bằng thẻ tín
+                                            dụng Muadee by HDBANK
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Benefits Section -->
+                            <div
+                                class="benefits-section d-flex justify-content-between text-center mb-2 bg-light p-1 rounded-2">
+                                <div class="benefit-item">
+                                    <img src="{{ asset('frontend/image/shipping-icon.svg') }}" alt="Delivery"
+                                        width="30" height="30">
+                                    <p class="small">Miễn phÍ giao trong 3 giờ</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="{{ asset('frontend/image/shopping 247-icon.svg') }}" alt="Service"
+                                        width="30" height="30">
+                                    <p class="small">Phục vụ 24/7</p>
+                                </div>
+                                <div class="benefit-item">
+                                    <img src="{{ asset('frontend/image/thudoi-icon.svg') }}" alt="Return"
+                                        width="30" height="30">
+                                    <p class="small">Thu đổi 48h</p>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="btns-section gap-3">
+                                <button class="btn btn-danger btn-buy-now d-flex align-items-center flex-column w-100">
+                                    <span class="fw-bold">Mua ngay</span>
+                                    <span class="fst-italic">(Giao hàng miễn phí tận nhà hoặc nhận tại cửa hàng)</span>
+                                </button>
+                                <div class="d-flex align-items-center justify-content-between mt-2 gap-2">
+                                    <button type="submit" class="btn btn-primary btn-add-cart">Thêm vào giỏ hàng</button>
+                                    <button class="btn btn-primary btn-phone">Gọi ngay (miễn phí)</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-12 col-lg-5 product-detail-right">
-                        <div class="title-section">
-                            <div class="d-flex align-items-center gap-2">
-                                <img class="img-fluid" src="{{ asset('frontend/image/PNJfast-Giaotrong3h.svg') }}"
-                                    alt="icon-pnj-fast" width="55" height="35">
-                                <h1 class="product-title text-primary m-0">{{ $dataDetail->product_name }}
-                                </h1>
-                            </div>
-                            <p class="text-muted small d-flex justify-content-between py-2">
-                                <span>Mã: GD0000W001071</span>
-                                <span>(0) 132 đã bán</span>
-                            </p>
-                        </div>
-
-                        <!-- Price Section -->
-                        <div class="price-section">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <p class="fs-4 text-primary">17.559.000₫</p>
-                                <p class="text-secondary">
-                                    Chỉ cần trả <span class="text-primary">1.463.250 ₫</span>/tháng
-                                </p>
-                            </div>
-                            <p class="price-note text-secondary fst-italic">
-                                (Giá sản phẩm thay đổi tuỳ trọng lượng vàng và đá)
-                            </p>
-                        </div>
-
-                        <!-- Size Selection -->
-                        <div class="size-section">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span>Chọn kích cỡ</span>
-                                <span class="fst-italic text-decoration-underline text-secondary">Cách đo size
-                                    nhẫn</span>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button class="size-btn rounded-2 btn btn-outline-primary active">42</button>
-                                <button class="size-btn rounded-2 btn btn-outline-primary">45</button>
-                                <button class="size-btn rounded-2 btn btn-outline-primary">48</button>
-                            </div>
-                        </div>
-                        <div class="stock-status-section my-3 text-primary">
-                            <span class="fw-bold">Còn hàng - </span>
-                            <a href="#"><img width="24" height="24"
-                                    src="{{ asset('frontend/image/zalo.svg') }}" alt="icon-zalo"></a>
-                            <span>nhấn để được tư vấn và nhận ưu đãi</span>
-                        </div>
-
-                        <!-- Promotions Section -->
-                        <div class="promotions-section bg-light rounded-2 mb-2 shadow">
-                            <h6 class="mb-1 fs-6 p-2">Ưu đãi:</h6>
-                            <ul class="list-unstyled p-2 rounded-bottom-2">
-                                <li class="promotion-item d-flex align-items-start mb-2 gap-2">
-                                    <span class="icon-check rounded-circle text-light">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                    <span>Giảm đến 300K khi thanh toán bằng VNPAY-QR</span>
-                                </li>
-                                <li class="promotion-item d-flex align-items-start mb-2 gap-2">
-                                    <span class="icon-check rounded-circle text-light">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                    <span>
-                                        Ưu đãi thêm lên đến 1.5tr khi thanh toán bằng thẻ TECHCOMBANK
-                                    </span>
-                                </li>
-                                <li class="promotion-item d-flex align-items-start mb-2 gap-2">
-                                    <span class="icon-check rounded-circle text-light">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                    <span>
-                                        Giảm 200.000₫ khi thanh toán bằng thẻ tín
-                                        dụng Muadee by HDBANK
-                                    </span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- Benefits Section -->
-                        <div
-                            class="benefits-section d-flex justify-content-between text-center mb-2 bg-light p-1 rounded-2">
-                            <div class="benefit-item">
-                                <img src="{{ asset('frontend/image/shipping-icon.svg') }}" alt="Delivery" width="30"
-                                    height="30">
-                                <p class="small">MIỄN PHÍ giao trong 3 giờ</p>
-                            </div>
-                            <div class="benefit-item">
-                                <img src="{{ asset('frontend/image/shopping 247-icon.svg') }}" alt="Service" width="30"
-                                    height="30">
-                                <p class="small">Phục vụ 24/7</p>
-                            </div>
-                            <div class="benefit-item">
-                                <img src="{{ asset('frontend/image/thudoi-icon.svg') }}" alt="Return" width="30"
-                                    height="30">
-                                <p class="small">Thu đổi 48h</p>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="btns-section gap-3">
-                            <button class="btn btn-danger btn-buy-now d-flex align-items-center flex-column w-100">
-                                <span class="fw-bold">Mua ngay</span>
-                                <span class="fst-italic">(Giao hàng miễn phí tận nhà hoặc nhận tại cửa hàng)</span>
-                            </button>
-                            <div class="d-flex align-items-center justify-content-between mt-2 gap-2">
-                                <button class="btn btn-primary btn-add-cart">Thêm vào giỏ hàng</button>
-                                <button class="btn btn-primary btn-phone">Gọi ngay (miễn phí)</button>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
+            </form>
+
         </section>
         <section id="comment-product" class="py-2">
             <div class="container">
@@ -216,11 +375,9 @@
                                 <div class="d-flex align-items-center gap-3">
                                     <span class="fs-2">5.0</span>
                                     <div class="rating-star text-warning">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <i class="fa-solid fa-star"></i>
+                                        @endfor
                                     </div>
                                 </div>
                                 <p class="text-muited">Tổng cộng 2 đánh giá từ khách hàng</p>
@@ -231,61 +388,52 @@
                                 </button>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="commentModal" tabindex="-1"
+                                <div class="modal fade modal-comment" id="commentModal" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered position-relative">
                                         <button type="button" class="btn-close position-absolute top-0"
                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                         <div class="modal-content px-5 py-3">
-                                            <div class="modal-header border-0 ">
-                                                <h5 class="modal-title fw-bold" id="exampleModalLabel">Mặt dây
-                                                    chuyền Vàng trắng 10K đính đá ECZ PNJ</h5>
+                                            <div class="modal-header border-0 p-0">
+                                                <img src="{{ asset('frontend/image/pnj.com.vn.png') }}"
+                                                    class="img-fluid mx-auto" alt="logo-pnj" width="150" />
                                             </div>
-                                            <div class="modal-body">
-                                                <p class="text-center mb-2">XMXMW001928</p>
-                                                <div class="text-center rating-stars mb-3">
-                                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                            <div class="infor-product mt-2">
+                                                <p class="fw-bold m-0 text-center">{{ $dataDetail->product_name }}</p>
+                                            </div>
+                                            <form action="" method="post">
+                                                <div class="modal-rating">
+                                                    <div class="rating d-flex justify-content-center">
+                                                        <input class="radio-star" type="radio" id="star5"
+                                                            name="rate" value="5" />
+                                                        <label class="label-star" for="star5" title="text"></label>
+                                                        <input class="radio-star" type="radio" id="star4"
+                                                            name="rate" value="4" />
+                                                        <label class="label-star" for="star4" title="text"></label>
+                                                        <input class="radio-star" type="radio" id="star3"
+                                                            name="rate" value="3" />
+                                                        <label class="label-star" for="star3" title="text"></label>
+                                                        <input class="radio-star" type="radio" id="star2"
+                                                            name="rate" value="2" />
+                                                        <label class="label-star" for="star2" title="text"></label>
+                                                        <input class="radio-star" type="radio" id="star1"
+                                                            name="rate" value="1" />
+                                                        <label class="label-star" for="star1" title="text"></label>
+                                                    </div>
                                                 </div>
-                                                <form>
-                                                    <!-- Name -->
+                                                <div class="modal-body">
                                                     <div class="mb-3">
-                                                        <label for="name" class="form-label">Họ và tên*</label>
-                                                        <input type="text" class="form-control" id="name"
-                                                            placeholder="Nhập họ và tên">
-                                                    </div>
-                                                    <!-- Review -->
-                                                    <div class="mb-3">
-                                                        <label for="review" class="form-label">Chia sẻ của bạn về
+                                                        <label for="review" class="form-label fw-bold">Chia sẻ của bạn
+                                                            về
                                                             sản phẩm*</label>
-                                                        <textarea class="form-control" id="review" rows="4" placeholder="Nhập đánh giá của bạn"></textarea>
+                                                        <textarea class="form-control" id="review" rows="8" placeholder="Nhập đánh giá của bạn"></textarea>
                                                     </div>
-                                                    <!-- Tags -->
-                                                    <div class="mb-3">
-                                                        <div class="tag">Sản phẩm đẹp</div>
-                                                        <div class="tag">Tư vấn nhiệt tình xinh đẹp</div>
-                                                        <div class="tag">Gói hàng cẩn thận</div>
-                                                        <div class="tag">Giao hàng nhanh chóng, an toàn</div>
-                                                        <div class="tag">Chất lượng dịch vụ siêu tốt</div>
-                                                    </div>
-                                                    <!-- Checkbox -->
-                                                    <div class="form-check mb-3">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="recommendCheck">
-                                                        <label class="form-check-label" for="recommendCheck">
-                                                            Sẽ giới thiệu cho bạn bè và người thân
-                                                        </label>
-                                                    </div>
-                                                    <!-- Upload -->
-                                                    <div class="mb-3 text-center">
-                                                        <i class="bi bi-camera camera-icon"></i>
-                                                        <p class="mb-0">Gửi hình chụp/clip quay thực tế</p>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer border-0">
-                                                <button type="button" class="btn btn-primary w-100">GỬI ĐÁNH
-                                                    GIÁ</button>
-                                            </div>
+                                                </div>
+                                                <div class="modal-footer border-0">
+                                                    <button type="button" class="btn btn-primary w-100">GỬI ĐÁNH
+                                                        GIÁ</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -618,4 +766,5 @@
 @push('script')
     <script src="{{ asset('frontend/js/helper.js') }}"></script>
     <script src="{{ asset('frontend/js/client.js') }}"></script>
+    <script src="{{ asset('frontend/js/detail.js') }}"></script>
 @endpush

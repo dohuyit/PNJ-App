@@ -133,6 +133,7 @@ function updateActiveCollection(collectionId) {
 
             products.forEach((product) => {
                 let imageUrl = storageUrl + product.product_image;
+                // console.log(imageUrl);
                 let originalPrice = parseFloat(product.original_price);
                 let salePrice = product.sale_price
                     ? parseFloat(product.sale_price)
@@ -156,8 +157,9 @@ function updateActiveCollection(collectionId) {
                 }
 
                 let productHTML = `
-                      <div class="swiper-slide card">
-            <div class="card-img position-relative">
+                  <div class="swiper-slide card">
+                   <a href="/detail-product/${product.id}">
+                    <div class="card-img position-relative">
                 <img src="${imageUrl}" class="card-img-top" alt="${
                     product.product_name
                 }" />
@@ -166,7 +168,9 @@ function updateActiveCollection(collectionId) {
             </div>
             <div class="card-body p-2">
                 <h5 class="card-title">
-                    <a href="/product/${product.id}">${product.product_name}</a>
+                    <a href="/detail-product/${product.id}">${
+                    product.product_name
+                }</a>
                 </h5>
                 <p class="card-text product-price mb-2 d-flex align-items-center justify-content-center gap-2">
                     ${priceHTML}
@@ -181,7 +185,8 @@ function updateActiveCollection(collectionId) {
                     </div>
                 </div>
             </div>
-        </div>
+                   </a>
+                  </div>
                 `;
                 productContainer.innerHTML += productHTML;
             });
@@ -198,4 +203,112 @@ document.addEventListener("DOMContentLoaded", function () {
         let collectionId = firstActiveSlide.getAttribute("data-id");
         updateActiveCollection(collectionId);
     }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".item-tags");
+    let swiperInstance; // Biến lưu trữ Swiper instance
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+            buttons.forEach((btn) => btn.classList.remove("active"));
+            this.classList.add("active");
+
+            const jewelryLineId = this.getAttribute("data-id");
+
+            fetch(`/jewelry-line/${jewelryLineId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.message) {
+                        console.error(data.message);
+                        return;
+                    }
+
+                    document.querySelector(".banner-main img").src =
+                        storageUrl + data.banner;
+                    document.querySelector(".desc-for-tag p").textContent =
+                        data.description;
+
+                    const swiperWrapper = document.querySelector(
+                        "#list-jewelryline-products"
+                    );
+
+                    // Xóa Swiper slide mà không phá vỡ Swiper
+                    swiperWrapper.innerHTML = "";
+
+                    data.products.forEach((product) => {
+                        let imageUrl = storageUrl + product.product_image;
+                        let originalPrice = parseFloat(product.original_price);
+                        let salePrice = product.sale_price
+                            ? parseFloat(product.sale_price)
+                            : null;
+
+                        let formattedOriginalPrice =
+                            originalPrice.toLocaleString("vi-VN") + "đ";
+                        let formattedSalePrice = salePrice
+                            ? salePrice.toLocaleString("vi-VN") + "đ"
+                            : formattedOriginalPrice;
+
+                        let priceHTML =
+                            salePrice !== originalPrice
+                                ? `<span class="original-price text-decoration-line-through fst-italic">${formattedOriginalPrice}</span>
+                               <span class="sale-price">${formattedSalePrice}</span>`
+                                : `<span class="sale-price">${formattedOriginalPrice}</span>`;
+
+                        let productHTML = `
+                            <div class="swiper-slide card">
+                               <a href="/detail-product/${product.id}">
+                               <div class="card-img position-relative">
+                                    <img src="${imageUrl}" class="card-img-top" alt="${
+                            product.product_name
+                        }" />
+                                    <img class="img-sub-fast" src="/frontend/image/PNJfast-Giaotrong3h.svg" alt="" />
+                                    <img class="img-sub-icon" src="/frontend/image/icon-tragop-2.svg" alt="" />
+                                </div>
+                                <div class="card-body p-2">
+                                    <h5 class="card-title">
+                                        <a href="/detail-product/${
+                                            product.id
+                                        }">${product.product_name}</a>
+                                    </h5>
+                                    <p class="card-text product-price mb-2 d-flex align-items-center justify-content-center gap-2">
+                                        ${priceHTML}
+                                    </p>
+                                    <div class="product-order-and-rating d-flex align-items-center justify-content-between">
+                                        <div class="item-rating">
+                                            <span><i class="fa-solid fa-star text-warning"></i></span>
+                                            <span>${
+                                                product.rating || "N/A"
+                                            }</span>
+                                        </div>
+                                        <div class="item-order">
+                                            <span>${
+                                                product.sold || 0
+                                            }+ đã bán</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                        `;
+                        swiperWrapper.innerHTML += productHTML;
+                    });
+
+                    // Hủy Swiper cũ đúng cách
+                    if (swiperInstance && swiperInstance.destroy) {
+                        swiperInstance.destroy(true, true);
+                    }
+
+                    swiper(".myCollection", 4, 10, 4500);
+                })
+                .catch((error) => console.error("Error:", error));
+        });
+    });
+
+    // Kích hoạt phần tử đầu tiên khi tải trang
+    if (buttons.length > 0) {
+        buttons[0].click();
+    }
+
+    swiper(".myCollection", 4, 10, 4500);
 });

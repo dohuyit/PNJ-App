@@ -16,16 +16,18 @@ class DetailController extends Controller
         $variantIds = Variant::whereHas('attribute.attributegroups', function ($query) {
             $query->where('name', 'Size');
         })->pluck('id');
-        // dd($variantIds);
+
         $dataDetail = Product::with([
             'variants' => function ($query) use ($variantIds) {
-                // dd($query);
-                $query->whereIn('id', $variantIds);
-            }
+                $query->whereIn('id', $variantIds)->with('attribute');
+            },
         ])->find($id);
+
+        // dd($dataDetail->variants);
 
         $albumImageProduct = ProductImage::query()->where('product_id', $id)->get();
         // dd($albumImageProduct);
+
         if (!$dataDetail) {
             abort(404);
         }

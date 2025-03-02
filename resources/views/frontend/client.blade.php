@@ -438,22 +438,18 @@
                     <div class="body-group">
                         <div class="row justify-content-center">
                             <div class="col-4 banner-main">
-                                <img src="./image/banner-test.webp" class="rounded-2" alt="" width="400"
-                                    height="400" />
+                                <img src="" class="rounded-2" alt="" width="400" height="400" />
                             </div>
                             <div class="col-7 content-main">
                                 <div class="list-tags d-flex flex-wrap gap-2">
                                     @foreach ($dataJewelryLines as $jewelryLine)
-                                        <button href="#"
+                                        <button href="#" data-id="{{ $jewelryLine->id }}"
                                             class="btn lh-lg item-tags fw-bold text-capitalize">{{ $jewelryLine->name }}</button>
                                     @endforeach
                                 </div>
                                 <div class="desc-for-tag mt-4 fst-italic text-primary">
                                     <p>
-                                        Trang sức kim tiền PNJ nổi bật với những đồng xu được
-                                        kết nối một cách tinh tế & thẩm mỹ. Chi tiết này tượng
-                                        trưng cho dòng chảy không ngừng của tài lộc & may mắn,
-                                        mang mong ước cho năm mới khởi phát.
+
                                     </p>
                                 </div>
                             </div>
@@ -463,175 +459,14 @@
             </div>
             <div class="jewelry-line-product">
                 <div class="header-group mb-5 d-flex align-items-end justify-content-center">
-                    <img src="./image/arrow-down.svg" alt="" class="" />
+                    <img src="{{ asset('frontend/image/arrow-down.svg') }}" alt="" class="" />
                 </div>
                 <div class="body-group py-4">
                     <div class="container">
                         <div class="body-swiper px-5 position-relative">
                             <div class="swiper myBestseller">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide card">
-                                        <div class="card-img position-relative">
-                                            <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                            <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg"
-                                                alt="" />
-                                            <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <h5 class="card-title">
-                                                <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                    TPXMW000045</a>
-                                            </h5>
-                                            <p class="card-text product-price">6.801.000đ</p>
-                                            <div
-                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                                <div class="item-rating">
-                                                    <span>
-                                                        <i class="fa-solid fa-star text-warning"></i>
-                                                    </span>
-                                                    <span>5</span>
-                                                </div>
-                                                <div class="item-order">
-                                                    <span>200+ đã bán</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide card">
-                                        <div class="card-img position-relative">
-                                            <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                            <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg"
-                                                alt="" />
-                                            <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <h5 class="card-title">
-                                                <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                    TPXMW000045</a>
-                                            </h5>
-                                            <p class="card-text product-price">6.801.000đ</p>
-                                            <div
-                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                                <div class="item-rating">
-                                                    <span>
-                                                        <i class="fa-solid fa-star text-warning"></i>
-                                                    </span>
-                                                    <span>5</span>
-                                                </div>
-                                                <div class="item-order">
-                                                    <span>200+ đã bán</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide card">
-                                        <div class="card-img position-relative">
-                                            <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                            <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg"
-                                                alt="" />
-                                            <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <h5 class="card-title">
-                                                <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                    TPXMW000045</a>
-                                            </h5>
-                                            <p class="card-text product-price">6.801.000đ</p>
-                                            <div
-                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                                <div class="item-rating">
-                                                    <span>
-                                                        <i class="fa-solid fa-star text-warning"></i>
-                                                    </span>
-                                                    <span>5</span>
-                                                </div>
-                                                <div class="item-order">
-                                                    <span>200+ đã bán</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide card">
-                                        <div class="card-img position-relative">
-                                            <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                            <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg"
-                                                alt="" />
-                                            <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <h5 class="card-title">
-                                                <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                    TPXMW000045</a>
-                                            </h5>
-                                            <p class="card-text product-price">6.801.000đ</p>
-                                            <div
-                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                                <div class="item-rating">
-                                                    <span>
-                                                        <i class="fa-solid fa-star text-warning"></i>
-                                                    </span>
-                                                    <span>5</span>
-                                                </div>
-                                                <div class="item-order">
-                                                    <span>200+ đã bán</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide card">
-                                        <div class="card-img position-relative">
-                                            <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                            <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg"
-                                                alt="" />
-                                            <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <h5 class="card-title">
-                                                <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                    TPXMW000045</a>
-                                            </h5>
-                                            <p class="card-text product-price">6.801.000đ</p>
-                                            <div
-                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                                <div class="item-rating">
-                                                    <span>
-                                                        <i class="fa-solid fa-star text-warning"></i>
-                                                    </span>
-                                                    <span>5</span>
-                                                </div>
-                                                <div class="item-order">
-                                                    <span>200+ đã bán</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide card">
-                                        <div class="card-img position-relative">
-                                            <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                            <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg"
-                                                alt="" />
-                                            <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <h5 class="card-title">
-                                                <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                    TPXMW000045</a>
-                                            </h5>
-                                            <p class="card-text product-price">6.801.000đ</p>
-                                            <div
-                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                                <div class="item-rating">
-                                                    <span>
-                                                        <i class="fa-solid fa-star text-warning"></i>
-                                                    </span>
-                                                    <span>5</span>
-                                                </div>
-                                                <div class="item-order">
-                                                    <span>200+ đã bán</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div id="list-jewelryline-products" class="swiper-wrapper">
+
                                 </div>
                             </div>
                             <!-- Navigation buttons -->

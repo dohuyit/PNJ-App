@@ -54,6 +54,14 @@ class Product extends Model
         return $this->hasMany(Variant::class);
     }
 
+    public function variantsOther()
+    {
+        return $this->hasMany(Variant::class)->whereHas('attribute.attributegroups', function ($query) {
+            $query->where('name', '!=', 'Size');
+        });
+    }
+
+
     public function discounts()
     {
         return $this->hasMany(ProductDiscount::class);

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -84,9 +85,14 @@ Route::middleware('client')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('client.home');
     Route::get('/get-product-by-collections/{id}', [HomeController::class, 'getProductByCollections'])
         ->name('client.home.getProductclt');
-    Route::get('detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
+    Route::get('/jewelry-line/{id}', [HomeController::class, 'getJewelryLines']);
 
+    // Detail Product Page
+    Route::get('/detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
 
+    //Cart Page
+    Route::post('/add-to-cart', [CartController::class, 'addCart'])->name('client.cart.add');
+    Route::get('/show-cart', [CartController::class, 'showCart'])->name('client.cart.show');
 
     // Authentication client
     Route::get('login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');

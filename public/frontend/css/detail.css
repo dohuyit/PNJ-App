@@ -15,6 +15,7 @@ body {
     --accent-color: #003468;
     --bg-default: #ffffff;
     --bg-hover: #c48c46;
+    --bg-light: rgba(0, 0, 0, 0.05);
     --bg-blur: #dddcdc;
     --text-color-primary: #000;
     --text-color-secondary: #4d4d4d; /*color-text*/
@@ -285,52 +286,80 @@ input {
     width: 100%;
 }
 
-.desc-heading .list-group .list-group-item {
+.product-description .list-group .list-group-item {
     font-size: 14px !important;
     border: none;
     border-radius: 0 !important;
 }
 
-.desc-heading .list-group .list-group-item.active {
+.product-description .list-group .list-group-item.active {
     background-color: var(--bg-light);
     border-bottom: 2px solid #000;
     color: var(--text-color-primary);
 }
 
-.desc-content table td {
+.tab-content #desc-product .table-desc p {
     font-size: 14px;
-    padding: 8px;
+    padding: 5px;
     vertical-align: middle;
 }
 
-.desc-content table {
-    border-collapse: collapse;
-    width: 100%;
+.tab-content #desc-product .table-desc p:nth-child(odd) {
+    background-color: rgb(242 242 242 / 1);
+    color: var(--text-card-color);
 }
 
-.desc-content table td:first-child {
-    width: 30%;
-}
-
-.desc-content table td:last-child {
-    width: 70%;
-}
-
-.desc-content p {
+.tab-content #desc-product > p {
     font-size: 14px;
     color: var(--text-color-secondary);
     line-height: 1.8;
 }
 
-.desc-content p a {
-    text-decoration: none;
-    font-weight: bold;
-    color: var(--text-card-secondary);
-    transition: 0.5s ease-in;
+.accordion-item {
+    border: none;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow: hidden;
 }
 
-.desc-content p a:hover {
+.accordion-button {
+    background-color: var(--bg-default);
     color: var(--accent-color);
+    font-weight: bold;
+    border: none;
+    box-shadow: none;
+    padding: 12px 16px;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.accordion-collapse {
+    border: none;
+}
+
+.accordion-body {
+    background-color: #fff;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #333;
+    white-space: pre-line;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--bg-default) !important;
+}
+
+.tab-content #service-policy .item-policy h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0 !important;
+}
+
+.tab-content #service-policy .item-policy li {
+    list-style-type: circle !important;
 }
 
 .title-section .product-title {
@@ -409,6 +438,44 @@ input {
     flex: 1;
 }
 
+.modal-comment .modal-content .infor-product {
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
+/* From Uiverse.io by BiliBC034 */
+.rating:not(:checked) > .radio-star {
+    position: absolute;
+    appearance: none;
+}
+
+.rating:not(:checked) > .label-star {
+    float: right;
+    cursor: pointer;
+    font-size: 25px;
+    color: #666;
+}
+
+.rating:not(:checked) > .label-star:before {
+    content: "★";
+}
+
+.rating > .label-star:checked + .label-star:hover,
+.rating > .label-star:checked + .label-star:hover ~ .label-star,
+.rating > .label-star:checked ~ .label-star:hover,
+.rating > .label-star:checked ~ .label-star:hover ~ .label-star,
+.rating > .label-star:hover ~ .label-star:checked ~ .label-star {
+    color: #e58e09;
+}
+
+.rating:not(:checked) > .label-star:hover,
+.rating:not(:checked) > .label-star:hover ~ .label-star {
+    color: #ff9e0b;
+}
+
+.rating > .label-star:checked ~ .label-star {
+    color: #ffa723;
+}
 .pagination-comment {
     display: flex; /* Sử dụng flexbox để căn giữa */
     justify-content: center; /* Căn giữa theo chiều ngang */

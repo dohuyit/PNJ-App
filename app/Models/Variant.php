@@ -23,4 +23,9 @@ class Variant extends Model
     {
         return $this->belongsTo(Attribute::class, 'attribute_id')->with('attributegroups');
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

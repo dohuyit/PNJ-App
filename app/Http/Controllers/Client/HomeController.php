@@ -43,4 +43,20 @@ class HomeController extends Controller
 
         return response()->json($products);
     }
+
+    public function getJewelryLines($id)
+    {
+        $jewelryLine = JewelryLine::find($id);
+
+        if (!$jewelryLine) {
+            return response()->json(['message' => 'Dòng hàng không tồn tại'], 404);
+        }
+        $products = Product::where('jewelry_line_id', $id)->get();
+        // dd($products);
+        return response()->json([
+            'banner' => $jewelryLine->image_thumbnail,
+            'description' => $jewelryLine->description,
+            'products' => $products
+        ]);
+    }
 }
