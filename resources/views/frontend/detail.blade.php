@@ -2,6 +2,7 @@
 @section('title', 'Trang chi tiết sản phẩm PNJ ')
 
 @section('content')
+    @include('frontend.layouts.include.header')
     <main>
         <section id="detail-product" class="py-5">
             <form action="{{ route('client.cart.add') }}" method="post">
@@ -278,16 +279,17 @@
                                     <div class="d-flex gap-2">
                                         @foreach ($dataDetail->variants as $variant)
                                             @if ($variant->attribute && $variant->attribute->attributegroups->name === 'Size')
-                                                <input type="hidden" name="id_variant_product"
-                                                    value="{{ $variant->id }}">
                                                 <button type="button" class="size-btn rounded-2 btn btn-outline-primary"
                                                     data-size-id="{{ $variant->attribute->id }}"
+                                                    data-variant-id="{{ $variant->id }}"
                                                     data-price-variant="{{ formatPrice($variant->price_variant) }}">
                                                     {{ $variant->attribute->name }}
                                                 </button>
                                             @endif
                                         @endforeach
                                     </div>
+
+                                    <input type="hidden" name="id_variant_product" id="selected_variant_id">
                                 </div>
                             @endif
 
@@ -757,6 +759,7 @@
             </div>
         </section>
     </main>
+    @include('frontend.layouts.include.footer')
 @endsection
 
 @push('link')

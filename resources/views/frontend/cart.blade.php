@@ -2,6 +2,7 @@
 
 @section('title', 'Trang chủ PNJ ')
 @section('content')
+    @include('frontend.layouts.include.header')
     <main id="main">
         <section id="main-cart">
             <div class="container mt-5">
@@ -13,7 +14,8 @@
                                     <span><i class="fa-solid fa-bag-shopping"></i></span>
                                     <span>GIỎ HÀNG CỦA BẠN</span>
                                 </h4>
-                                <a href="#" class="text-decoration-none text-primary d-flex align-items-center gap-2">
+                                <a href="{{ route('client.home') }}"
+                                    class="text-decoration-none text-primary d-flex align-items-center gap-2">
                                     <i class="fas fa-arrow-left"></i>
                                     <span>Tiếp tục mua hàng</span>
                                 </a>
@@ -21,10 +23,15 @@
 
                             <div class="cart-controls d-flex align-items-center justify-content-between mb-3 px-2">
                                 <div class="cart-select-all d-flex align-items-center">
-                                    <input class="form-check-input me-3" type="checkbox" />
-                                    <p>Tất cả <span>(2 sản phẩm)</span></p>
+                                    <input class="form-check-input me-3" type="checkbox" id="selectAll" />
+                                    <p>Tất cả <span>({{ count($dataCarts) . ' sản phẩm' }})</span></p>
                                 </div>
-                                <button class="remove-all btn btn-outline-secondary">
+                                <form action="{{ route('client.cart.deleteAll') }}" method="POST" id="deleteAllForm"
+                                    style="display: none;">
+                                    @csrf
+                                    <input type="hidden" name="cart_ids" id="cartIdsInput">
+                                </form>
+                                <button class="remove-all btn btn-outline-secondary" disabled>
                                     <span class="me-2">Xóa tất cả</span>
                                     <i class="fa-regular fa-trash-can"></i>
                                 </button>
@@ -36,7 +43,8 @@
                                     <div
                                         class="cart-item-left d-flex align-items-center justify-content-between flex-grow-1 py-2">
                                         <div class="d-flex align-items-center">
-                                            <input class="form-check-input me-3" type="checkbox" />
+                                            <input class="form-check-input me-3 cart-item-checkbox" type="checkbox"
+                                                data-id="{{ $cart->id }}" />
                                             <div class="cart-item-info d-flex align-items-center">
                                                 <div class="cart-item-image">
                                                     <img src="{{ Storage::url($cart->variant->product->product_image) }}" />
@@ -46,39 +54,64 @@
                                                         {{ $cart->variant->product->product_name }}
                                                     </p>
                                                     <div class="d-flex align-items-center gap-3">
-                                                        <select name="" id="" class="form-select">
-                                                            @foreach ($attributes as $attributeValue)
-                                                                <option @selected($cart->variant->attribute->id == $attributeValue->id)
-                                                                    value="{{ $attributeValue->id }}">
-                                                                    {{ $attributeValue->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        @if ($cart->variant->attribute->attributegroups->name == 'Size')
+                                                            <select name="size" class="form-select size-select"
+                                                                data-cart-id="{{ $cart->id }}"
+                                                                data-product-id="{{ $cart->variant->product_id }}">
+                                                                @foreach ($attributes as $attributeValue)
+                                                                    @php
+                                                                        $isSelected =
+                                                                            $cart->variant->attribute->id ==
+                                                                            $attributeValue->id;
+                                                                        $isDisabled =
+                                                                            !$isSelected &&
+                                                                            in_array(
+                                                                                $attributeValue->id,
+                                                                                $selectedSizes[
+                                                                                    $cart->variant->product_id
+                                                                                ] ?? [],
+                                                                            );
+                                                                    @endphp
+                                                                    <option value="{{ $attributeValue->id }}"
+                                                                        @selected($isSelected)
+                                                                        @disabled($isDisabled)>
+                                                                        {{ $attributeValue->name }}
+                                                                        @if ($isDisabled)
+                                                                            (Đã chọn)
+                                                                        @endif
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @endif
                                                         <span
-                                                            class="text-secondary fw-bold mb-0">{{ formatPrice($cart->variant->price_variant) }}</span>
+                                                            class="text-secondary fw-bold mb-0">{{ formatPrice($cart->variant->price_variant * $cart->quantity) }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="cart-item-quantity d-flex align-items-center border rounded">
-                                            <button>-</button>
-                                            <input type="number" value="{{ $cart->quantity }}" min="1" readonly />
-                                            <button>+</button>
+                                            <button type="button" class="quantity-btn minus"
+                                                data-cart-id="{{ $cart->id }}">-</button>
+                                            <input type="number" class="quantity-input" value="{{ $cart->quantity }}"
+                                                min="1" max="3" readonly
+                                                data-cart-id="{{ $cart->id }}" />
+                                            <button type="button" class="quantity-btn plus"
+                                                data-cart-id="{{ $cart->id }}">+</button>
                                         </div>
                                     </div>
                                     <div class="cart-right flex-grow-1 d-flex justify-content-end">
-                                        <button class="btn btn-outline-secondary" disabled>
-                                            <i class="fa-regular fa-trash-can"></i>
-                                        </button>
+                                        <form action="{{ route('client.cart.delete') }}" method="POST"
+                                            style="display: inline;">
+                                            @csrf
+                                            <input type="hidden" name="cart_id" value="{{ $cart->id }}">
+                                            <button type="submit" class="btn btn-outline-secondary delete-item" disabled>
+                                                <i class="fa-regular fa-trash-can"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach
 
-                            <div class="card-footer mt-3">
-                                <button class="btn btn-primary">
-                                    <i class="fa-solid fa-arrow-left"></i>
-                                    <span class="me-2">Quay lại</span>
-                                </button>
-                            </div>
                         </div>
 
                     </div>
@@ -86,30 +119,36 @@
                         <div class="cart-summary px-1">
                             <div class="d-flex justify-content-between">
                                 <span>Tạm tính:</span>
-                                <span>2,110,000₫</span>
+                                <span id="subtotal">0đ</span>
                             </div>
                             <div class="d-flex justify-content-between mt-3">
                                 <span>Chi phí vận chuyển:</span>
-                                <span>Miễn phí</span>
+                                <span>0đ</span>
                             </div>
                             <hr />
                             <div class="d-flex justify-content-between fw-bold text-primary">
                                 <span>Tổng cộng:</span>
-                                <span>2,110,000₫</span>
+                                <span id="total">0đ</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary w-100 mt-3">
-                            Tiến hàng thanh toán
-                        </button>
+                        <form action="{{ route('client.order.checkout') }}" method="POST" id="checkoutForm">
+                            @csrf
+                            <input type="hidden" name="selected_cart_items" id="selectedCartItems">
+                            <button type="submit" class="btn btn-primary w-100 mt-3" id="checkoutButton" disabled>
+                                Tiến hành thanh toán
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+    @include('frontend.layouts.include.footer')
 @endsection
 
 @push('link')
     <link rel="stylesheet" href="{{ asset('frontend/css/cart.css') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 
 @push('script')
@@ -117,5 +156,5 @@
         var storageUrl = "{{ Storage::url('') }}";
     </script>
     <script src="{{ asset('frontend/js/helper.js') }}"></script>
-    {{-- <script src="{{ asset('frontend/js/cart.js') }}"></script> --}}
+    <script src="{{ asset('frontend/js/cart.js') }}"></script>
 @endpush

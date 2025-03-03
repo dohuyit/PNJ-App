@@ -30,7 +30,7 @@
                             alt="" />
                         <span class="fs-6">1900 54 54 57</span>
                     </a>
-                    <a href="#" class="cart-group py-2">
+                    <a href="{{ route('client.cart.show') }}" class="cart-group py-2">
                         <img class="icon-header" src="{{ asset('frontend/image/icon-cart-new.svg') }}"
                             alt="icon cửa hàng" />
                         <span class="fs-6">Giỏ hàng</span>

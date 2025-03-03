@@ -230,12 +230,12 @@ input {
 .col-md-7 .form-check-input:checked {
     background-color: var(--bg-hover) !important;
     border-color: var(--bg-hover) !important;
+    outline: none !important;
 }
 
 .col-md-7 .form-check-input:focus {
-    border-color: #caa06db6;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem #caa06db2;
+    outline: none;
+    box-shadow: none !important;
 }
 
 .cart-header h4 {

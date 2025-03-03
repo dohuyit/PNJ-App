@@ -12,9 +12,10 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
-use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CartClientController;
 use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\OrderClientController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -91,8 +92,17 @@ Route::middleware('client')->group(function () {
     Route::get('/detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
 
     //Cart Page
-    Route::post('/add-to-cart', [CartController::class, 'addCart'])->name('client.cart.add');
-    Route::get('/show-cart', [CartController::class, 'showCart'])->name('client.cart.show');
+    Route::post('/cart/add-to-cart', [CartClientController::class, 'addCart'])->name('client.cart.add');
+    Route::get('/cart/show-cart', [CartClientController::class, 'showCart'])->name('client.cart.show');
+    Route::post('/cart/delete', [CartClientController::class, 'delete'])->name('client.cart.delete');
+    Route::post('/cart/delete-all', [CartClientController::class, 'deleteAll'])->name('client.cart.deleteAll');
+    Route::post('/cart/update-quantity', [CartClientController::class, 'updateQuantity'])->name('client.cart.updateQuantity');
+    Route::post('/cart/update-size', [CartClientController::class, 'updateSize'])->name('client.cart.updateSize');
+
+    //Order Page
+
+    Route::post('/order/checkout', [OrderClientController::class, 'checkOut'])->name('client.order.checkout');
+
 
     // Authentication client
     Route::get('login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');

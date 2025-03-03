@@ -2,6 +2,7 @@
 
 @section('title', 'Trang chủ PNJ ')
 @section('content')
+    @include('frontend.layouts.include.header')
     <main>
         <section class="my-3" id="slider">
             <div class="row">
@@ -550,6 +551,7 @@
             </div>
         </section>
     </main>
+    @include('frontend.layouts.include.footer')
 @endsection
 
 @push('link')
