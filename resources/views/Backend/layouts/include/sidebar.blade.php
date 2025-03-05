@@ -118,6 +118,15 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item menu-close">
+                    <a href="{{ route('order.index') }}" class="nav-link active">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p class="ml-2">
+                            Đơn hàng
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

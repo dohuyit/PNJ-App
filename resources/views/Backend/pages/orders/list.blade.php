@@ -35,89 +35,78 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Thông tin sản phẩm</th>
-                                        <th>Giá sản phẩm</th>
-                                        <th>Trang sức cưới</th>
+                                        <th>Khách hàng</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Phương thức thanh toán</th>
                                         <th>Trạng thái</th>
+                                        <th>Tổng tiền</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listProducts as $index => $Product)
+                                    @foreach ($orderItemsData as $index => $data)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td>
-                                                @if ($Product->product_image && \Storage::exists($Product->product_image))
-                                                    <img src="{{ Storage::url($Product->product_image) }}" alt="Banner"
-                                                        width="100">
+                                                <b>Thời gian:</b> {{ formatTime($data->order->date) }} <br>
+                                                <strong>{{ $data->order->name }}</strong> <br>
+                                                {{ $data->order->phone }}
+                                            </td>
+                                            <td>
+                                                {{ $data->variant->product->product_name }}
+                                            </td>
+                                            <td>
+                                                <p class="text-muted m-0">Phường/Xã: {{ $data->order->ward->name }}</p>
+                                                <p class="fw-bold text-info m-0">Quận/Huyện:
+                                                    {{ $data->order->district->name }}
+                                                </p>
+                                                <p><strong>{{ $data->order->city->name }}</strong></p>
+                                            </td>
+                                            <td>
+                                                @if ($data->order->paymentMethod->id == 1)
+                                                    <span
+                                                        class="badge bg-secondary">{{ $data->order->paymentMethod->name }}</span>
+                                                @elseif ($data->order->paymentMethod->id == 2)
+                                                    <span
+                                                        class="badge bg-primary">{{ $data->order->paymentMethod->name }}</span>
                                                 @else
-                                                    <span class="badge bg-secondary">Chưa có ảnh</span>
+                                                    <span
+                                                        class="badge bg-danger">{{ $data->order->paymentMethod->name }}</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <p> {{ $Product->product_name }}</p>
-                                            </td>
-                                            <td>
+                                                @php
+                                                    $statusColors = [
+                                                        'Chờ xác nhận' => 'btn-outline-secondary',
+                                                        'Đã xác nhận' => 'btn-outline-primary',
+                                                        'Đang xử lý' => 'btn-outline-warning',
+                                                        'Đang giao hàng' => 'btn-outline-info',
+                                                        'Đã giao hàng' => 'btn-outline-success',
+                                                        'Đã hủy' => 'btn-outline-danger',
+                                                        'Hoàn trả' => 'btn-outline-dark',
+                                                    ];
+                                                    $status = $data->order->orderStatus->name;
+                                                    $btnClass = $statusColors[$status] ?? 'btn-outline-secondary'; // Mặc định nếu không có
+                                                @endphp
 
-                                                @if ($Product->original_price != $Product->sale_price)
-                                                    <p>
-                                                        <strong>Giá gốc:</strong>
-                                                        <span
-                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->original_price) }}</span>
-                                                    </p>
-                                                    <p>
-                                                        <strong>Giá bán:</strong>
-                                                        <span
-                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->sale_price) }}</span>
-                                                    </p>
-                                                @else
-                                                    <p>
-                                                        <strong>Giá bán:</strong>
-                                                        <span
-                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->sale_price) }}</span>
-                                                    </p>
-                                                @endif
+                                                <span class="btn {{ $btnClass }} btn-sm">{{ $status }}</span>
                                             </td>
                                             <td>
-                                                @if ($Product->is_wedding == 0)
-                                                    <p class="btn btn-outline-success m-0 p-2">
-                                                        <span class="mr-1">
-                                                            <i class="fas fa-check-circle"></i>
-                                                        </span>
-                                                        <span>Có</span>
-                                                    </p>
-                                                @else
-                                                    <p class="btn btn-outline-danger m-0 p-2">
-                                                        <span class="mr-1">
-                                                            <i class="fas fa-exclamation-circle"></i>
-                                                        </span>
-                                                        <span>Không</span>
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="switch-column ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $Product->id }}"
-                                                        {{ $Product->product_status ? '' : 'checked' }}
-                                                        data-id="{{ $Product->id }}" />
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch{{ $Product->id }}"></label>
-                                                </div>
+                                                {{ formatPrice($data->total_price) }}
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('product.edit', $Product) }}"
+                                                <a href="{{ route('order.edit', $data->id) }}"
                                                     class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $Product->id }}">
+                                                    data-target="#modal-{{ $data->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $Product->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-{{ $data->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -134,8 +123,8 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('product.destroy', $Product) }}"
-                                                            method="POST" class="d-inline">
+                                                        <form action="{{ route('order.destroy', $data) }}" method="POST"
+                                                            class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-success">
@@ -151,11 +140,12 @@
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Thông tin sản phẩm</th>
-                                        <th>Giá sản phẩm</th>
-                                        <th>Trang sức cưới</th>
+                                        <th>Khách hàng</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Phương thức thanh toán</th>
                                         <th>Trạng thái</th>
+                                        <th>Tổng tiền</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>

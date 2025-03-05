@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\JewelryLineController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
@@ -49,8 +50,9 @@ Route::prefix('admin')->group(function () {
         Route::resource('attribute-group', AttributeGroupController::class);
         Route::resource('attribute', AttributeController::class);
         Route::resource('product', ProductController::class);
+        Route::resource('order', OrderController::class);
+
         Route::get('/get-product-types/{categoryId}', [ProductController::class, 'getProductTypes']);
-        // Route::delete('/product/{productId}/variants/delete-all', [ProductController::class, 'deleteAllSizeVariants']);
 
         // Quản lí tài khoản khách hàng và admin
         Route::prefix('account')->group(function () {

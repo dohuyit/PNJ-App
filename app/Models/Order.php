@@ -37,4 +37,27 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
+
+    public function ward()
+    {
+        return $this->belongsTo(Ward::class, 'ward_id');
+    }
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+    public function orderStatus()
+    {
+        return $this->belongsTo(OrderStatus::class, 'status_id');
+    }
 }
