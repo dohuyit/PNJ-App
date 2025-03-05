@@ -135,7 +135,7 @@
                                     <div class="form-group col-6">
                                         <label>Quận / Huyện</label>
                                         <select name="district_id" id="district" class="form-control">
-                                            <option value="" hidden selected>-- Xã / Phường --</option>
+                                            <option value="" hidden selected>-- Quận / Huyện --</option>
                                             @foreach ($districts as $district)
                                                 <option value="{{ $district->id }}" @selected($customerAccount->district_id == $district->id)>
                                                     {{ $district->name }}
@@ -146,7 +146,7 @@
                                     <div class="form-group col-6">
                                         <label>Xã / Phường</label>
                                         <select name="ward_id" id="ward" class="form-control">
-                                            <option value="" hidden selected>-- Quận / Huyện --</option>
+                                            <option value="" hidden selected>-- Xã / Phường --</option>
                                             @foreach ($wards as $ward)
                                                 <option value="{{ $ward->id }}" @selected($customerAccount->ward_id == $ward->id)>
                                                     {{ $ward->name }}
@@ -218,20 +218,23 @@
                 wardSelect.disabled = true;
 
                 if (cityId) {
-                    fetch(`/admin/account/customer/districts/${cityId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(district => {
+                    fetch(`/customer/districts/${cityId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            data.forEach((district) => {
                                 const option = document.createElement("option");
                                 option.value = district.id;
                                 option.textContent = district.name;
-                                if (district.id == selectedDistrict) option.selected = true;
+                                if (district.id == selectedDistrict)
+                                    option.selected = true;
                                 districtSelect.appendChild(option);
                             });
                             districtSelect.disabled = false;
                             districtSelect.dispatchEvent(new Event("change"));
                         })
-                        .catch(error => console.error("Lỗi khi tải Quận/Huyện:", error));
+                        .catch((error) =>
+                            console.error("Lỗi khi tải Quận/Huyện:", error)
+                        );
                 } else {
                     districtSelect.disabled = true;
                     wardSelect.disabled = true;
@@ -244,10 +247,10 @@
                 wardSelect.innerHTML = '<option value="">Chọn Xã/Phường</option>';
 
                 if (districtId) {
-                    fetch(`/admin/account/customer/wards/${districtId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(ward => {
+                    fetch(`/customer/wards/${districtId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            data.forEach((ward) => {
                                 const option = document.createElement("option");
                                 option.value = ward.id;
                                 option.textContent = ward.name;
@@ -256,7 +259,9 @@
                             });
                             wardSelect.disabled = false;
                         })
-                        .catch(error => console.error("Lỗi khi tải Xã/Phường:", error));
+                        .catch((error) =>
+                            console.error("Lỗi khi tải Xã/Phường:", error)
+                        );
                 } else {
                     wardSelect.disabled = true;
                 }

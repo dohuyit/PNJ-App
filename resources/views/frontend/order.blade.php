@@ -4,21 +4,22 @@
 @section('content')
     <main id="main">
         <section id="main-order">
-            <div class="container my-5">
-                <div class="row">
-                    <!-- Thông tin khách hàng -->
-                    <div class="col-md-7">
-                        <div class="header-order d-flex align-items-center justify-content-between">
-                            <img src="{{ asset('frontend/image/pnj.com.vn.png') }}" alt="PNJ Logo" class="mb-2"
-                                width="120" />
-                            <a href="{{ route('client.home') }}"
-                                class="text-decoration-none text-primary d-flex align-items-center gap-2">
-                                <i class="fas fa-arrow-left"></i>
-                                <span>Tiếp tục mua hàng</span>
-                            </a>
-                        </div>
+            <form action="{{ route('client.order.process') }}" method="post">
+                @csrf
+                <div class="container my-5">
+                    <div class="row">
+                        <!-- Thông tin khách hàng -->
+                        <div class="col-md-7">
+                            <div class="header-order d-flex align-items-center justify-content-between">
+                                <img src="{{ asset('frontend/image/pnj.com.vn.png') }}" alt="PNJ Logo" class="mb-2"
+                                    width="120" />
+                                <a href="{{ route('client.home') }}"
+                                    class="text-decoration-none text-primary d-flex align-items-center gap-2">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Tiếp tục mua hàng</span>
+                                </a>
+                            </div>
 
-                        <form>
                             <div class="customer-info mb-5">
                                 <div class="title-group">
                                     <h3 class="fw-bold my-3">Thông tin giao hàng</h3>
@@ -27,19 +28,23 @@
                                 <div class="content-group row g-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Họ và Tên</label>
-                                        <input type="text" class="form-control" placeholder="Họ và tên *" />
+                                        <input type="text" name="name" class="form-control" placeholder="Họ và tên *"
+                                            value="{{ Auth::user()->username }}" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" placeholder="Email" />
+                                        <input type="email" name="email" class="form-control" placeholder="Email"
+                                            value="{{ Auth::user()->email }}" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" placeholder="Số điện thoại *" />
+                                        <input type="text" name="phone" class="form-control"
+                                            placeholder="Số điện thoại *" value="{{ Auth::user()->phone }}" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ngày sinh</label>
-                                        <input type="date" class="form-control" placeholder="MM/DD/YY" />
+                                        <input type="date" name="" class="form-control" placeholder="MM/DD/YY"
+                                            value="{{ Auth::user()->birthday }}" />
                                     </div>
                                 </div>
                             </div>
@@ -87,29 +92,45 @@
                                     <div class="row g-3 mt-1">
                                         <div class="col-md-6">
                                             <label class="form-label">Tỉnh / Thành</label>
-                                            <select class="form-select">
-                                                <option selected>Chọn tỉnh / thành</option>
+                                            <select name="city_id" id="city" class="form-control">
+                                                <option value="" hidden selected>-- Tỉnh / Thành Phố --</option>
+                                                @foreach ($cities as $city)
+                                                    <option value="{{ $city->id }}" @selected(Auth::user()->city_id == $city->id)>
+                                                        {{ $city->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Quận / Huyện</label>
-                                            <select class="form-select">
-                                                <option selected>Chọn quận / huyện</option>
+                                            <select name="district_id" id="district" class="form-control">
+                                                <option value="" hidden selected>-- Quận / Huyện --</option>
+                                                @foreach ($districts as $district)
+                                                    <option value="{{ $district->id }}" @selected(Auth::user()->district_id == $district->id)>
+                                                        {{ $district->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Phường / Xã</label>
-                                            <select class="form-select">
-                                                <option selected>Chọn phường / xã</option>
+                                            <select name="ward_id" id="ward" class="form-control">
+                                                <option value="" hidden selected>-- Xã / Phường --</option>
+                                                @foreach ($wards as $ward)
+                                                    <option value="{{ $ward->id }}" @selected(Auth::user()->ward_id == $ward->id)>
+                                                        {{ $ward->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Địa chỉ</label>
-                                            <input type="text" class="form-control" placeholder="Địa chỉ" />
+                                            <input type="text" class="form-control" placeholder="Địa chỉ"
+                                                name="address" />
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label">Ghi chú</label>
-                                            <textarea name="" id="" cols="30" rows="15" class="form-control"
+                                            <textarea name="note" id="" cols="30" rows="15" class="form-control"
                                                 placeholder="Ghi chú đơn hàng..."></textarea>
                                         </div>
                                     </div>
@@ -120,7 +141,8 @@
                             <div class="payment-method">
                                 <h3 class="fw-bold my-3">Phương thức thanh toán</h3>
                                 <div class="item-form-check">
-                                    <input class="form-check-input" type="radio" name="payment" id="payment-cod" />
+                                    <input class="form-check-input" type="radio" name="payment" id="payment-cod"
+                                        value="1" checked />
                                     <label
                                         class="form-check-label px-2 py-2 rounded-2 payment-content d-flex align-items-center gap-3"
                                         for="payment-cod">
@@ -134,7 +156,7 @@
                                 </div>
                                 <div class="item-form-check">
                                     <input class="form-check-input" type="radio" name="payment" id="payment-vnpay"
-                                        checked />
+                                        value="2" />
                                     <label
                                         class="form-check-label px-2 py-2 rounded-2 payment-content d-flex align-items-center gap-3"
                                         for="payment-vnpay">
@@ -147,7 +169,8 @@
                                     </label>
                                 </div>
                                 <div class="item-form-check">
-                                    <input class="form-check-input" type="radio" name="payment" id="payment-momo" />
+                                    <input class="form-check-input" type="radio" name="payment" id="payment-momo"
+                                        value="3" />
                                     <label
                                         class="form-check-label px-2 py-2 rounded-2 payment-content d-flex align-items-center gap-3"
                                         for="payment-momo">
@@ -160,8 +183,8 @@
                                     </label>
                                 </div>
                                 <div class="item-form-check">
-                                    <input class="form-check-input" type="radio" name="payment"
-                                        id="payment-zalopay" />
+                                    <input class="form-check-input" type="radio" name="payment" id="payment-zalopay"
+                                        value="4" />
                                     <label
                                         class="form-check-label px-2 py-2 rounded-2 payment-content d-flex align-items-center gap-3"
                                         for="payment-zalopay">
@@ -174,75 +197,78 @@
                                     </label>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
 
-                    <!-- Tóm tắt đơn hàng -->
-                    <div class="col-md-5">
-                        <div class="accordion" id="infoOrder">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Tóm tắt đơn hàng
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show"
-                                    aria-labelledby="headingOne" data-bs-parent="#infoOrder">
-                                    <div class="accordion-body">
-                                        @foreach ($cartItems as $item)
-                                            <div class="item-accordion d-flex align-items-center gap-3 mb-3">
-                                                <div class="image">
-                                                    <img src="{{ Storage::url($item->variant->product->product_image) }}"
-                                                        alt="{{ $item->variant->product->product_name }}"
-                                                        class="border rounded-3" />
-                                                </div>
-                                                <div class="content d-flex flex-column w-100">
-                                                    <p class="fw-bold">
-                                                        {{ $item->variant->product->product_name }}
-                                                    </p>
-                                                    <div class="product-details">
-                                                        <span class="text-secondary">Size:
-                                                            {{ $item->variant->attribute->name }}</span>
+                        <!-- Tóm tắt đơn hàng -->
+                        <div class="col-md-5">
+                            <div class="accordion" id="infoOrder">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            Tóm tắt đơn hàng
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingOne" data-bs-parent="#infoOrder">
+                                        <div class="accordion-body">
+                                            @foreach ($cartItems as $item)
+                                                <div class="item-accordion d-flex align-items-center gap-3 mb-3">
+                                                    <div class="image">
+                                                        <img src="{{ Storage::url($item->variant->product->product_image) }}"
+                                                            alt="{{ $item->variant->product->product_name }}"
+                                                            class="border rounded-3" />
                                                     </div>
-                                                    <p class="mt-auto d-flex justify-content-between fw-bold">
-                                                        <span>{{ formatPrice($item->variant->price_variant * $item->quantity) }}</span>
-                                                        <span>Số lượng: <strong>{{ $item->quantity }}</strong></span>
-                                                    </p>
+                                                    <div class="content d-flex flex-column w-100">
+                                                        <p class="fw-bold">
+                                                            {{ $item->variant->product->product_name }}
+                                                        </p>
+                                                        @if ($item->variant->attribute->attributegroups->name == 'Size')
+                                                            <div class="product-details">
+                                                                <span class="text-secondary">Size:
+                                                                    {{ $item->variant->attribute->name }}</span>
+                                                            </div>
+                                                        @endif
+                                                        <p class="mt-auto d-flex justify-content-between fw-bold">
+                                                            <span>{{ formatPrice($item->variant->price_variant * $item->quantity) }}</span>
+                                                            <span>Số lượng: <strong>{{ $item->quantity }}</strong></span>
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body order-sumary">
-                            <hr />
-                            <div class="input-group mt-2">
-                                <input type="text" class="form-control" placeholder="Nhập Mã Giảm Giá" />
-                                <button class="btn btn-primary">Sử dụng</button>
+                            <div class="card-body order-sumary">
+                                <hr />
+                                <form action="" class="input-group mt-2" method="POST">
+                                    <input type="text" class="form-control" placeholder="Nhập Mã Giảm Giá" />
+                                    <button type="button" class="btn btn-primary">Sử dụng</button>
+                                </form>
+                                <hr />
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-0">Tạm tính</p>
+                                    <p class="mb-0 fw-bold text-secondary">{{ formatPrice($subTotal) }}</p>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <p class="mb-0">Phí vận chuyển</p>
+                                    <p class="mb-0 fw-bold text-secondary">-0đ</p>
+                                </div>
+                                <hr />
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <p class="mb-0">TỔNG CỘNG</p>
+                                    <p class="mb-0 text-secondary">{{ formatPrice($subTotal) }}</p>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mt-3">
+                                    Đặt hàng
+                                </button>
                             </div>
-                            <hr />
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-0">Tạm tính</p>
-                                <p class="mb-0 fw-bold text-secondary">{{ formatPrice($subTotal) }}</p>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <p class="mb-0">Phí vận chuyển</p>
-                                <p class="mb-0 fw-bold text-secondary">-0đ</p>
-                            </div>
-                            <hr />
-                            <div class="d-flex justify-content-between fw-bold">
-                                <p class="mb-0">TỔNG CỘNG</p>
-                                <p class="mb-0 text-secondary">{{ formatPrice($subTotal) }}</p>
-                            </div>
-                            <button type="reset" class="btn btn-primary w-100 mt-3">
-                                Đặt hàng
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </section>
     </main>
 
@@ -253,7 +279,5 @@
 @endpush
 
 @push('script')
-    {{-- <script src="{{ asset('frontend/js/helper.js') }}"></script>
-    <script src="{{ asset('frontend/js/client.js') }}"></script>
-    <script src="{{ asset('frontend/js/detail.js') }}"></script> --}}
+    <script src="{{ asset('frontend/js/order.js') }}"></script>
 @endpush

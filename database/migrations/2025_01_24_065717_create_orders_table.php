@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('district_id');
             $table->unsignedBigInteger('ward_id');
+            $table->text('address');
             $table->text('note')->nullable();
             $table->unsignedBigInteger('payment_method_id'); // Liên kết phương thức thanh toán
             $table->unsignedBigInteger('status_id'); // Liên kết trạng thái

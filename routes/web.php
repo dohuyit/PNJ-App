@@ -66,11 +66,7 @@ Route::prefix('admin')->group(function () {
             Route::get('customer/{id}/edit', [UserController::class, 'editCustomerAccount'])->name('customer.edit');
             Route::put('customer/update/{id}', [UserController::class, 'updateCustomerAccount'])->name('customer.update');
 
-            // API lấy quận/huyện theo thành phố
-            Route::get('customer/districts/{city_id}', [UserController::class, 'getDistricts'])->name('customer.districts');
 
-            // API lấy xã/phường theo quận/huyện
-            Route::get('customer/wards/{district_id}', [UserController::class, 'getWards'])->name('customer.wards');
 
             Route::delete('/{id}', [UserController::class, 'destroy'])->name('account.destroy');
         });
@@ -79,7 +75,11 @@ Route::prefix('admin')->group(function () {
 
 
 
+// API lấy quận/huyện theo thành phố
+Route::get('customer/districts/{city_id}', [UserController::class, 'getDistricts'])->name('customer.districts');
 
+// API lấy xã/phường theo quận/huyện
+Route::get('customer/wards/{district_id}', [UserController::class, 'getWards'])->name('customer.wards');
 // Route::get('/', [HomeController::class, 'index'])->name('client.home');
 Route::middleware('client')->group(function () {
     // CLIENT DASHBOARD
@@ -102,6 +102,8 @@ Route::middleware('client')->group(function () {
     //Order Page
 
     Route::post('/order/checkout', [OrderClientController::class, 'checkOut'])->name('client.order.checkout');
+    Route::post('/order/order-process', [OrderClientController::class, 'orderProcess'])->name('client.order.process');
+    Route::get('/order/order-success', [OrderClientController::class, 'showOrderSuccess'])->name('client.order.success');
 
 
     // Authentication client
