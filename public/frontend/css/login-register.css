@@ -128,11 +128,10 @@ section .sub-title {
 .form-action
     :is(input[type="email"], input[type="text"], input[type="password"]) {
     outline: none;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
     /* color: #ffffff; */
     padding: 15px 40px 15px 10px;
-    letter-spacing: 2px;
     width: 100%;
     /* border: 1px solid #dccbcf; */
     border: 1px solid #0000009c;

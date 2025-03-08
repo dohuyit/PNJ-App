@@ -26,7 +26,7 @@ class AuthClientController extends Controller
         $remember_token = $request->has('remember');
         if (Auth::attempt($dataLogin, $remember_token)) {
             if (Auth::user()->role_id == '2') {
-                $request->session()->put('client_auth', Auth::user()->username);
+                $request->session()->put('client_auth', Auth::user());
 
                 // dd(session()->all()); 
                 return redirect()->route('client.home')->with('success', 'Đăng nhập thành công');

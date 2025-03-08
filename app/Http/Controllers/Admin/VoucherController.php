@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Voucher;
 use App\Http\Requests\StoreVoucherRequest;
 use App\Http\Requests\UpdateVoucherRequest;
@@ -13,7 +14,9 @@ class VoucherController extends Controller
      */
     public function index()
     {
-        //
+        $listVouchers = Voucher::all();
+
+        return view('backend.pages.vouchers.list', compact('listVouchers'));
     }
 
     /**
@@ -21,7 +24,7 @@ class VoucherController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.pages.vouchers.add');
     }
 
     /**

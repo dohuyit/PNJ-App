@@ -50,7 +50,7 @@
                 @error('password')
                     <p class="text-danger mb-2">{{ $message }}</p>
                 @enderror
-                <div class="link-group d-flex justify-content-end mb-3">
+                <div class="link-group d-flex justify-content-end my-3">
                     {{-- <div class="remember-link d-flex align-items-center gap-2 text-dark">
                         <input type="checkbox" name="remember" id="remember">
                         <label for="remember">Remember me</label>

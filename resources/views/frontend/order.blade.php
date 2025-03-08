@@ -29,22 +29,22 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Họ và Tên</label>
                                         <input type="text" name="name" class="form-control" placeholder="Họ và tên *"
-                                            value="{{ Auth::user()->username }}" />
+                                            value="{{ session('client_auth')->username }}" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control" placeholder="Email"
-                                            value="{{ Auth::user()->email }}" />
+                                            value="{{ session('client_auth')->email }}" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
                                         <input type="text" name="phone" class="form-control"
-                                            placeholder="Số điện thoại *" value="{{ Auth::user()->phone }}" />
+                                            placeholder="Số điện thoại *" value="{{ session('client_auth')->phone }}" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ngày sinh</label>
                                         <input type="date" name="" class="form-control" placeholder="MM/DD/YY"
-                                            value="{{ Auth::user()->birthday }}" />
+                                            value="{{ session('client_auth')->birthday }}" />
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                             <select name="city_id" id="city" class="form-control">
                                                 <option value="" hidden selected>-- Tỉnh / Thành Phố --</option>
                                                 @foreach ($cities as $city)
-                                                    <option value="{{ $city->id }}" @selected(Auth::user()->city_id == $city->id)>
+                                                    <option value="{{ $city->id }}" @selected(session('client_auth')->city_id == $city->id)>
                                                         {{ $city->name }}
                                                     </option>
                                                 @endforeach
@@ -106,7 +106,7 @@
                                             <select name="district_id" id="district" class="form-control">
                                                 <option value="" hidden selected>-- Quận / Huyện --</option>
                                                 @foreach ($districts as $district)
-                                                    <option value="{{ $district->id }}" @selected(Auth::user()->district_id == $district->id)>
+                                                    <option value="{{ $district->id }}" @selected(session('client_auth')->district_id == $district->id)>
                                                         {{ $district->name }}
                                                     </option>
                                                 @endforeach
@@ -117,7 +117,7 @@
                                             <select name="ward_id" id="ward" class="form-control">
                                                 <option value="" hidden selected>-- Xã / Phường --</option>
                                                 @foreach ($wards as $ward)
-                                                    <option value="{{ $ward->id }}" @selected(Auth::user()->ward_id == $ward->id)>
+                                                    <option value="{{ $ward->id }}" @selected(session('client_auth')->ward_id == $ward->id)>
                                                         {{ $ward->name }}
                                                     </option>
                                                 @endforeach

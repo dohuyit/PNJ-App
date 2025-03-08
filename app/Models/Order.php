@@ -28,7 +28,7 @@ class Order extends Model
         'payment_status',
     ];
 
-    public function items()
+    public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }

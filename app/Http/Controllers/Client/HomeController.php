@@ -8,11 +8,15 @@ use App\Models\Collection;
 use App\Models\JewelryLine;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        if (session('admin_auth')) {
+            Auth::logout();
+        }
         $dataBrands = Brand::all();
         $dataNewProducts = Product::query()->where('product_status', "=", 0)->orderBy('created_at', 'desc')->take(8)->get();
         $dataProductFeatures = Product::query()

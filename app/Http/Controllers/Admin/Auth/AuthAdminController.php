@@ -22,6 +22,8 @@ class AuthAdminController extends Controller
         // dd($dataLogin);
         if (Auth::attempt($dataLogin, $remember_token)) {
             if (Auth::user()->role_id == '1' || Auth::user()->role_id == '3') {
+
+                $request->session()->put('admin_auth', Auth::user());
                 return redirect()->route("index")->with("success", "Đăng Nhập Thành Công!");
             } else {
                 return back()->with("error", "Email và mật khẩu không hợp lệ!");

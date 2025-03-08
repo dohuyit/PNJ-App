@@ -16,7 +16,7 @@
                         Chúng tôi sẽ sớm liên hệ để xác nhận đơn hàng.
                     </p>
                     <div class="mt-4">
-                        <a href="index.html" class="btn btn-primary btn-custom">
+                        <a href="{{ route('client.home') }}" class="btn btn-primary btn-custom">
                             <i class="fa-solid fa-house"></i>
                             <span class="ms-2">Quay Lại Trang Chủ</span>
                         </a>

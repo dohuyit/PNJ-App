@@ -24,10 +24,6 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('product.create') }}" class="btn btn-primary">
-                                <span><i class="fas fa-plus"></i></span>
-                                <span class="ml-2">Thêm mới dữ liệu</span>
-                            </a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -36,7 +32,6 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Khách hàng</th>
-                                        <th>Tên sản phẩm</th>
                                         <th>Địa chỉ</th>
                                         <th>Phương thức thanh toán</th>
                                         <th>Trạng thái</th>
@@ -54,9 +49,6 @@
                                                 {{ $data->order->phone }}
                                             </td>
                                             <td>
-                                                {{ $data->variant->product->product_name }}
-                                            </td>
-                                            <td>
                                                 <p class="text-muted m-0">Phường/Xã: {{ $data->order->ward->name }}</p>
                                                 <p class="fw-bold text-info m-0">Quận/Huyện:
                                                     {{ $data->order->district->name }}
@@ -66,13 +58,13 @@
                                             <td>
                                                 @if ($data->order->paymentMethod->id == 1)
                                                     <span
-                                                        class="badge bg-secondary">{{ $data->order->paymentMethod->name }}</span>
+                                                        class="badge py-2 bg-secondary">{{ $data->order->paymentMethod->name }}</span>
                                                 @elseif ($data->order->paymentMethod->id == 2)
                                                     <span
-                                                        class="badge bg-primary">{{ $data->order->paymentMethod->name }}</span>
+                                                        class="badge p-2 bg-primary">{{ $data->order->paymentMethod->name }}</span>
                                                 @else
                                                     <span
-                                                        class="badge bg-danger">{{ $data->order->paymentMethod->name }}</span>
+                                                        class="badge py-2 bg-danger">{{ $data->order->paymentMethod->name }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -96,9 +88,9 @@
                                                 {{ formatPrice($data->total_price) }}
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('order.edit', $data->id) }}"
-                                                    class="btn btn-warning text-light">
-                                                    <i class="far fa-edit"></i>
+                                                <a href="{{ route('order.edit', $data->order->id) }}"
+                                                    class="btn btn-primary text-light">
+                                                    <i class="fas fa-eye"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
                                                     data-target="#modal-{{ $data->id }}">
@@ -141,7 +133,6 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Khách hàng</th>
-                                        <th>Tên sản phẩm</th>
                                         <th>Địa chỉ</th>
                                         <th>Phương thức thanh toán</th>
                                         <th>Trạng thái</th>

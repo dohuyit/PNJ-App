@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
 use App\Http\Controllers\Client\CartClientController;
 use App\Http\Controllers\Client\DetailController;
@@ -51,8 +52,12 @@ Route::prefix('admin')->group(function () {
         Route::resource('attribute', AttributeController::class);
         Route::resource('product', ProductController::class);
         Route::resource('order', OrderController::class);
+        Route::resource('voucher', VoucherController::class);
 
         Route::get('/get-product-types/{categoryId}', [ProductController::class, 'getProductTypes']);
+
+        Route::get('/export-invoice/{orderId}', [OrderController::class, 'exportInvoice'])->name('order.export.invoice');
+
 
         // Quản lí tài khoản khách hàng và admin
         Route::prefix('account')->group(function () {

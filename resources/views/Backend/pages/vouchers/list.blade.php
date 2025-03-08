@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Danh sách sản phẩm')
+@section('title', 'Danh sách mã giảm giá')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Danh sách sản phẩm</h1>
+                    <h1>Danh sách mã giảm giá</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+                        <li class="breadcrumb-item active">Danh sách mã giảm giá</li>
                     </ol>
                 </div>
             </div>
@@ -24,9 +24,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a href="{{ route('product.create') }}" class="btn btn-primary">
+                            <a href="{{ route('voucher.create') }}" class="btn btn-primary">
                                 <span><i class="fas fa-plus"></i></span>
-                                <span class="ml-2">Thêm mới dữ liệu</span>
+                                <span class="ml-2">Tạo mới mã giảm giá</span>
                             </a>
                         </div>
                         <!-- /.card-header -->
@@ -35,72 +35,44 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Thông tin sản phẩm</th>
-                                        <th>Giá sản phẩm</th>
-                                        <th>Trạng thái</th>
+                                        <th>Mã giảm giá</th>
+                                        <th>Tên</th>
+                                        <th>Giá tiền</th>
+                                        <th>Số lượt sử dụng</th>
+                                        <th>Loại</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($listProducts as $index => $Product)
+                                    @foreach ($listVouchers as $index => $Voucher)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
+                                            <td>{{ $Voucher->voucher_code }}</td>
+                                            <td>{{ $Voucher->voucher_name }}</td>
+                                            <td>{{ formatPrice($Voucher->discount_amount) }}</td>
+                                            <td>{{ $Voucher->max_uses }}</td>
                                             <td>
-                                                @if ($Product->product_image && \Storage::exists($Product->product_image))
-                                                    <img src="{{ Storage::url($Product->product_image) }}" alt="Banner"
-                                                        width="100">
+                                                @if ($Voucher->type == 0)
+                                                    <span class="badge bg-info">Toàn bộ sản phẩm</span>
+                                                @elseif ($Voucher->type == 1)
+                                                    <span class="badge bg-warning">Người dùng cố định</span>
                                                 @else
-                                                    <span class="badge bg-secondary">Chưa có ảnh</span>
+                                                    <span class="badge bg-success">Sản phẩm cố định</span>
                                                 @endif
-                                            </td>
-                                            <td>
-                                                <p> {{ $Product->product_name }}</p>
-                                            </td>
-                                            <td>
-
-                                                @if ($Product->original_price != $Product->sale_price)
-                                                    <p>
-                                                        <strong>Giá gốc:</strong>
-                                                        <span
-                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->original_price) }}</span>
-                                                    </p>
-                                                    <p>
-                                                        <strong>Giá bán:</strong>
-                                                        <span
-                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->sale_price) }}</span>
-                                                    </p>
-                                                @else
-                                                    <p>
-                                                        <strong>Giá bán:</strong>
-                                                        <span
-                                                            class="ml-2 badge bg-warning text-light">{{ formatPrice($Product->sale_price) }}</span>
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="switch-column ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="customSwitch{{ $Product->id }}"
-                                                        {{ $Product->product_status ? '' : 'checked' }}
-                                                        data-id="{{ $Product->id }}" />
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch{{ $Product->id }}"></label>
-                                                </div>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('product.edit', $Product) }}"
+                                                <a href="{{ route('voucher.edit', $Voucher) }}"
                                                     class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $Product->id }}">
+                                                    data-target="#modal-{{ $Voucher->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $Product->id }}" tabindex="-1"
-                                            role="dialog" aria-hidden="true">
+                                        <div class="modal fade" id="modal-{{ $Voucher->id }}" tabindex="-1" role="dialog"
+                                            aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -116,7 +88,7 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('product.destroy', $Product) }}"
+                                                        <form action="{{ route('voucher.destroy', $Voucher) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
@@ -129,14 +101,16 @@
                                             </div>
                                         </div>
                                     @endforeach
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Thông tin sản phẩm</th>
-                                        <th>Giá sản phẩm</th>
-                                        <th>Trạng thái</th>
+                                        <th>Mã giảm giá</th>
+                                        <th>Tên</th>
+                                        <th>Giá tiền</th>
+                                        <th>Số lượt sử dụng</th>
+                                        <th>Loại</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>

@@ -28,7 +28,7 @@
                     <a href="#" class="nav-link active">
                         <i class="fas fa-boxes"></i>
                         <p class="ml-2">
-                            Sản phẩm
+                            Quản lí sản phẩm
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -97,9 +97,32 @@
                 </li>
                 <li class="nav-item menu-close">
                     <a href="#" class="nav-link active">
+                        <i class="fas fa-ticket-alt"></i>
+                        <p class="ml-2">
+                            Quản lí mã giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('voucher.index') }}" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách mã giảm giá</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('customer.index') }}" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm mới</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu-close">
+                    <a href="#" class="nav-link active">
                         <i class="fas fa-users"></i>
                         <p class="ml-2">
-                            Tài khoản
+                            Quản lí tài khoản
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -122,8 +145,7 @@
                     <a href="{{ route('order.index') }}" class="nav-link active">
                         <i class="fas fa-shopping-cart"></i>
                         <p class="ml-2">
-                            Đơn hàng
-                            <i class="right fas fa-angle-left"></i>
+                            Quản lí dơn hàng
                         </p>
                     </a>
                 </li>

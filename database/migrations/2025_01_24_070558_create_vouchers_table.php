@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('uses')->unsigned();
             $table->integer('max_uses')->unsigned();
             $table->integer('max_uses_user')->unsigned();
+            $table->double('min_order_value')->default(0);
             $table->boolean('type', 3);
             $table->double('discount_amount');
             $table->boolean('is_fixed');

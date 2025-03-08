@@ -14,11 +14,12 @@ class CartClientController extends Controller
 {
     public function addCart(Request $request)
     {
-        $user = Auth::user();
+        $user = session('client_auth');;
         try {
             if (!$user) {
-                return redirect()->route('client.login.form')->with('error', 'Vui lòng đăng nhập tài khoản');
+                return redirect()->route('client.login.form');
             }
+
 
             $cart = Cart::query()->where('user_id', $user->id)->first();
 
@@ -64,9 +65,11 @@ class CartClientController extends Controller
 
     public function showCart()
     {
-        $user = Auth::user();
+        $user = session('client_auth');
+
+        // dd($user);
         if (!$user) {
-            return redirect()->route('client.login.form')->with('error', 'Vui lòng đăng nhập tài khoản');
+            return redirect()->route('client.login.form');
         }
 
         $cart = Cart::where('user_id', $user->id)->first();

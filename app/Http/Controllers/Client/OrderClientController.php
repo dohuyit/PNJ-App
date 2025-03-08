@@ -17,7 +17,7 @@ class OrderClientController extends Controller
 {
     public function checkout(Request $request)
     {
-        $user = Auth::user();
+        $user = session('client_auth');
         // dd($user);
         if (!$user) {
             return redirect()->route('client.login.form')
@@ -74,7 +74,7 @@ class OrderClientController extends Controller
         try {
             // DB::beginTransaction();
 
-            $user = Auth::user();
+            $user = session('client_auth');
             if (!$user) {
                 return redirect()->route('client.login.form')
                     ->with('error', 'Vui lòng đăng nhập để thanh toán');
