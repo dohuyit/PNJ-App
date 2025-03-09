@@ -16,6 +16,7 @@ class Voucher extends Model
         'uses',
         'max_uses',
         'max_uses_user',
+        'min_order_value',
         'type',
         'discount_amount',
         'is_fixed',
@@ -24,7 +25,7 @@ class Voucher extends Model
         'delete_at',
     ];
 
-    public function customers()
+    public function users()
     {
         return $this->belongsToMany(User::class, 'customer_vouchers', 'voucher_id', 'user_id')
             ->withTimestamps();

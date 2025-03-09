@@ -31,13 +31,13 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped text-center">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
                                         <th>Mã giảm giá</th>
                                         <th>Tên</th>
-                                        <th>Giá tiền</th>
+                                        <th>Giá trị</th>
                                         <th>Số lượt sử dụng</th>
                                         <th>Loại</th>
                                         <th class="text-center">Hành động</th>
@@ -49,15 +49,21 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $Voucher->voucher_code }}</td>
                                             <td>{{ $Voucher->voucher_name }}</td>
-                                            <td>{{ formatPrice($Voucher->discount_amount) }}</td>
+                                            <td>
+                                                @if ($Voucher->is_fixed == 0)
+                                                    {{ intval($Voucher->discount_amount) }}%
+                                                @else
+                                                    {{ formatPrice($Voucher->discount_amount) }}
+                                                @endif
+                                            </td>
                                             <td>{{ $Voucher->max_uses }}</td>
                                             <td>
                                                 @if ($Voucher->type == 0)
                                                     <span class="badge bg-info">Toàn bộ sản phẩm</span>
                                                 @elseif ($Voucher->type == 1)
-                                                    <span class="badge bg-warning">Người dùng cố định</span>
-                                                @else
                                                     <span class="badge bg-success">Sản phẩm cố định</span>
+                                                @else
+                                                    <span class="badge bg-warning">Người dùng cố định</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -108,7 +114,7 @@
                                         <th>STT</th>
                                         <th>Mã giảm giá</th>
                                         <th>Tên</th>
-                                        <th>Giá tiền</th>
+                                        <th>Giá trị</th>
                                         <th>Số lượt sử dụng</th>
                                         <th>Loại</th>
                                         <th class="text-center">Hành động</th>

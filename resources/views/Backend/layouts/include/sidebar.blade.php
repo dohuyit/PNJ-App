@@ -111,7 +111,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('customer.index') }}" class="nav-link active">
+                            <a href="{{ route('voucher.create') }}" class="nav-link active">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm mới</p>
                             </a>

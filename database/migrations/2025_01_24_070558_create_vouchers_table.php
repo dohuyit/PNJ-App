@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->string('voucher_code', 500);
-            $table->string('voucher_name', 500);
-            $table->text('description');
-            $table->integer('uses')->unsigned();
-            $table->integer('max_uses')->unsigned();
-            $table->integer('max_uses_user')->unsigned();
-            $table->double('min_order_value')->default(0);
-            $table->boolean('type', 3);
-            $table->double('discount_amount');
-            $table->boolean('is_fixed');
+            $table->string('voucher_code', 255)->unique();
+            $table->string('voucher_name', 255);
+            $table->text('description')->nullable();
+            $table->unsignedInteger('uses')->default(0);
+            $table->unsignedInteger('max_uses')->default(0);
+            $table->unsignedInteger('max_uses_user')->default(0);
+            $table->decimal('min_order_value', 12, 2)->default(0);
+            $table->tinyInteger('type')->default(0);
+            $table->decimal('discount_amount', 12, 2);
+            $table->boolean('is_fixed')->default(0);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->timestamp('delete_at');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

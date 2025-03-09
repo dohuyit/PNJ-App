@@ -1,18 +1,18 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Thêm mã giảm giá mới')
+@section('title', 'Cập nhật giảm giá mới')
 
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Thêm mã giảm giá mới</h1>
+                    <h1>Cập nhật giảm giá mới</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Thêm mã giảm giá mới</li>
+                        <li class="breadcrumb-item active">Cập nhật giảm giá mới</li>
                     </ol>
                 </div>
             </div>
@@ -20,8 +20,9 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('voucher.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('voucher.update', $voucher) }}" method="post" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="row">
                     <!-- Form nhập thông tin -->
                     <div class="col-md-8" id="mainCard">
@@ -34,7 +35,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Mã giảm giá</label>
                                         <input type="text" class="form-control" name="voucher_code"
-                                            placeholder="Nhập mã giảm giá" value="{{ old('voucher_code') }}"
+                                            placeholder="Nhập mã giảm giá" value="{{ $voucher->voucher_code }}"
                                             id="voucher_code">
                                         <button type="button" id="generate_code" class="btn btn-info mt-2">Tạo
                                             mã</button>
@@ -45,7 +46,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Tên mã giảm giá</label>
                                         <input type="text" class="form-control" name="voucher_name"
-                                            placeholder="Nhập tên mã giảm giá" value="{{ old('voucher_name') }}">
+                                            placeholder="Nhập tên mã giảm giá" value="{{ $voucher->voucher_name }}">
                                         @error('voucher_name')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
@@ -53,7 +54,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Tổng tiền giảm giá</label>
                                         <input type="text" class="form-control" name="discount_amount"
-                                            placeholder="Giá trị áp dụng tối thiểu" value="{{ old('discount_amount') }}">
+                                            placeholder="Giá trị áp dụng tối thiểu" value="{{ $voucher->discount_amount }}">
                                         @error('discount_amount')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
@@ -61,8 +62,10 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Loại ưu đãi</label>
                                         <select name="is_fixed" id="" class="form-control">
-                                            <option value="0">Giảm giá theo phần trăm</option>
-                                            <option value="1">Giảm giá theo số tiền</option>
+                                            <option @selected($voucher->is_fixed == 0) value="0">Giảm giá theo phần trăm
+                                            </option>
+                                            <option @selected($voucher->is_fixed == 1) value="1">Giảm giá theo số tiền
+                                            </option>
                                         </select>
                                         @error('is_fixed')
                                             <span class="text-danger mt-1">{{ $message }}</span>
@@ -71,7 +74,8 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Số lần sử dụng tối đa</label>
                                         <input type="number" class="form-control" name="max_uses"
-                                            placeholder="Nhập Số lần sử dụng tối đa" value="0" min="1">
+                                            placeholder="Nhập Số lần sử dụng tối đa" value="{{ $voucher->max_uses ?? 0 }}"
+                                            min="1">
                                         @error('max_uses')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
@@ -79,7 +83,8 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Số lần sử dụng của tài khoản</label>
                                         <input type="number" class="form-control" name="max_uses_user"
-                                            placeholder="Số lần sử dụng của tài khoản" value="0" min="1">
+                                            placeholder="Số lần sử dụng của tài khoản"
+                                            value="{{ $voucher->max_uses ?? 0 }}" min="1">
                                         @error('max_uses_user')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
@@ -87,7 +92,8 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Giá trị áp dụng tối thiểu</label>
                                         <input type="text" class="form-control" name="min_order_value"
-                                            placeholder="Giá trị áp dụng tối thiểu" value="{{ old('min_order_value') }}">
+                                            placeholder="Giá trị áp dụng tối thiểu"
+                                            value="{{ $voucher->min_order_value ?? 0 }}">
                                         @error('min_order_value')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
@@ -95,9 +101,9 @@
                                     <div class="col-md-6 mb-3">
                                         <label>Loại áp dụng giảm giá</label>
                                         <select class="form-control" name="type" id="typeSelect">
-                                            <option value="0">Toàn bộ sản phẩm</option>
-                                            <option value="1">Sản phẩm cố định</option>
-                                            <option value="2">Người dùng cố định</option>
+                                            <option @selected($voucher->type == 0) value="0">Toàn bộ sản phẩm</option>
+                                            <option @selected($voucher->type == 1) value="1">Sản phẩm cố định</option>
+                                            <option @selected($voucher->type == 2) value="2">Người dùng cố định</option>
                                         </select>
                                         @error('type')
                                             <span class="text-danger mt-1">{{ $message }}</span>
@@ -106,21 +112,25 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label>Ngày bắt đầu</label>
-                                        <input type="date" name="start_date" id="start_date" class="form-control">
+                                        <input type="date" name="start_date" id="start_date" class="form-control"
+                                            value="{{ \Carbon\Carbon::parse($voucher->start_date)->format('Y-m-d') }}">
+
                                         @error('start_date')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label>Ngày kết thúc</label>
-                                        <input type="date" name="end_date" id="end_date" class="form-control">
+                                        <input type="date" name="end_date" id="end_date" class="form-control"
+                                            value="{{ \Carbon\Carbon::parse($voucher->end_date)->format('Y-m-d') }}">
+
                                         @error('end_date')
                                             <span class="text-danger mt-1">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="col-md-12">
                                         <label>Mô tả</label>
-                                        <textarea class="form-control" rows="4" name="description" placeholder="Nhập mô tả">{{ old('description') }}</textarea>
+                                        <textarea class="form-control" rows="4" name="description" placeholder="Nhập mô tả">{{ $voucher->description }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -160,14 +170,18 @@
                                     <tbody>
                                         @foreach ($listProducts as $product)
                                             <tr>
-                                                <td><input type="checkbox" name="product_id[]" class="item-checkbox"
-                                                        value="{{ $product->id }}"></td>
+                                                <td>
+                                                    <input type="checkbox" name="product_id[]" class="item-checkbox"
+                                                        value="{{ $product->id }}"
+                                                        @if ($dataVoucherDetail && $dataVoucherDetail->products->contains('id', $product->id)) checked @endif>
+                                                </td>
                                                 <td><img src="{{ Storage::url($product->product_image) }}"
                                                         class="img-thumbnail" alt="product"></td>
                                                 <td>{{ $product->product_name }}</td>
                                                 <td>{{ formatPrice($product->sale_price) }}</td>
                                             </tr>
                                         @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -190,6 +204,7 @@
                                         @foreach ($listUsers as $user)
                                             <tr>
                                                 <td><input type="checkbox" name="user_id[]" class="item-checkbox"
+                                                        @if ($dataVoucherDetail && $dataVoucherDetail->users->contains('id', $user->id)) checked @endif
                                                         value="{{ $user->id }}"></td>
                                                 <td>{{ $user->username }}</td>
                                                 <td>{{ $user->email }}</td>
