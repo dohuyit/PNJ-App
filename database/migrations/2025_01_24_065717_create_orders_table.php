@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('phone');
             $table->date('date');
             $table->decimal('total_amount', 12, 2);
+            $table->decimal('discount_amount', 12, 2)->nullable();
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('district_id');
             $table->unsignedBigInteger('ward_id');

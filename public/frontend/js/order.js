@@ -68,3 +68,131 @@ document.addEventListener("DOMContentLoaded", function () {
         citySelect.dispatchEvent(new Event("change"));
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const applyVoucherBtn = document.querySelector("#applyVoucherBtn");
+    const voucherInput = document.querySelector("#voucher_code");
+    const voucherMessage = document.querySelector("#voucherMessage");
+    const voucherSection = document.querySelector("#voucherSection");
+    const subtotalElement = document.querySelector("#subtotal");
+    const finalPriceElement = document.querySelector("#finalPrice");
+
+    applyVoucherBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        const voucherCode = voucherInput.value.trim();
+
+        if (!voucherCode) {
+            showMessage("Vui lòng nhập mã giảm giá", "error");
+            return;
+        }
+
+        fetch("/order/apply-voucher", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector(
+                    'meta[name="csrf-token"]'
+                ).content,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                voucher_code: voucherCode,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Hiển thị thông tin voucher
+                    voucherSection.innerHTML = `
+                <div class="voucher-applied mt-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-success">
+                            Mã giảm giá: ${data.voucher_code}
+                        </span>
+                        <button type="button" id="removeVoucherBtn" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+                    // Cập nhật phần giảm giá
+                    document.querySelector(".discount-section").innerHTML = `
+                <div class="d-flex justify-content-between mt-2">
+                    <p class="mb-0">Mã giảm giá</p>
+                    <p class="mb-0 fw-bold text-danger" id="discountAmount">
+                        - ${data.discount_amount}
+                    </p>
+                </div>
+            `;
+
+                    // Cập nhật tổng tiền
+                    finalPriceElement.textContent = data.final_price;
+
+                    // Hiển thị thông báo thành công
+                    showMessage(data.message, "success");
+
+                    // Thêm event listener cho nút xóa voucher
+                    document
+                        .getElementById("removeVoucherBtn")
+                        .addEventListener("click", function () {
+                            removeVoucher();
+                        });
+                } else {
+                    showMessage(data.message, "error");
+                }
+            })
+            .catch((error) => {
+                console.error("Lỗi:", error);
+                showMessage("Có lỗi xảy ra khi áp dụng mã giảm giá", "error");
+            });
+    });
+
+    function removeVoucher() {
+        fetch("/order/remove-voucher", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector(
+                    'meta[name="csrf-token"]'
+                ).content,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Xóa thông tin voucher
+                    voucherSection.innerHTML = "";
+                    // Xóa phần giảm giá
+                    document.querySelector(".discount-section").innerHTML = "";
+                    // Cập nhật lại tổng tiền
+                    finalPriceElement.textContent = data.final_price;
+                    // Reset input
+                    voucherInput.value = "";
+                    // Hiển thị thông báo
+                    showMessage(data.message, "success");
+                }
+            })
+            .catch((error) => {
+                console.error("Lỗi:", error);
+                showMessage("Có lỗi xảy ra khi xóa mã giảm giá", "error");
+            });
+    }
+
+    function showMessage(message, type = "success") {
+        // Hiển thị thông báo
+        voucherMessage.innerHTML = `
+<div class="alert alert-${
+            type === "success" ? "success" : "danger"
+        } alert-dismissible fade show" role="alert">
+    ${message}
+</div>
+`;
+
+        // Tự động ẩn sau 3 giây
+        setTimeout(() => {
+            voucherMessage.innerHTML = "";
+        }, 2000);
+    }
+});

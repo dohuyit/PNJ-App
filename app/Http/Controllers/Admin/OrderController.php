@@ -105,6 +105,15 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        // dd($order->all());
+        try {
+            DB::transaction(function () use ($order) {
+                $order->delete();
+            });
+
+            return redirect()->route('order.index')->with('success', 'Xóa đơn hàng thành công!');
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
     }
 }

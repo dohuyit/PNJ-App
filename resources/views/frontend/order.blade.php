@@ -243,23 +243,58 @@
                             </div>
                             <div class="card-body order-sumary">
                                 <hr />
-                                <form action="" class="input-group mt-2" method="POST">
-                                    <input type="text" class="form-control" placeholder="Nhập Mã Giảm Giá" />
-                                    <button type="button" class="btn btn-primary">Sử dụng</button>
-                                </form>
+                                <div id="voucherMessage" class="mb-2"></div>
+
+                                <div class="mt-2 input-group">
+                                    <input type="text" name="voucher_code" id="voucher_code" class="form-control"
+                                        placeholder="Nhập mã giảm giá...">
+                                    <button type="button" id="applyVoucherBtn" class="btn btn-primary">Sử dụng</button>
+                                </div>
+
+                                <div id="voucherSection" class="mt-2">
+                                    @if (Session::has('voucher_id'))
+                                        <div class="voucher-applied">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-success">
+                                                    Mã giảm giá: {{ Session::get('voucher_code') }}
+                                                </span>
+                                                <button type="button" id="removeVoucherBtn"
+                                                    class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
                                 <hr />
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0">Tạm tính</p>
-                                    <p class="mb-0 fw-bold text-secondary">{{ formatPrice($subTotal) }}</p>
+                                    <p class="mb-0 fw-bold text-secondary" id="subtotal">{{ formatPrice($subTotal) }}
+                                    </p>
                                 </div>
+
+                                <div class="discount-section">
+                                    @if (Session::has('voucher_id'))
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <p class="mb-0">Mã giảm giá</p>
+                                            <p class="mb-0 fw-bold text-danger" id="discountAmount">
+                                                - {{ formatPrice(Session::get('discount_amount', 0)) }}
+                                            </p>
+                                        </div>
+                                    @endif
+                                </div>
+
                                 <div class="d-flex justify-content-between mt-2">
                                     <p class="mb-0">Phí vận chuyển</p>
-                                    <p class="mb-0 fw-bold text-secondary">-0đ</p>
+                                    <p class="mb-0 fw-bold text-secondary">0đ</p>
                                 </div>
                                 <hr />
                                 <div class="d-flex justify-content-between fw-bold">
                                     <p class="mb-0">TỔNG CỘNG</p>
-                                    <p class="mb-0 text-secondary">{{ formatPrice($subTotal) }}</p>
+                                    <p class="mb-0 text-secondary" id="finalPrice">
+                                        {{ formatPrice(Session::get('final_price', $subTotal)) }}
+                                    </p>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100 mt-3">
                                     Đặt hàng
@@ -275,6 +310,7 @@
 @endsection
 
 @push('link')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/order.css') }}" />
 @endpush
 

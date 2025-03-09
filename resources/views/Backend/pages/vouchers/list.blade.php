@@ -40,6 +40,8 @@
                                         <th>Giá trị</th>
                                         <th>Số lượt sử dụng</th>
                                         <th>Loại</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Ngày kết thúc</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </thead>
@@ -66,6 +68,14 @@
                                                     <span class="badge bg-warning">Người dùng cố định</span>
                                                 @endif
                                             </td>
+                                            <td>
+                                                <span
+                                                    class="btn btn-outline-primary">{{ \Carbon\Carbon::parse($Voucher->start_date)->format('d-m-Y') }}</span>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="btn btn-outline-danger">{{ \Carbon\Carbon::parse($Voucher->end_date)->format('d-m-Y') }}</span>
+                                            </td>
                                             <td class="text-center">
                                                 <a href="{{ route('voucher.edit', $Voucher) }}"
                                                     class="btn btn-warning text-light">
@@ -77,8 +87,8 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $Voucher->id }}" tabindex="-1" role="dialog"
-                                            aria-hidden="true">
+                                        <div class="modal fade" id="modal-{{ $Voucher->id }}" tabindex="-1"
+                                            role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -107,7 +117,6 @@
                                             </div>
                                         </div>
                                     @endforeach
-
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -117,6 +126,8 @@
                                         <th>Giá trị</th>
                                         <th>Số lượt sử dụng</th>
                                         <th>Loại</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Ngày kết thúc</th>
                                         <th class="text-center">Hành động</th>
                                     </tr>
                                 </tfoot>

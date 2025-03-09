@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th scope="col">STT</th>
@@ -44,7 +44,7 @@
                                     <tbody>
                                         @php
                                             $subTotal = 0;
-                                            $shippingFee = 30000;
+                                            $shippingFee = 0;
                                         @endphp
                                         @foreach ($dataOrder->orderItems as $index => $itemDetail)
                                             @php
@@ -57,8 +57,8 @@
                                                     <img src="{{ Storage::url($itemDetail->variant->product->product_image) }}"
                                                         alt="" width="80" class="img-thumbnail">
                                                 </td>
-                                                <td width="300">
-                                                    <p class="w-100">{{ $itemDetail->variant->product->product_name }}
+                                                <td>
+                                                    <p class="w-10">{{ $itemDetail->variant->product->product_name }}
                                                     </p>
                                                 </td>
                                                 <td>{{ formatPrice($itemDetail->unit_price) }}</td>
@@ -71,7 +71,8 @@
                             </div>
 
                             @php
-                                $finalTotal = max(0, $subTotal + $shippingFee);
+                                $discountAmount = $dataOrder->discount_amount ?? 0;
+                                $finalTotal = max(0, $subTotal + $shippingFee - $discountAmount);
                             @endphp
 
                             <div class="col-md-6 my-3 p-0 ml-auto">
@@ -82,7 +83,8 @@
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <span class="fw-bold">Khuyến mãi:</span>
-                                        <span class="text-danger">- 0đ</span>
+                                        <span class="text-danger">-
+                                            {{ formatPrice($dataOrder->discount_amount ?? 0) }}</span>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <span class="fw-bold">Phí ship:</span>

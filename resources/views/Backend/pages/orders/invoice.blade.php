@@ -69,6 +69,7 @@
         .total {
             font-weight: bold;
             font-size: 16px;
+            background: #f8f9fa;
         }
 
         .footer {
@@ -117,8 +118,14 @@
                         <td>{{ formatPrice($item->total_price) }}</td>
                     </tr>
                 @endforeach
+                <!-- Dòng tổng tiền -->
+                <tr>
+                    <td colspan="4" class="text-right total"><strong>Tổng tiền:</strong></td>
+                    <td class="total">{{ formatPrice($order->total_amount) }}</td>
+                </tr>
             </tbody>
         </table>
+
         <!-- Ghi chú -->
         <div class="footer">
             <p>Cảm ơn quý khách đã mua hàng!</p>

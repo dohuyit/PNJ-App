@@ -5,19 +5,24 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\CartItem;
 use App\Models\City;
+use App\Models\CustomerVoucher;
 use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVoucher;
+use App\Models\Voucher;
 use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class OrderClientController extends Controller
 {
     public function checkout(Request $request)
     {
-        $user = session('client_auth');
+        $user = Session::get('client_auth');
         // dd($user);
         if (!$user) {
             return redirect()->route('client.login.form')
@@ -26,7 +31,6 @@ class OrderClientController extends Controller
 
         $selectedItemIds = explode(',', $request->selected_cart_items);
 
-        // dd($selectedItemIds);
         $cartItems = CartItem::whereIn('id', $selectedItemIds)
             ->whereHas('cart', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
@@ -35,6 +39,11 @@ class OrderClientController extends Controller
             ->get();
 
         // dd($cartItems);
+        $sessionCart = [];
+        foreach ($cartItems as $item) {
+            $sessionCart[] = $item->variant->product->id;
+        }
+        // dd($sessionCart);
 
         if ($cartItems->isEmpty()) {
             return redirect()->route('client.cart.show')
@@ -51,18 +60,22 @@ class OrderClientController extends Controller
 
         // dd($districts, $wards);
         // dd($subTotal);
-        session(['selected_cart_items' => $selectedItemIds]);
+        Session::put([
+            'selected_cart_items' => $selectedItemIds,
+            'sessionCart' => $sessionCart,
+            'total_price' => $subTotal
+        ]);
 
         return view('frontend.order', compact('cartItems', 'subTotal', 'cities', 'districts', 'wards'));
     }
 
     public function showOrderSuccess()
     {
-        if (!session()->has('order_success')) {
+        if (!Session::has('order_success')) {
             return redirect()->route('client.home');
         }
 
-        session()->forget('order_success');
+        Session::forget('order_success');
 
         return view('frontend.order-success');
     }
@@ -74,14 +87,14 @@ class OrderClientController extends Controller
         try {
             // DB::beginTransaction();
 
-            $user = session('client_auth');
+            $user = Session::get('client_auth');
             if (!$user) {
                 return redirect()->route('client.login.form')
                     ->with('error', 'Vui lòng đăng nhập để thanh toán');
             }
 
             // Lấy danh sách item được chọn từ session
-            $selectedItemIds = session('selected_cart_items', []);
+            $selectedItemIds = Session::get('selected_cart_items', []);
             if (empty($selectedItemIds)) {
                 return redirect()->route('client.cart.show')
                     ->with('error', 'Không có sản phẩm nào được chọn');
@@ -91,9 +104,8 @@ class OrderClientController extends Controller
             $cartItems = CartItem::whereIn('id', $selectedItemIds)
                 ->with(['variant.product', 'variant.attribute'])
                 ->get();
-
-            // Tính tổng tiền
-            $total = $cartItems->sum(function ($item) {
+            $discountAmount = Session::get('discount_amount');
+            $totalAmount = Session::has('final_price') ? Session::get('final_price') : $cartItems->sum(function ($item) {
                 return $item->variant->price_variant * $item->quantity;
             });
 
@@ -105,7 +117,8 @@ class OrderClientController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'date' => date('Y-m-d H:i:s'),
-                'total_amount'  => $total,
+                'total_amount'  => $totalAmount,
+                'discount_amount'  => $discountAmount,
                 'address' => $request->address,
                 'city_id' => $request->city_id,
                 'district_id' => $request->district_id,
@@ -126,13 +139,19 @@ class OrderClientController extends Controller
                 ]);
             }
 
+            if (Session::has('voucher_id')) {
+                $voucher = Voucher::find(Session::get('voucher_id'));
+                if ($voucher) {
+                    $voucher->increment('uses');
+                }
+            }
+
             // Xóa các sản phẩm đã đặt khỏi giỏ hàng
             CartItem::whereIn('id', $selectedItemIds)->delete();
 
             // Xóa session
-            session()->forget('selected_cart_items');
-
-            session()->put('order_success', true);
+            Session::forget(['voucher_id', 'voucher_code', 'discount_amount', 'final_price', 'selected_cart_items', 'sessionCart', 'total_price']);
+            Session::put('order_success', true);
             return redirect()->route('client.order.success')->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -140,6 +159,131 @@ class OrderClientController extends Controller
                 ->with('error', 'Có lỗi xảy ra khi đặt hàng: ');
         }
     }
+
+    public function applyVoucher(Request $request)
+    {
+        try {
+            $voucherCode = $request->voucher_code;
+            $totalPrice = Session::get('total_price', 0);
+
+            if (!$totalPrice) {
+                return response()->json(['success' => false, 'message' => 'Không thể áp dụng mã giảm giá vì không có đơn hàng.']);
+            }
+
+            // Tìm mã giảm giá
+            $voucher = Voucher::where('voucher_code', $voucherCode)
+                ->where('start_date', '<=', now())
+                ->where('end_date', '>=', now())
+                ->first();
+
+            if (!$voucher) {
+                return response()->json(['success' => false, 'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!']);
+            }
+
+            // Kiểm tra số lần sử dụng
+            if ($voucher->uses >= $voucher->max_uses) {
+                return response()->json(['success' => false, 'message' => 'Mã giảm giá đã hết lượt sử dụng!']);
+            }
+
+            // Kiểm tra số lần sử dụng của user
+            $userUses = CustomerVoucher::where('voucher_id', $voucher->id)
+                ->where('user_id', auth()->id())
+                ->count();
+
+            if ($userUses >= $voucher->max_uses_user) {
+                return response()->json(['success' => false, 'message' => 'Mã giảm giá đã hết lượt sử dụng!']);
+            }
+
+            // Kiểm tra giá trị đơn hàng tối thiểu
+            if ($totalPrice < $voucher->min_order_value) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Đơn hàng phải có giá trị tối thiểu " . formatPrice($voucher->min_order_value) . " mới có thể áp dụng mã!"
+                ]);
+            }
+
+            if ($voucher->type == 1) {
+
+                $cartProducts = Session::get('sessionCart', []); // Danh sách ID sản phẩm use 
+
+                // Kiểm tra giá trị của $cartProducts
+                // Log::info('Dữ liệu cartProducts:', ['cartProducts' => $cartProducts]);
+
+                $validProducts = ProductVoucher::where('voucher_id', $voucher->id)
+                    ->whereIn('product_id', $cartProducts)
+                    ->exists();
+
+                if (!$validProducts) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Mã giảm giá không phù hợp với sản phẩm của bạn!'
+                    ]);
+                }
+            }
+
+            if ($voucher->type == 2) {
+                $validUser = CustomerVoucher::where('voucher_id', $voucher->id)
+                    ->where('user_id', auth()->id())
+                    ->exists();
+
+                if (!$validUser) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Mã giảm giá không hợp lệ cho tài khoản của bạn!'
+                    ]);
+                }
+            }
+
+            $discountAmount = $voucher->is_fixed ? $voucher->discount_amount : ($voucher->discount_amount / 100) * $totalPrice;
+            $finalPrice = max(0, $totalPrice - $discountAmount);
+
+            // Lưu vào session
+            Session::put('discount_amount', $discountAmount);
+            Session::put('final_price', $finalPrice);
+            Session::put('voucher_id', $voucher->id);
+            Session::put('voucher_code', $voucher->voucher_code);
+
+            return response()->json([
+                'success' => true,
+                'voucher_code' => $voucherCode,
+                'discount_amount' => formatPrice($discountAmount),
+                'final_price' => formatPrice($finalPrice),
+                'message' => 'Áp dụng mã giảm giá thành công!'
+            ]);
+
+            // return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi máy chủ: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function removeVoucher()
+    {
+        try {
+            // Xóa các session liên quan đến voucher
+            Session::forget(['voucher_id', 'voucher_code', 'discount_amount', 'final_price']);
+
+            // Lấy giá gốc từ session
+            $originalPrice = Session::get('total_price', 0);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Xõa mã giảm giá thành công!',
+                'final_price' => formatPrice($originalPrice)
+            ]);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi xóa mã giảm giá'
+            ], 500);
+        }
+    }
+
 
     // // Xử lý thanh toán VNPay
     // private function processVNPayPayment($order)

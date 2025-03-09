@@ -17,6 +17,7 @@ class Order extends Model
         'phone',
         'date',
         'total_amount',
+        'discount_amount',
         'address',
         'city_id',
         'district_id',

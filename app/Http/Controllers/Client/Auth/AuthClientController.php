@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthLoginRequest;
 use App\Http\Requests\AuthRegisterRequest;
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthClientController extends Controller
 {
@@ -67,6 +67,7 @@ class AuthClientController extends Controller
 
     public function logout()
     {
+        Session::flush();
         Auth::logout();
 
         session()->forget('client_auth');

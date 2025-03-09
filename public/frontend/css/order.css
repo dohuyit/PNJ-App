@@ -126,4 +126,98 @@ form h3 {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
+.voucher-applied {
+    position: relative;
+    background: #f8f9fa;
+    border: 2px dashed #dc3545; /* Viền nét đứt */
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    max-width: 350px;
+    margin: auto;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🎟️ Hiệu ứng cắt tròn hai bên giống vé */
+.voucher-applied::before,
+.voucher-applied::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 0 2px #dc3545;
+}
+
+.voucher-applied::before {
+    left: -10px;
+}
+
+.voucher-applied::after {
+    right: -10px;
+}
+
+/* 🔥 Chỉnh kiểu chữ */
+.voucher-applied p {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 🎨 Mã giảm giá nổi bật */
+.voucher-applied p strong {
+    color: #dc3545;
+}
+
+/* 🗑 Nút Xóa Mã Giảm Giá */
+.btn-remove-voucher {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-remove-voucher:hover {
+    background: #a71d2a;
+    transform: scale(1.05);
+}
+
+.text-success {
+    color: #28a745;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+#voucherMessage {
+    margin-bottom: 10px;
+}
+
+.alert {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
 /* ================================ */

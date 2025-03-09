@@ -85,7 +85,7 @@
                                                 <span class="btn {{ $btnClass }} btn-sm">{{ $status }}</span>
                                             </td>
                                             <td>
-                                                {{ formatPrice($data->total_price) }}
+                                                {{ formatPrice($data->order->total_amount) }}
                                             </td>
                                             <td class="text-center">
                                                 <a href="{{ route('order.edit', $data->order->id) }}"
@@ -93,12 +93,12 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#modal-{{ $data->id }}">
+                                                    data-target="#modal-{{ $data->order->id }}">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="modal-{{ $data->id }}" tabindex="-1"
+                                        <div class="modal fade" id="modal-{{ $data->order->id }}" tabindex="-1"
                                             role="dialog" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -115,8 +115,8 @@
                                                     <div class="modal-footer d-flex justify-content-between">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Hủy</button>
-                                                        <form action="{{ route('order.destroy', $data) }}" method="POST"
-                                                            class="d-inline">
+                                                        <form action="{{ route('order.destroy', $data->order->id) }}"
+                                                            method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-success">
