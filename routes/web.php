@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\AttributeGroupController;
 use App\Http\Controllers\Admin\Auth\AuthAdminController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CollectionController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
 use App\Http\Controllers\Client\CartClientController;
+use App\Http\Controllers\Client\DetailCategoryController;
 use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderClientController;
@@ -53,10 +55,13 @@ Route::prefix('admin')->group(function () {
         Route::resource('product', ProductController::class);
         Route::resource('order', OrderController::class);
         Route::resource('voucher', VoucherController::class);
+        Route::resource('banner', BannerController::class);
 
         Route::get('/get-product-types/{categoryId}', [ProductController::class, 'getProductTypes']);
 
         Route::get('/export-invoice/{orderId}', [OrderController::class, 'exportInvoice'])->name('order.export.invoice');
+
+
 
 
         // Quản lí tài khoản khách hàng và admin
@@ -114,6 +119,7 @@ Route::middleware('client')->group(function () {
     Route::post('/order/apply-voucher', [OrderClientController::class, 'applyVoucher'])->name('order.apply.voucher');
     Route::post('/order/remove-voucher', [OrderClientController::class, 'removeVoucher'])->name('order.remove.voucher');
 
+    Route::get('/category/{type}/{id}', [DetailCategoryController::class, 'show'])->name('category.show');
 
 
     // Authentication client

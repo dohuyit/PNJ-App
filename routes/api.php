@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// api banner
+Route::get('/banner/collections', [BannerController::class, 'getCollections']);
+Route::get('/banner/jewelry-lines', [BannerController::class, 'getJewelryLines']);
+Route::get('/banner/brands', [BannerController::class, 'getBrands']);

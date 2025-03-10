@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttributeGroup;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Collection;
+use App\Models\JewelryLine;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductType;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 
@@ -32,6 +37,13 @@ class DetailController extends Controller
             abort(404);
         }
         // dd($dataDetail);
-        return view('frontend.detail', compact('dataDetail', 'albumImageProduct'));
+
+        $dataCategoryParentNav = Category::pluck('name', 'id');
+        $dataProductTypesNav = ProductType::where('category_id', 1)->pluck('name', 'id');
+        $dataJewelryLinesNav = JewelryLine::where('is_wedding', 1)->pluck('name', 'id');
+        $dataCollectionsNav = Collection::where('is_wedding_collection', 1)->pluck('name', 'id');
+        $dataBrandsNav = Brand::pluck('name', 'id');
+
+        return view('frontend.detail', compact('dataDetail', 'albumImageProduct', 'dataCategoryParentNav', 'dataProductTypesNav', 'dataJewelryLinesNav', 'dataCollectionsNav', 'dataBrandsNav'));
     }
 }

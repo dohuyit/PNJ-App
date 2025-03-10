@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $listProducts = Product::all();
+        $listProducts = Product::with('productType')->get();
         return view("backend.pages.products.list", compact("listProducts"));
     }
 

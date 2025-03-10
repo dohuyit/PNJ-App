@@ -149,135 +149,62 @@
             <div class="row d-flex align-items-center w-100 justify-content-between">
                 <div class="col-md-8 ps-0">
                     <ul class="navbar-nav gap-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Trang sức</a>
-                            <ul class="submenu position-absolute top-100 start-0 shadow-lg d-flex gap-5 px-5 py-4">
-                                <li class="submenu-content d-flex justify-content-between flex-grow-1">
-                                    <div class="column-submenu">
-                                        <h4 class="submenu-title fw-bold">Chủng loại</h4>
-                                        <ul class="submenu-items ps-0">
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                            <li><a class="submenu-link" href="#">Nhẫn</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="column-submenu">
-                                        <h4 class="submenu-title fw-bold">Chất liệu</h4>
-                                        <ul class="submenu-items ps-0">
-                                            <li><a class="submenu-link" href="#">Vàng</a></li>
-                                            <li><a class="submenu-link" href="#">Bạc</a></li>
-                                            <li>
-                                                <a class="submenu-link" href="#">Platinum</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="column-submenu">
-                                        <h4 class="submenu-title fw-bold">Dòng hàng</h4>
-                                        <ul class="submenu-items ps-0">
-                                            <li>
-                                                <a class="submenu-link" href="#">Trang sức đính kim cương</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">Trang sức ECZ</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức ngọc trai</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức không đính đá</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức công nghệ ý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức đính đá quý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức CZ</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="column-submenu">
-                                        <h4 class="submenu-title fw-bold">Bộ sưu tập</h4>
-                                        <ul class="submenu-items ps-0">
-                                            <li>
-                                                <a class="submenu-link" href="#">Kim bảo như ý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">Trang sức ECZ</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức ngọc trai</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức không đính đá</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức công nghệ ý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức đính đá quý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức CZ</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="column-submenu">
-                                        <h4 class="submenu-title fw-bold">Dòng hàng</h4>
-                                        <ul class="submenu-items ps-0">
-                                            <li>
-                                                <a class="submenu-link" href="#">Trang sức đính kim cương</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">Trang sức ECZ</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức ngọc trai</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức không đính đá</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức công nghệ ý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức đính đá quý</a>
-                                            </li>
-                                            <li>
-                                                <a class="submenu-link" href="#">TRang sức CZ</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="submenu-banner">
-                                    <img src="./image/XUAN2025-Vang24K_Banner-400x270.webp" alt="" />
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Trang sức cưới</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Đồng Hồ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Quà tặng</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Thương hiệu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Khuyến mãi</a>
-                        </li>
+                        @foreach ($dataCategoryParentNav as $id => $name)
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">{{ $name }}</a>
+                                @if ($name == 'Trang sức')
+                                    <ul
+                                        class="submenu position-absolute top-100 start-0 shadow-lg d-flex gap-5 px-5 py-4">
+                                        <li class="submenu-content d-flex justify-content-between flex-grow-1">
+                                            <div class="column-submenu">
+                                                <h4 class="submenu-title fw-bold">Chủng loại</h4>
+                                                <ul class="submenu-items ps-0">
+                                                    @foreach ($dataProductTypesNav as $id => $name)
+                                                        <li><a class="submenu-link"
+                                                                href="{{ route('category.show', ['type' => 'product-type', 'id' => $id]) }}">{{ $name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+
+                                            <div class="column-submenu">
+                                                <h4 class="submenu-title fw-bold">Dòng hàng</h4>
+                                                <ul class="submenu-items ps-0">
+                                                    @foreach ($dataJewelryLinesNav as $id => $name)
+                                                        <li><a class="submenu-link"
+                                                                href="{{ route('category.show', ['type' => 'jewelry-line', 'id' => $id]) }}">{{ $name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            <div class="column-submenu">
+                                                <h4 class="submenu-title fw-bold">Bộ sưu tập</h4>
+                                                <ul class="submenu-items ps-0">
+                                                    @foreach ($dataCollectionsNav as $id => $name)
+                                                        <li><a class="submenu-link"
+                                                                href="{{ route('category.show', ['type' => 'collection', 'id' => $id]) }}">{{ $name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            <div class="column-submenu">
+                                                <h4 class="submenu-title fw-bold">Thương hiệu</h4>
+                                                <ul class="submenu-items ps-0">
+                                                    @foreach ($dataBrandsNav as $id => $name)
+                                                        <li><a class="submenu-link"
+                                                                href="{{ route('category.show', ['type' => 'brand', 'id' => $id]) }}">{{ $name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="submenu-banner">
+                                            <img src="./image/XUAN2025-Vang24K_Banner-400x270.webp" alt="" />
+                                        </li>
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-md-4 p-0">

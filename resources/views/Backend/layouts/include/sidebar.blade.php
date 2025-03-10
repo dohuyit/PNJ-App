@@ -149,6 +149,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item menu-close">
+                    <a href="{{ route('banner.index') }}" class="nav-link active">
+                        <i class="fas fa-images"></i>
+                        <p class="ml-2">
+                            Quản lí banner
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

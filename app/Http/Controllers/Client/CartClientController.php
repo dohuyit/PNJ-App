@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attribute;
+use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Category;
+use App\Models\Collection;
+use App\Models\JewelryLine;
+use App\Models\ProductType;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -102,7 +107,13 @@ class CartClientController extends Controller
             })
             ->get();
 
-        return view('frontend.cart', compact('dataCarts', 'attributes', 'selectedSizes'));
+        $dataCategoryParentNav = Category::pluck('name', 'id');
+        $dataProductTypesNav = ProductType::where('category_id', 1)->pluck('name', 'id');
+        $dataJewelryLinesNav = JewelryLine::where('is_wedding', 1)->pluck('name', 'id');
+        $dataCollectionsNav = Collection::where('is_wedding_collection', 1)->pluck('name', 'id');
+        $dataBrandsNav = Brand::pluck('name', 'id');
+
+        return view('frontend.cart', compact('dataCarts', 'attributes', 'selectedSizes', 'dataCategoryParentNav', 'dataProductTypesNav', 'dataJewelryLinesNav', 'dataCollectionsNav', 'dataBrandsNav'));
     }
 
     public function delete(Request $request)
