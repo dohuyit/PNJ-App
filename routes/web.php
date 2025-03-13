@@ -87,11 +87,7 @@ Route::prefix('admin')->group(function () {
 
 
 
-// API lấy quận/huyện theo thành phố
-Route::get('customer/districts/{city_id}', [UserController::class, 'getDistricts'])->name('customer.districts');
 
-// API lấy xã/phường theo quận/huyện
-Route::get('customer/wards/{district_id}', [UserController::class, 'getWards'])->name('customer.wards');
 // Route::get('/', [HomeController::class, 'index'])->name('client.home');
 Route::middleware('client')->group(function () {
     // CLIENT DASHBOARD
@@ -108,8 +104,7 @@ Route::middleware('client')->group(function () {
     Route::get('/cart/show-cart', [CartClientController::class, 'showCart'])->name('client.cart.show');
     Route::post('/cart/delete', [CartClientController::class, 'delete'])->name('client.cart.delete');
     Route::post('/cart/delete-all', [CartClientController::class, 'deleteAll'])->name('client.cart.deleteAll');
-    Route::post('/cart/update-quantity', [CartClientController::class, 'updateQuantity'])->name('client.cart.updateQuantity');
-    Route::post('/cart/update-size', [CartClientController::class, 'updateSize'])->name('client.cart.updateSize');
+
 
     //Order Page
 

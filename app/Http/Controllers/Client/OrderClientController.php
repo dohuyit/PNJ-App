@@ -54,6 +54,9 @@ class OrderClientController extends Controller
             return $item->variant->price_variant * $item->quantity;
         });
 
+        // Thêm Log để debug
+        Log::info('Setting total_price in session: ' . $subTotal);
+
         $cities = City::all();
         $districts = District::where('city_id', $user->city_id)->get();
         $wards = Ward::where('district_id', $user->district_id)->get();
@@ -65,6 +68,9 @@ class OrderClientController extends Controller
             'sessionCart' => $sessionCart,
             'total_price' => $subTotal
         ]);
+
+        // Thêm Log để verify
+        Log::info('Verifying total_price in session: ' . Session::get('total_price'));
 
         return view('frontend.order', compact('cartItems', 'subTotal', 'cities', 'districts', 'wards'));
     }
@@ -165,9 +171,9 @@ class OrderClientController extends Controller
         try {
             $voucherCode = $request->voucher_code;
             $totalPrice = Session::get('total_price', 0);
-
+            Log::info('Total Price: ' . $totalPrice);
             if (!$totalPrice) {
-                return response()->json(['success' => false, 'message' => 'Không thể áp dụng mã giảm giá vì không có đơn hàng.']);
+                return response()->json(['success' => false, 'message' => 'Lỗi khi áp dụng mã giảm giá.']);
             }
 
             // Tìm mã giảm giá

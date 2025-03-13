@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Client\CartClientController;
+use App\Http\Controllers\Client\OrderClientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +18,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 // api banner
 Route::get('/banner/collections', [BannerController::class, 'getCollections']);
 Route::get('/banner/jewelry-lines', [BannerController::class, 'getJewelryLines']);
 Route::get('/banner/brands', [BannerController::class, 'getBrands']);
+
+
+Route::prefix('location')->group(function () {
+    Route::get('/districts/{city_id}', [UserController::class, 'getDistricts'])->name('location.districts');
+
+    Route::get('/wards/{district_id}', [UserController::class, 'getWards'])->name('location.wards');
+});
+
+Route::prefix('cart')->group(function () {
+    Route::post('/update-quantity', [CartClientController::class, 'updateQuantity'])->name('client.cart.updateQuantity');
+    Route::post('/update-size', [CartClientController::class, 'updateSize'])->name('client.cart.updateSize');
+});
+
+// Route::middleware('client')->group(function () {
+//     Route::prefix('order')->group(function () {
+//         Route::post('/apply-voucher', [OrderClientController::class, 'applyVoucher'])->name('order.apply.voucher');
+//         Route::post('/remove-voucher', [OrderClientController::class, 'removeVoucher'])->name('order.remove.voucher');
+//     });
+// });

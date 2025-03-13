@@ -16,7 +16,8 @@ function swiper(
     nameSwiper,
     numberSlideView,
     numberSlideSpace,
-    numberDelay = 2000
+    numberDelay = 2000,
+    dataPagination = null
 ) {
     var swiper = new Swiper(nameSwiper, {
         slidesPerView: 1,
@@ -32,7 +33,7 @@ function swiper(
         },
         loop: true,
         pagination: {
-            el: ".swiper-pagination",
+            el: dataPagination,
             clickable: true,
         },
         breakpoints: {
@@ -60,6 +61,7 @@ swiper(".myBrand", 3, 20, 5000);
 swiper(".myBestseller", 4, 10, 3000);
 swiper(".myCollection", 4, 10, 4500);
 swiper(".myProducts", 4, 10, 4500);
+swiper(".myNewProductJewelryLines", 3, 10, 3000);
 
 function swiperSecond() {
     var swiper = new Swiper(".sliderCollection", {

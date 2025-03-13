@@ -145,7 +145,7 @@
                             <div class="card-body">
                                 <button type="submit" class="btn btn-outline-success">
                                     <span><i class="fas fa-save"></i></span>
-                                    <span class="ml-2">Thêm mới dữ liệu</span>
+                                    <span class="ml-2">Cập nhật dữ liệu</span>
                                 </button>
                                 <a href="{{ route('voucher.index') }}" class="btn btn-outline-primary ml-2">
                                     <span><i class="fas fa-undo"></i></span>

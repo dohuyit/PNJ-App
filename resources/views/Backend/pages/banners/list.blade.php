@@ -47,7 +47,7 @@
                                     @foreach ($listBanners as $index => $Banner)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $Banner->title }}</td>
+                                            <td>{{ $Banner->name }}</td>
                                             <td>
                                                 @if ($Banner->banner_image && \Storage::exists($Banner->banner_image))
                                                     <img src="{{ Storage::url($Banner->banner_image) }}" alt="Banner"
@@ -60,7 +60,11 @@
                                                 {{ $Banner->position }}
                                             </td>
                                             <td>
-                                                {{ $Banner->priority }}
+                                                @if ($Banner->priority == 1)
+                                                    <span class="badge bg-success">{{ $Banner->priority }}</span>
+                                                @else
+                                                    <span class="badge bg-primary">{{ $Banner->priority }}</span>
+                                                @endif
                                             </td>
                                             <td class="switch-column ">
                                                 <div class="custom-control custom-switch">
@@ -73,7 +77,7 @@
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('brand.edit', $Banner->id) }}"
+                                                <a href="{{ route('banner.edit', $Banner->id) }}"
                                                     class="btn btn-warning text-light">
                                                     <i class="far fa-edit"></i>
                                                 </a>

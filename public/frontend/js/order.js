@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         wardSelect.disabled = true;
 
         if (cityId) {
-            fetch(`/customer/districts/${cityId}`)
+            fetch(`/api/location/districts/${cityId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     data.forEach((district) => {
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         wardSelect.innerHTML = '<option value="">Chọn Xã/Phường</option>';
 
         if (districtId) {
-            fetch(`/customer/wards/${districtId}`)
+            fetch(`/api/location/wards/${districtId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     data.forEach((ward) => {

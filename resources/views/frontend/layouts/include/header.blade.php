@@ -149,7 +149,7 @@
             <div class="row d-flex align-items-center w-100 justify-content-between">
                 <div class="col-md-8 ps-0">
                     <ul class="navbar-nav gap-4">
-                        @foreach ($dataCategoryParentNav as $id => $name)
+                        @foreach ($categories as $id => $name)
                             <li class="nav-item">
                                 <a class="nav-link" href="#">{{ $name }}</a>
                                 @if ($name == 'Trang sức')
@@ -157,9 +157,9 @@
                                         class="submenu position-absolute top-100 start-0 shadow-lg d-flex gap-5 px-5 py-4">
                                         <li class="submenu-content d-flex justify-content-between flex-grow-1">
                                             <div class="column-submenu">
-                                                <h4 class="submenu-title fw-bold">Chủng loại</h4>
+                                                <h4 class="submenu-title fw-bold mb-2">Chủng loại</h4>
                                                 <ul class="submenu-items ps-0">
-                                                    @foreach ($dataProductTypesNav as $id => $name)
+                                                    @foreach ($productTypes as $id => $name)
                                                         <li><a class="submenu-link"
                                                                 href="{{ route('category.show', ['type' => 'product-type', 'id' => $id]) }}">{{ $name }}</a>
                                                         </li>
@@ -168,9 +168,9 @@
                                             </div>
 
                                             <div class="column-submenu">
-                                                <h4 class="submenu-title fw-bold">Dòng hàng</h4>
+                                                <h4 class="submenu-title fw-bold mb-2">Dòng hàng</h4>
                                                 <ul class="submenu-items ps-0">
-                                                    @foreach ($dataJewelryLinesNav as $id => $name)
+                                                    @foreach ($jewelryLines as $id => $name)
                                                         <li><a class="submenu-link"
                                                                 href="{{ route('category.show', ['type' => 'jewelry-line', 'id' => $id]) }}">{{ $name }}</a>
                                                         </li>
@@ -178,9 +178,9 @@
                                                 </ul>
                                             </div>
                                             <div class="column-submenu">
-                                                <h4 class="submenu-title fw-bold">Bộ sưu tập</h4>
+                                                <h4 class="submenu-title fw-bold mb-2">Bộ sưu tập</h4>
                                                 <ul class="submenu-items ps-0">
-                                                    @foreach ($dataCollectionsNav as $id => $name)
+                                                    @foreach ($collections as $id => $name)
                                                         <li><a class="submenu-link"
                                                                 href="{{ route('category.show', ['type' => 'collection', 'id' => $id]) }}">{{ $name }}</a>
                                                         </li>
@@ -188,9 +188,9 @@
                                                 </ul>
                                             </div>
                                             <div class="column-submenu">
-                                                <h4 class="submenu-title fw-bold">Thương hiệu</h4>
+                                                <h4 class="submenu-title fw-bold mb-2">Thương hiệu</h4>
                                                 <ul class="submenu-items ps-0">
-                                                    @foreach ($dataBrandsNav as $id => $name)
+                                                    @foreach ($brands as $id => $name)
                                                         <li><a class="submenu-link"
                                                                 href="{{ route('category.show', ['type' => 'brand', 'id' => $id]) }}">{{ $name }}</a>
                                                         </li>
@@ -199,7 +199,10 @@
                                             </div>
                                         </li>
                                         <li class="submenu-banner">
-                                            <img src="./image/XUAN2025-Vang24K_Banner-400x270.webp" alt="" />
+                                            <a href="{{ $subBanner->link }}">
+                                                <img src="{{ Storage::url($subBanner->banner_image) }}"
+                                                    alt="" />
+                                            </a>
                                         </li>
                                     </ul>
                                 @endif

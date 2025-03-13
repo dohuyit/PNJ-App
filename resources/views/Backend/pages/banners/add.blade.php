@@ -20,15 +20,20 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('brand.store') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('banner.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <!-- Form nhập thông tin -->
                     <div class="col-md-8">
                         <div class="card card-primary">
-                            <div class="card-header">
+                            <div class="card-header d-flex align-items-center">
                                 <h3 class="card-title">Nhập thông tin banner</h3>
+                                <a href="{{ route('banner.index') }}" class="ml-auto d-flex align-items-center">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span class="ml-2">Quay lại trang danh sách</span>
+                                </a>
                             </div>
+
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Tên banner</label>
@@ -53,11 +58,12 @@
                                         </option>
                                         <option value="submenu" {{ old('position') == 'submenu' ? 'selected' : '' }}>Submenu
                                         </option>
-                                        <option value="collection" {{ old('position') == 'collection' ? 'selected' : '' }}>
+                                        <option value="collections"
+                                            {{ old('position') == 'collections' ? 'selected' : '' }}>
                                             Collection</option>
-                                        <option value="jewelry-line"
-                                            {{ old('position') == 'jewelry-line' ? 'selected' : '' }}>Jewelry Line</option>
-                                        <option value="brand" {{ old('position') == 'brand' ? 'selected' : '' }}>Brand
+                                        <option value="jewelry_lines"
+                                            {{ old('position') == 'jewelry_lines' ? 'selected' : '' }}>Jewelry Line</option>
+                                        <option value="brands" {{ old('position') == 'brands' ? 'selected' : '' }}>Brand
                                         </option>
                                     </select>
                                 </div>
@@ -70,10 +76,10 @@
                                 <div class="form-group">
                                     <label>Chế độ ưu tiên</label>
                                     <select name="priority" class="form-control">
-                                        <option value="0" {{ old('priority', 0) == 0 ? 'selected' : '' }}>Ưu tiên thứ
+                                        <option value="1" {{ old('priority', 1) == 1 ? 'selected' : '' }}>Ưu tiên thứ
                                             nhất
                                         </option>
-                                        <option value="1" {{ old('priority') == 1 ? 'selected' : '' }}>Ưu tiên thứ hai
+                                        <option value="2" {{ old('priority') == 2 ? 'selected' : '' }}>Ưu tiên thứ hai
                                         </option>
                                     </select>
                                 </div>
@@ -85,12 +91,6 @@
                                         <option value="1" {{ old('is_active') == 1 ? 'selected' : '' }}>Ẩn</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-outline-primary d-flex align-items-center ">
-                                    <span><i class="fas fa-save"></i></span>
-                                    <span class="ml-2">Thêm mới dữ liệu</span>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -123,6 +123,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card ">
+                            <div class="card-header">
+                                <h3 class="card-title">Thao tác</h3>
+                            </div>
+                            <div class="card-body d-flex align-items-center">
+                                <button type="submit" class="btn btn-outline-success d-flex align-items-center mr-2">
+                                    <span><i class="fas fa-save"></i></span>
+                                    <span class="ml-2">Thêm mới dữ liệu</span>
+                                </button>
+                                <button type="reset" class="btn btn-outline-danger d-flex align-items-center ">
+                                    <span><i class="fas fa-undo"></i></span>
+                                    <span class="ml-2">Reset</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -143,7 +158,7 @@
 
             refSelect.innerHTML = ""; // Xóa danh sách cũ
 
-            if (position === "collection") {
+            if (position === "collections") {
                 fetch("/api/banner/collections").then(res => res.json()).then(data => {
                     data.forEach(item => {
                         let option = new Option(item.name, item.id);
@@ -151,7 +166,7 @@
                     });
                 });
                 refSection.style.display = "block";
-            } else if (position === "jewelry-line") {
+            } else if (position === "jewelry_lines") {
                 fetch("/api/banner/jewelry-lines").then(res => res.json()).then(data => {
                     data.forEach(item => {
                         let option = new Option(item.name, item.id);
@@ -159,7 +174,7 @@
                     });
                 });
                 refSection.style.display = "block";
-            } else if (position === "brand") {
+            } else if (position === "brands") {
                 fetch("/api/banner/brands").then(res => res.json()).then(data => {
                     data.forEach(item => {
                         let option = new Option(item.name, item.id);

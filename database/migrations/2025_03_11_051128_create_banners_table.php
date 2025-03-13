@@ -16,12 +16,12 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('banner_image');
             $table->string('link')->nullable();
-            $table->enum('position', ['slide', 'submenu', 'collection', 'jewelry-line', 'brand']);
+            $table->enum('position', ['slide', 'submenu', 'collections', 'jewelry_lines', 'brands']);
             // Bảng và ID tham chiếu (nếu có)
             $table->string('reference_table')->nullable();
             $table->unsignedBigInteger('reference_id')->nullable();
 
-            $table->tinyInteger('priority')->default(0);
+            $table->tinyInteger('priority')->default(1);
             $table->boolean('is_active')->default(0);
             $table->timestamps();
         });

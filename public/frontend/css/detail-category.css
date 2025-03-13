@@ -334,6 +334,7 @@ input {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    overflow: hidden;
     color: var(--text-card-color) !important;
     line-height: 22px;
     font-weight: 300 !important;

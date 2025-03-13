@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attribute;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -17,6 +18,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CartClientController extends Controller
 {
+
+    private function showDataNavbar()
+    {
+        return [
+            'categories' => Category::pluck('name', 'id'),
+            'productTypes' => ProductType::where('category_id', 1)->pluck('name', 'id'),
+            'jewelryLines' => JewelryLine::where('is_wedding', 1)->pluck('name', 'id'),
+            'collections' => Collection::where('is_wedding_collection', 1)->pluck('name', 'id'),
+            'brands' => Brand::pluck('name', 'id'),
+            'subBanner' => Banner::where('position', 'submenu')->where('priority', 1)->where('is_active', 0)->first()
+        ];
+    }
+
     public function addCart(Request $request)
     {
         $user = session('client_auth');;
@@ -70,6 +84,7 @@ class CartClientController extends Controller
 
     public function showCart()
     {
+
         $user = session('client_auth');
 
         // dd($user);
@@ -81,6 +96,8 @@ class CartClientController extends Controller
         if (!$cart) {
             return view('frontend.cart', ['dataCarts' => []]);
         }
+
+        $navbarData = $this->showDataNavbar();
 
         $dataCarts = CartItem::where('cart_id', $cart->id)
             ->with('variant.product')
@@ -113,7 +130,7 @@ class CartClientController extends Controller
         $dataCollectionsNav = Collection::where('is_wedding_collection', 1)->pluck('name', 'id');
         $dataBrandsNav = Brand::pluck('name', 'id');
 
-        return view('frontend.cart', compact('dataCarts', 'attributes', 'selectedSizes', 'dataCategoryParentNav', 'dataProductTypesNav', 'dataJewelryLinesNav', 'dataCollectionsNav', 'dataBrandsNav'));
+        return view('frontend.cart', array_merge($navbarData, compact('dataCarts', 'attributes', 'selectedSizes')));
     }
 
     public function delete(Request $request)

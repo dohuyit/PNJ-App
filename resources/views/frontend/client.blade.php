@@ -9,26 +9,21 @@
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
-                            <li class="dot active" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
-                                aria-current="true" aria-label="Slide 1"></li>
-                            <li class="dot" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                                aria-label="Slide 2"></li>
-                            <li class="dot" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                                aria-label="Slide 3"></li>
+                            <div class="carousel-indicators">
+                                @foreach ($dataBanners as $index => $banner)
+                                    <li class="dot @if ($index == 0) active @endif"
+                                        data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ $index }}">
+                                    </li>
+                                @endforeach
+                            </div>
                         </div>
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="{{ asset('frontend/image/xmas-24-1972x640-cta.jpg') }}" class="d-block w-100"
-                                    alt="banner1" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="{{ asset('frontend/image/ngaydoi-12-12-24-1972x640CTA.jpg') }}"
-                                    class="d-block w-100" alt="banner2" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="{{ asset('frontend/image/tabsale-chung-t12-24-1972x640.jpg') }}"
-                                    class="d-block w-100" alt="banner3" />
-                            </div>
+                            @foreach ($dataBanners as $index => $banner)
+                                <div class="carousel-item @if ($index == 0) active @endif">
+                                    <img src="{{ Storage::url($banner->banner_image) }}" class="d-block w-100"
+                                        alt="{{ $banner->name }}" />
+                                </div>
+                            @endforeach
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
                             data-bs-slide="prev">
@@ -62,6 +57,128 @@
                         <img src="{{ asset('frontend/image/thudoi-icon.svg') }}" alt="Thu đổi 48h" class="icon">
                         <div class="content ms-3">
                             <h6 class="fw-bold text-uppercase text-primary mb-0">Thu đổi 48H</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="my-5" id="group-voucher">
+            <div class="container">
+                <div class="title-group pb-3 text-primary px-5">
+                    <h2 class="fs-5 text-center fw-bold">Code ưu đãi độc quyền</h2>
+                </div>
+                <div class="block-voucher">
+                    <div class="voucher-items-list d-flex flex-wrap justify-content-center overflow-hidden">
+                        <div class="voucher-item d-flex">
+                            <div class="voucher-item-info">
+                                <div class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                    <div class="voucher-item-title d-block">
+                                        <strong>
+                                            <span>
+                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
+                                                <br>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <div class="voucher-item-des">
+                                        <span>Nhập mã </span>
+                                        <strong>
+                                            <span>
+                                                <span>TOKYO60</span>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <div class="voucher-item-des">
+                                        <span>Cho đơn hàng từ 199,000đ</span>
+                                    </div>
+                                    <div class="voucher-item-date">
+                                        <span class="expire fw-bold">Hết hạn:
+                                            15/03/2025
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="voucher-item-action d-flex align-items-center justify-content-center">
+                                    <div class="action btn btn-primary">
+                                        <span class="copy-content" data-code="TOKYO60" data-copied-text="Đã chép">Sao chép
+                                            mã
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="voucher-item d-flex">
+                            <div class="voucher-item-info">
+                                <div class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                    <div class="voucher-item-title d-block">
+                                        <strong>
+                                            <span>
+                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
+                                                <br>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <div class="voucher-item-des">
+                                        <span>Nhập mã </span>
+                                        <strong>
+                                            <span>
+                                                <span>TOKYO60</span>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <div class="voucher-item-des">
+                                        <span>Cho đơn hàng từ 199,000đ</span>
+                                    </div>
+                                    <div class="voucher-item-date">
+                                        <span class="expire fw-bold">Hết hạn:
+                                            15/03/2025
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="voucher-item-action d-flex align-items-center justify-content-center">
+                                    <div class="action btn btn-primary">
+                                        <span class="copy-content" data-code="TOKYO60" data-copied-text="Đã chép">Sao chép
+                                            mã
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="voucher-item d-flex">
+                            <div class="voucher-item-info">
+                                <div class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                    <div class="voucher-item-title d-block">
+                                        <strong>
+                                            <span>
+                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
+                                                <br>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <div class="voucher-item-des">
+                                        <span>Nhập mã </span>
+                                        <strong>
+                                            <span>
+                                                <span>TOKYO60</span>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <div class="voucher-item-des">
+                                        <span>Cho đơn hàng từ 199,000đ</span>
+                                    </div>
+                                    <div class="voucher-item-date">
+                                        <span class="expire fw-bold">Hết hạn:
+                                            15/03/2025
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="voucher-item-action d-flex align-items-center justify-content-center">
+                                    <div class="action btn btn-primary">
+                                        <span class="copy-content" data-code="TOKYO60" data-copied-text="Đã chép">Sao chép
+                                            mã
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

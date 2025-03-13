@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
@@ -14,33 +15,48 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    private function showDataNavbar()
+    {
+        return [
+            'categories' => Category::pluck('name', 'id'),
+            'productTypes' => ProductType::where('category_id', 1)->pluck('name', 'id'),
+            'jewelryLines' => JewelryLine::where('is_wedding', 1)->pluck('name', 'id'),
+            'collections' => Collection::where('is_wedding_collection', 1)->pluck('name', 'id'),
+            'brands' => Brand::pluck('name', 'id'),
+            'subBanner' => Banner::where('position', 'submenu')->where('priority', 1)->where('is_active', 0)->first()
+        ];
+    }
+
+
     public function index()
     {
         if (session('admin_auth')) {
             Auth::logout();
         }
-        $dataBrands = Brand::all();
-        $dataNewProducts = Product::query()->where('product_status', "=", 0)->orderBy('created_at', 'desc')->take(8)->get();
-        $dataProductFeatures = Product::query()
-            ->where('product_status', "=", 0)
-            ->where('is_featured', '=', 1)
-            ->orderBy('created_at', 'desc')->take(8)->get();
-        $dataCollections = Collection::query()
-            ->whereNotNull('image_thumbnail')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $dataJewelryLines = JewelryLine::query()
-            ->whereNotNull('image_thumbnail')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $dataCategoryParentNav = Category::pluck('name', 'id');
-        $dataProductTypesNav = ProductType::where('category_id', 1)->pluck('name', 'id');
-        $dataJewelryLinesNav = JewelryLine::where('is_wedding', 1)->pluck('name', 'id');
-        $dataCollectionsNav = Collection::where('is_wedding_collection', 1)->pluck('name', 'id');
-        $dataBrandsNav = Brand::pluck('name', 'id');
 
-        return view("frontend.client", compact('dataBrands', 'dataNewProducts', 'dataProductFeatures', 'dataCollections', 'dataJewelryLines', 'dataCategoryParentNav', 'dataProductTypesNav', 'dataJewelryLinesNav', 'dataCollectionsNav', 'dataBrandsNav'));
+        $navbarData = $this->showDataNavbar();
+
+        // dd($navbarData);
+
+        $dataBrands = Brand::all();
+        $dataNewProducts = Product::where('product_status', 0)->orderBy('created_at', 'desc')->take(8)->get();
+        $dataProductFeatures = Product::where('product_status', 0)
+            ->where('is_featured', 1)
+            ->orderBy('created_at', 'desc')->take(8)->get();
+        $dataCollections = Collection::whereNotNull('image_thumbnail')->orderBy('created_at', 'desc')->get();
+        $dataJewelryLines = JewelryLine::whereNotNull('image_thumbnail')->orderBy('created_at', 'desc')->get();
+        $dataBanners = Banner::where('position', 'slide')->where('is_active', 0)->get();
+
+        return view("frontend.client", array_merge($navbarData, compact(
+            'dataBrands',
+            'dataNewProducts',
+            'dataProductFeatures',
+            'dataCollections',
+            'dataJewelryLines',
+            'dataBanners'
+        )));
     }
+
 
     public function getProductByCollections($id)
     {
