@@ -37,4 +37,22 @@ menuOverlay.addEventListener("click", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".copy-btn").forEach((button) => {
+        button.addEventListener("click", function () {
+            let voucherCode = this.getAttribute("data-code"); // Lấy mã giảm giá từ data-code
+            console.log(voucherCode);
+            // Sao chép mã vào clipboard
+            navigator.clipboard
+                .writeText(voucherCode)
+                .then(() => {
+                    alert("Đã sao chép mã: " + voucherCode); // Thông báo thành công
+                })
+                .catch((err) => {
+                    console.error("Lỗi khi sao chép mã: ", err);
+                });
+        });
+    });
+});
+
 // =====================================//

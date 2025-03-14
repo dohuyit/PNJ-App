@@ -251,7 +251,7 @@ class OrderClientController extends Controller
 
             return response()->json([
                 'success' => true,
-                'voucher_code' => $voucherCode,
+                'voucher' => $voucher,
                 'discount_amount' => formatPrice($discountAmount),
                 'final_price' => formatPrice($finalPrice),
                 'message' => 'Áp dụng mã giảm giá thành công!'

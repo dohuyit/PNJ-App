@@ -69,117 +69,54 @@
                 </div>
                 <div class="block-voucher">
                     <div class="voucher-items-list d-flex flex-wrap justify-content-center overflow-hidden">
-                        <div class="voucher-item d-flex">
-                            <div class="voucher-item-info">
-                                <div class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
-                                    <div class="voucher-item-title d-block">
-                                        <strong>
-                                            <span>
-                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
-                                                <br>
+                        @foreach ($dataVoucher as $voucher)
+                            <div class="voucher-item d-flex">
+                                <div class="voucher-item-info">
+                                    <div
+                                        class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                        <div class="voucher-item-title d-block">
+                                            <strong>
+                                                <span>
+                                                    <span class="fw-bold">GIẢM THÊM
+                                                        @if ($voucher->is_fixed == 0)
+                                                            {{ intval($voucher->discount_amount) }}%
+                                                        @else
+                                                            {{ formatPrice($voucher->discount_amount) }}
+                                                        @endif
+                                                    </span>
+                                                    <br>
+                                                </span>
+                                            </strong>
+                                        </div>
+                                        <div class="voucher-item-des">
+                                            <span>Nhập mã </span>
+                                            <strong>
+                                                <span>
+                                                    <span>{{ $voucher->voucher_code }}</span>
+                                                </span>
+                                            </strong>
+                                        </div>
+                                        <div class="voucher-item-des">
+                                            <span>Cho đơn hàng từ {{ formatPrice($voucher->min_order_value) }}</span>
+                                        </div>
+                                        <div class="voucher-item-date">
+                                            <span class="expire fw-bold">Hết hạn:
+                                                {{ \Carbon\Carbon::parse($voucher->end_date)->format('d-m-Y') }}
                                             </span>
-                                        </strong>
+                                        </div>
                                     </div>
-                                    <div class="voucher-item-des">
-                                        <span>Nhập mã </span>
-                                        <strong>
-                                            <span>
-                                                <span>TOKYO60</span>
+                                    <div class="voucher-item-action d-flex align-items-center justify-content-center">
+                                        <div class="action btn btn-primary copy-btn"
+                                            data-code="{{ $voucher->voucher_code }}">
+                                            <span class="copy-content" data-copied-text="Đã chép">Sao
+                                                chép
+                                                mã
                                             </span>
-                                        </strong>
-                                    </div>
-                                    <div class="voucher-item-des">
-                                        <span>Cho đơn hàng từ 199,000đ</span>
-                                    </div>
-                                    <div class="voucher-item-date">
-                                        <span class="expire fw-bold">Hết hạn:
-                                            15/03/2025
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="voucher-item-action d-flex align-items-center justify-content-center">
-                                    <div class="action btn btn-primary">
-                                        <span class="copy-content" data-code="TOKYO60" data-copied-text="Đã chép">Sao chép
-                                            mã
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="voucher-item d-flex">
-                            <div class="voucher-item-info">
-                                <div class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
-                                    <div class="voucher-item-title d-block">
-                                        <strong>
-                                            <span>
-                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
-                                                <br>
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="voucher-item-des">
-                                        <span>Nhập mã </span>
-                                        <strong>
-                                            <span>
-                                                <span>TOKYO60</span>
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="voucher-item-des">
-                                        <span>Cho đơn hàng từ 199,000đ</span>
-                                    </div>
-                                    <div class="voucher-item-date">
-                                        <span class="expire fw-bold">Hết hạn:
-                                            15/03/2025
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="voucher-item-action d-flex align-items-center justify-content-center">
-                                    <div class="action btn btn-primary">
-                                        <span class="copy-content" data-code="TOKYO60" data-copied-text="Đã chép">Sao chép
-                                            mã
-                                        </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="voucher-item d-flex">
-                            <div class="voucher-item-info">
-                                <div class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
-                                    <div class="voucher-item-title d-block">
-                                        <strong>
-                                            <span>
-                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
-                                                <br>
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="voucher-item-des">
-                                        <span>Nhập mã </span>
-                                        <strong>
-                                            <span>
-                                                <span>TOKYO60</span>
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="voucher-item-des">
-                                        <span>Cho đơn hàng từ 199,000đ</span>
-                                    </div>
-                                    <div class="voucher-item-date">
-                                        <span class="expire fw-bold">Hết hạn:
-                                            15/03/2025
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="voucher-item-action d-flex align-items-center justify-content-center">
-                                    <div class="action btn btn-primary">
-                                        <span class="copy-content" data-code="TOKYO60" data-copied-text="Đã chép">Sao chép
-                                            mã
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

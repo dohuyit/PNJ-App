@@ -253,15 +253,42 @@
 
                                 <div id="voucherSection" class="mt-2">
                                     @if (Session::has('voucher_id'))
-                                        <div class="voucher-applied">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <span class="text-success">
-                                                    Mã giảm giá: {{ Session::get('voucher_code') }}
-                                                </span>
-                                                <button type="button" id="removeVoucherBtn"
-                                                    class="btn btn-sm btn-outline-danger">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
+                                        <div class="voucher-item d-flex align-items-center mt-3">
+                                            <div class="voucher-item-info">
+                                                <div
+                                                    class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                                    <div class="voucher-item-title d-block">
+                                                        <strong>
+                                                            <span>
+                                                                <span class="fw-bold">GIẢM THÊM 6% TỐI ĐA 60K</span>
+                                                                <br>
+                                                            </span>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="voucher-item-des">
+                                                        <span>Nhập mã </span>
+                                                        <strong>
+                                                            <span>
+                                                                <span>TOKYO60</span>
+                                                            </span>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="voucher-item-des">
+                                                        <span>Cho đơn hàng từ 199,000đ</span>
+                                                    </div>
+                                                    <div class="voucher-item-date">
+                                                        <span class="expire fw-bold">Hết hạn:
+                                                            15/03/2025
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="voucher-item-action d-flex align-items-center justify-content-center">
+                                                    <span class="action btn btn-danger" id="removeVoucherBtn">
+                                                        <span class="copy-content">Xóa
+                                                        </span>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif

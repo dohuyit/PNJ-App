@@ -10,6 +10,7 @@ use App\Models\Collection;
 use App\Models\JewelryLine;
 use App\Models\Product;
 use App\Models\ProductType;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,6 +47,10 @@ class HomeController extends Controller
         $dataCollections = Collection::whereNotNull('image_thumbnail')->orderBy('created_at', 'desc')->get();
         $dataJewelryLines = JewelryLine::whereNotNull('image_thumbnail')->orderBy('created_at', 'desc')->get();
         $dataBanners = Banner::where('position', 'slide')->where('is_active', 0)->get();
+        $dataVoucher = Voucher::where('type', 0)->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())->take(3)->get();
+
+        // dd($dataVoucher);
 
         return view("frontend.client", array_merge($navbarData, compact(
             'dataBrands',
@@ -53,7 +58,8 @@ class HomeController extends Controller
             'dataProductFeatures',
             'dataCollections',
             'dataJewelryLines',
-            'dataBanners'
+            'dataBanners',
+            'dataVoucher'
         )));
     }
 

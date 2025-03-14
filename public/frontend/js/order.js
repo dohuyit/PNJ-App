@@ -102,18 +102,60 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {
+                    console.log(data);
                     // Hiển thị thông tin voucher
                     voucherSection.innerHTML = `
-                <div class="voucher-applied mt-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-success">
-                            Mã giảm giá: ${data.voucher_code}
-                        </span>
-                        <button type="button" id="removeVoucherBtn" class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
+                <div class="voucher-item d-flex align-items-center mt-3">
+                                            <div class="voucher-item-info">
+                                                <div
+                                                    class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                                    <div class="voucher-item-title d-block">
+                                                        <strong>
+                                                            <span>
+                                                                <span class="fw-bold">${
+                                                                    data.voucher
+                                                                        .voucher_name
+                                                                }</span>
+                                                                <br>
+                                                            </span>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="voucher-item-des">
+                                                        <span>Tên mã giảm giá </span>
+                                                        <strong>
+                                                            <span>
+                                                                <span>${
+                                                                    data.voucher
+                                                                        .voucher_code
+                                                                }</span>
+                                                            </span>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="voucher-item-des">
+                                                        <span>Tổng tiền giảm</span>
+                                                        <span class="badge bg-success ms-2">${
+                                                            data.discount_amount
+                                                        }</span>
+                                                    </div>
+                                                    <div class="voucher-item-date">
+                                                        <span class="expire fw-bold">Hết hạn:
+                                                        ${new Date(
+                                                            data.voucher.end_date
+                                                        ).toLocaleDateString(
+                                                            "vi-VN"
+                                                        )}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="voucher-item-action d-flex align-items-center justify-content-center">
+                                                    <span class="action btn btn-danger" id="removeVoucherBtn">
+                                                        <span class="copy-content">Xóa
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
             `;
 
                     // Cập nhật phần giảm giá

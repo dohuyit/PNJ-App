@@ -220,4 +220,127 @@ form h3 {
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
+
+.block-voucher .voucher-item {
+    padding: 5px 12px;
+}
+
+.block-voucher .voucher-item-action .action {
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 8pt;
+}
+
+.block-voucher .voucher-item-action .action:has(.disabled) {
+    background: #fff !important;
+    border: 1px solid var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+.voucher-item {
+    margin-bottom: 20px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.33;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.voucher-item-info {
+    display: flex;
+    border-radius: 4px;
+    min-height: 116px;
+    position: relative;
+    width: 100%;
+}
+
+.voucher-item-info:after {
+    content: "";
+    width: 30px;
+    background-color: #fff;
+    position: relative;
+    margin: 11px 0 10px;
+    min-width: 30px;
+    z-index: 3;
+}
+
+.voucher-item-info:before {
+    content: "";
+    width: 1px;
+    border-right: 1px dashed #cbd5e1;
+    top: 15px;
+    bottom: 15px;
+    position: absolute;
+    right: 125px;
+    z-index: 4;
+}
+
+.voucher-item-detail {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(40, 41, 61, 0.08),
+        0 0.5px 6px rgba(96, 97, 112, 0.16);
+    width: calc(100% - 141px);
+}
+
+.voucher-item-title {
+    color: var(--accent-color);
+    text-transform: uppercase !important;
+    font-size: 16px;
+    line-height: 22px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.voucher-item-des {
+    font-size: 10pt;
+    line-height: 20px;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.voucher-item-date {
+    font-size: 10pt;
+}
+
+.voucher-item-date .expire {
+    color: var(--color-sale);
+}
+
+.voucher-item-action {
+    width: 110px;
+    min-width: 110px;
+    order: 4;
+    background-color: var(--bg-default);
+    box-shadow: 0 0 5px rgba(40, 41, 61, 0.08),
+        0 0.5px 6px rgba(96, 97, 112, 0.16);
+    position: relative;
+    border-radius: 0 4px 4px 0;
+    padding: 0 17px 0 2px;
+}
+
+.voucher-item-action:after,
+.voucher-item-action:before {
+    content: "";
+    height: 17px;
+    width: 30px;
+    position: absolute;
+    left: -30px;
+    background-size: 100% 100%;
+}
+
+.voucher-item-action:before {
+    background-image: url(../image/radius-top.png);
+    top: -6px;
+}
+
+.voucher-item-action:after {
+    background-image: url(../image/radius-bottom.png);
+    bottom: -7px;
+}
 /* ================================ */

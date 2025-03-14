@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
+use App\Http\Controllers\Client\Auth\AuthSocialController;
 use App\Http\Controllers\Client\CartClientController;
 use App\Http\Controllers\Client\DetailCategoryController;
 use App\Http\Controllers\Client\DetailController;
@@ -123,4 +124,7 @@ Route::middleware('client')->group(function () {
     Route::post('login-process', [AuthClientController::class, 'login'])->name('client.login.process');
     Route::post('register-process', [AuthClientController::class, 'register'])->name('client.register.process');
     Route::get('logout', [AuthClientController::class, 'logout'])->name('client.logout.process');
+
+    Route::get('auth/google', [AuthSocialController::class, 'redirectToGoogle']);
+    Route::get('auth/google/callback', [AuthSocialController::class, 'handleGoogleCallback']);
 });
