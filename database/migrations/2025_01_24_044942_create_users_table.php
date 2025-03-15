@@ -28,6 +28,8 @@ return new class extends Migration
             $table->unsignedBigInteger('district_id')->nullable(); // Quận/Huyện
             $table->unsignedBigInteger('ward_id')->nullable(); // Phường/Xã
             $table->boolean('status')->default(0);
+            $table->string('google_id')->nullable();
+            $table->string('facebook_id')->nullable();
             $table->timestamps();
 
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');

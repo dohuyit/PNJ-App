@@ -31,6 +31,8 @@ class User extends Authenticatable
         'district_id',
         'ward_id',
         'status',
+        'google_id',
+        'facebook_id'
     ];
 
     /**

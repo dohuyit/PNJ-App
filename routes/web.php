@@ -125,6 +125,13 @@ Route::middleware('client')->group(function () {
     Route::post('register-process', [AuthClientController::class, 'register'])->name('client.register.process');
     Route::get('logout', [AuthClientController::class, 'logout'])->name('client.logout.process');
 
-    Route::get('auth/google', [AuthSocialController::class, 'redirectToGoogle']);
+
+    Route::get('auth/google', [AuthSocialController::class, 'redirectToGoogle'])->name('auth.google');
     Route::get('auth/google/callback', [AuthSocialController::class, 'handleGoogleCallback']);
+
+    Route::get('auth/facebook', [AuthSocialController::class, 'redirectToFacebook'])->name('auth.facebook');
+    Route::get('auth/facebook/callback', [AuthSocialController::class, 'handleFacebookCallback']);
+
+    Route::get('auth/set-password', [AuthSocialController::class, 'showSetPasswordForm'])->name('password.set');
+    Route::post('auth/set-password/process', [AuthSocialController::class, 'processPassword'])->name('password.process');
 });

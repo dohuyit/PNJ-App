@@ -60,14 +60,19 @@
                 <div class="signin-orther-title">
                     <h4 class="text-dart">Hoặc</h4>
                     <div class="form-media">
-                        <div
-                            class="item-media py-0 px-2 rounded-2 d-flex align-items-center justify-content-between mb-3">
-                            <p>Đăng nhập với Google</p>
-                            <img src="{{ asset('frontend/image/icons8-google-48.png') }}" alt="" />
+                        <div class="item-media py-0 px-2 rounded-2 mb-3">
+                            <a href="{{ route('auth.google') }}"
+                                class="d-flex align-items-center justify-content-between">
+                                <p class="text-primary">Đăng nhập với Google</p>
+                                <img src="{{ asset('frontend/image/icons8-google-48.png') }}" alt="" />
+                            </a>
                         </div>
-                        <div class="item-media py-0 px-2 rounded-2 d-flex align-items-center justify-content-between">
-                            <p>Đăng nhập với Facebook</p>
-                            <img src="{{ asset('frontend/image/icons8-facebook-48.png') }}" alt="" />
+                        <div class="item-media py-0 px-2 rounded-2 mb-3">
+                            <a href="{{ route('auth.facebook') }}"
+                                class="d-flex align-items-center justify-content-between">
+                                <p class="text-primary">Đăng nhập với Facebook</p>
+                                <img src="{{ asset('frontend/image/icons8-facebook-48.png') }}" alt="" />
+                            </a>
                         </div>
                     </div>
                 </div>
