@@ -112,6 +112,10 @@ Route::middleware('client')->group(function () {
     Route::post('/order/checkout', [OrderClientController::class, 'checkOut'])->name('client.order.checkout');
     Route::post('/order/order-process', [OrderClientController::class, 'orderProcess'])->name('client.order.process');
     Route::get('/order/order-success', [OrderClientController::class, 'showOrderSuccess'])->name('client.order.success');
+
+    // VNPAY Payment
+    Route::get('/order/vnpay/return', [OrderClientController::class, 'vnpayReturn'])->name('client.order.vnpay');
+
     Route::post('/order/apply-voucher', [OrderClientController::class, 'applyVoucher'])->name('order.apply.voucher');
     Route::post('/order/remove-voucher', [OrderClientController::class, 'removeVoucher'])->name('order.remove.voucher');
 

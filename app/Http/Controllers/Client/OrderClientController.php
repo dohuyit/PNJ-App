@@ -3,12 +3,18 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
+use App\Models\Brand;
 use App\Models\CartItem;
+use App\Models\Category;
 use App\Models\City;
+use App\Models\Collection;
 use App\Models\CustomerVoucher;
 use App\Models\District;
+use App\Models\JewelryLine;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductType;
 use App\Models\ProductVoucher;
 use App\Models\Voucher;
 use App\Models\Ward;
@@ -20,6 +26,18 @@ use Illuminate\Support\Facades\Session;
 
 class OrderClientController extends Controller
 {
+    private function showDataNavbar()
+    {
+        return [
+            'categories' => Category::pluck('name', 'id'),
+            'productTypes' => ProductType::where('category_id', 1)->pluck('name', 'id'),
+            'jewelryLines' => JewelryLine::where('is_wedding', 1)->pluck('name', 'id'),
+            'collections' => Collection::where('is_wedding_collection', 1)->pluck('name', 'id'),
+            'brands' => Brand::pluck('name', 'id'),
+            'subBanner' => Banner::where('position', 'submenu')->where('priority', 1)->where('is_active', 0)->first()
+        ];
+    }
+
     public function checkout(Request $request)
     {
         $user = Session::get('client_auth');
@@ -80,10 +98,12 @@ class OrderClientController extends Controller
         if (!Session::has('order_success')) {
             return redirect()->route('client.home');
         }
+        $navbarData = $this->showDataNavbar();
+
 
         Session::forget('order_success');
 
-        return view('frontend.order-success');
+        return view('frontend.order-success', array_merge($navbarData));
     }
 
     public function orderProcess(Request $request)
@@ -134,6 +154,8 @@ class OrderClientController extends Controller
                 'status_id' => 1,
             ]);
 
+            // dd($order);
+
             // Tạo chi tiết đơn hàng
             foreach ($cartItems as $item) {
                 OrderItem::create([
@@ -144,6 +166,8 @@ class OrderClientController extends Controller
                     'total_price' => $item->variant->price_variant * $item->quantity
                 ]);
             }
+
+
 
             if (Session::has('voucher_id')) {
                 $voucher = Voucher::find(Session::get('voucher_id'));
@@ -158,6 +182,18 @@ class OrderClientController extends Controller
             // Xóa session
             Session::forget(['voucher_id', 'voucher_code', 'discount_amount', 'final_price', 'selected_cart_items', 'sessionCart', 'total_price']);
             Session::put('order_success', true);
+
+            switch ($request->payment) {
+                case 2:
+                    return $this->processVNPayPayment($order);
+                    break;
+                case 3:
+                    return $this->processMoMo($order);
+                    break;
+                default:
+                    return redirect()->back()->with('error', 'Phương thức thanh toán không hợp lệ!');
+            }
+
             return redirect()->route('client.order.success')->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -290,72 +326,78 @@ class OrderClientController extends Controller
         }
     }
 
+    // Xử lý thanh toán VNPay
+    private function processVNPayPayment($order)
+    {
+        $vnp_Url = env('VNP_URL');
+        $vnp_ReturnUrl = env('VNP_RETURN_URL');
+        $vnp_TmnCode = env('VNP_TMN_CODE');
+        $vnp_HashSecret = env('VNP_HASH_SECRET');
 
-    // // Xử lý thanh toán VNPay
-    // private function processVNPayPayment($order)
-    // {
-    //     $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    //     $vnp_ReturnUrl = route('client.vnpay.return');
-    //     $vnp_TmnCode = "YOUR_TMN_CODE";
-    //     $vnp_HashSecret = "YOUR_HASH_SECRET";
+        $vnp_TxnRef = $order->order_code;
+        $vnp_OrderInfo = "Thanh toan don hang " . $order->order_code;
+        $vnp_OrderType = "billpayment";
+        $vnp_Amount = $order->total_amount * 100;
+        $vnp_Locale = 'vn';
+        $vnp_IpAddr = request()->ip();
 
-    //     $vnp_TxnRef = $order->order_code;
-    //     $vnp_OrderInfo = "Thanh toan don hang " . $order->order_code;
-    //     $vnp_OrderType = "billpayment";
-    //     $vnp_Amount = $order->total_amount * 100;
-    //     $vnp_Locale = 'vn';
-    //     $vnp_IpAddr = request()->ip();
+        $inputData = array(
+            "vnp_Version" => "2.1.0",
+            "vnp_TmnCode" => $vnp_TmnCode,
+            "vnp_Amount" => $vnp_Amount,
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_IpAddr" => $vnp_IpAddr,
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => $vnp_OrderInfo,
+            "vnp_OrderType" => $vnp_OrderType,
+            "vnp_ReturnUrl" => $vnp_ReturnUrl,
+            "vnp_TxnRef" => $vnp_TxnRef,
+        );
 
-    //     $inputData = array(
-    //         "vnp_Version" => "2.1.0",
-    //         "vnp_TmnCode" => $vnp_TmnCode,
-    //         "vnp_Amount" => $vnp_Amount,
-    //         "vnp_Command" => "pay",
-    //         "vnp_CreateDate" => date('YmdHis'),
-    //         "vnp_CurrCode" => "VND",
-    //         "vnp_IpAddr" => $vnp_IpAddr,
-    //         "vnp_Locale" => $vnp_Locale,
-    //         "vnp_OrderInfo" => $vnp_OrderInfo,
-    //         "vnp_OrderType" => $vnp_OrderType,
-    //         "vnp_ReturnUrl" => $vnp_ReturnUrl,
-    //         "vnp_TxnRef" => $vnp_TxnRef,
-    //     );
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashdata = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashdata .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
 
-    //     ksort($inputData);
-    //     $query = "";
-    //     $i = 0;
-    //     $hashdata = "";
-    //     foreach ($inputData as $key => $value) {
-    //         if ($i == 1) {
-    //             $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-    //         } else {
-    //             $hashdata .= urlencode($key) . "=" . urlencode($value);
-    //             $i = 1;
-    //         }
-    //         $query .= urlencode($key) . "=" . urlencode($value) . '&';
-    //     }
+        $vnp_Url = $vnp_Url . "?" . $query;
+        if (isset($vnp_HashSecret)) {
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
 
-    //     $vnp_Url = $vnp_Url . "?" . $query;
-    //     if (isset($vnp_HashSecret)) {
-    //         $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-    //         $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-    //     }
+        return redirect($vnp_Url);
+    }
 
-    //     return redirect($vnp_Url);
-    // }
-
-    // // Xử lý kết quả trả về từ VNPay
-    // public function vnpayReturn(Request $request)
-    // {
-    //     if ($request->vnp_ResponseCode == '00') {
-    //         $order = Order::where('order_code', $request->vnp_TxnRef)->firstOrFail();
-    //         $order->update(['status' => 'paid']);
-
-    //         return redirect()->route('client.order.success', $order->id)
-    //             ->with('success', 'Thanh toán thành công');
-    //     }
-
-    //     return redirect()->route('client.order.failed')
-    //         ->with('error', 'Thanh toán thất bại');
-    // }
+    // Xử lý kết quả trả về từ VNPay
+    public function vnpayReturn(Request $request)
+    {
+        try {
+            // dd($request->vnp_TransactionNo);
+            if ($request->vnp_ResponseCode == '00') {
+                $order = Order::where('order_code', $request->vnp_TxnRef)->firstOrFail();
+                $order->update(
+                    [
+                        'payment_status' => 1,
+                        'transaction_code' => $request->vnp_TransactionNo
+                    ]
+                );
+                // Session::put('order_success', true);
+                return redirect()->route('client.order.success', $order->id)
+                    ->with('success', 'Thanh toán thành công');
+            }
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+    }
 }
