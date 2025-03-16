@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\CartItem;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class OrderClientController extends Controller
@@ -154,6 +156,7 @@ class OrderClientController extends Controller
                 'status_id' => 1,
             ]);
 
+
             // dd($order);
 
             // Tạo chi tiết đơn hàng
@@ -183,7 +186,11 @@ class OrderClientController extends Controller
             Session::forget(['voucher_id', 'voucher_code', 'discount_amount', 'final_price', 'selected_cart_items', 'sessionCart', 'total_price']);
             Session::put('order_success', true);
 
+            Mail::to($order->email)->send(new OrderConfirmationMail($order));
+
             switch ($request->payment) {
+                case 1:
+                    return redirect()->route('client.order.success')->with('success', 'Đặt hàng thành công!');
                 case 2:
                     return $this->processVNPayPayment($order);
                     break;
@@ -193,6 +200,7 @@ class OrderClientController extends Controller
                 default:
                     return redirect()->back()->with('error', 'Phương thức thanh toán không hợp lệ!');
             }
+
 
             return redirect()->route('client.order.success')->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {

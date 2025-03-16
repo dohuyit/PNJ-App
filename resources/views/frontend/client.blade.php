@@ -62,65 +62,67 @@
                 </div>
             </div>
         </section>
-        <section class="my-5" id="group-voucher">
-            <div class="container">
-                <div class="title-group pb-3 text-primary px-5">
-                    <h2 class="fs-5 text-center fw-bold">Code ưu đãi độc quyền</h2>
-                </div>
-                <div class="block-voucher">
-                    <div class="voucher-items-list d-flex flex-wrap justify-content-center overflow-hidden">
-                        @foreach ($dataVoucher as $voucher)
-                            <div class="voucher-item d-flex">
-                                <div class="voucher-item-info">
-                                    <div
-                                        class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
-                                        <div class="voucher-item-title d-block">
-                                            <strong>
-                                                <span>
-                                                    <span class="fw-bold">GIẢM THÊM
-                                                        @if ($voucher->is_fixed == 0)
-                                                            {{ intval($voucher->discount_amount) }}%
-                                                        @else
-                                                            {{ formatPrice($voucher->discount_amount) }}
-                                                        @endif
+        @if (!$dataVoucher)
+            <section class="my-5" id="group-voucher">
+                <div class="container">
+                    <div class="title-group pb-3 text-primary px-5">
+                        <h2 class="fs-5 text-center fw-bold">Code ưu đãi độc quyền</h2>
+                    </div>
+                    <div class="block-voucher">
+                        <div class="voucher-items-list d-flex flex-wrap justify-content-center overflow-hidden">
+                            @foreach ($dataVoucher as $voucher)
+                                <div class="voucher-item d-flex">
+                                    <div class="voucher-item-info">
+                                        <div
+                                            class="voucher-item-detail p-3 d-flex flex-column justify-content-center flex-grow-1">
+                                            <div class="voucher-item-title d-block">
+                                                <strong>
+                                                    <span>
+                                                        <span class="fw-bold">GIẢM THÊM
+                                                            @if ($voucher->is_fixed == 0)
+                                                                {{ intval($voucher->discount_amount) }}%
+                                                            @else
+                                                                {{ formatPrice($voucher->discount_amount) }}
+                                                            @endif
+                                                        </span>
+                                                        <br>
                                                     </span>
-                                                    <br>
+                                                </strong>
+                                            </div>
+                                            <div class="voucher-item-des">
+                                                <span>Nhập mã </span>
+                                                <strong>
+                                                    <span>
+                                                        <span>{{ $voucher->voucher_code }}</span>
+                                                    </span>
+                                                </strong>
+                                            </div>
+                                            <div class="voucher-item-des">
+                                                <span>Cho đơn hàng từ {{ formatPrice($voucher->min_order_value) }}</span>
+                                            </div>
+                                            <div class="voucher-item-date">
+                                                <span class="expire fw-bold">Hết hạn:
+                                                    {{ \Carbon\Carbon::parse($voucher->end_date)->format('d-m-Y') }}
                                                 </span>
-                                            </strong>
+                                            </div>
                                         </div>
-                                        <div class="voucher-item-des">
-                                            <span>Nhập mã </span>
-                                            <strong>
-                                                <span>
-                                                    <span>{{ $voucher->voucher_code }}</span>
+                                        <div class="voucher-item-action d-flex align-items-center justify-content-center">
+                                            <div class="action btn btn-primary copy-btn"
+                                                data-code="{{ $voucher->voucher_code }}">
+                                                <span class="copy-content" data-copied-text="Đã chép">Sao
+                                                    chép
+                                                    mã
                                                 </span>
-                                            </strong>
-                                        </div>
-                                        <div class="voucher-item-des">
-                                            <span>Cho đơn hàng từ {{ formatPrice($voucher->min_order_value) }}</span>
-                                        </div>
-                                        <div class="voucher-item-date">
-                                            <span class="expire fw-bold">Hết hạn:
-                                                {{ \Carbon\Carbon::parse($voucher->end_date)->format('d-m-Y') }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="voucher-item-action d-flex align-items-center justify-content-center">
-                                        <div class="action btn btn-primary copy-btn"
-                                            data-code="{{ $voucher->voucher_code }}">
-                                            <span class="copy-content" data-copied-text="Đã chép">Sao
-                                                chép
-                                                mã
-                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endif
         <section class="my-5" id="group-brand">
             <div class="container">
                 <div class="title-group pb-3 text-primary px-5">

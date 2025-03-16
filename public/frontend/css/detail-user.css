@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Elbasan&family=Poppins&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+* {
+  text-decoration: none !important;
+  list-style: none !important;
+  /* overflow-x: hidden; */
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+:root {
+  --accent-color: #003468;
+  --bg-default: #ffffff;
+  --bg-hover: #c48c46;
+  --bg-blur: #dddcdc;
+  --text-color-primary: #000;
+  --text-color-secondary: #4d4d4d; /*color-text*/
+  --text-card-color: #282828; /*text-title-card*/
+  --text-card-primary: #c4c4c4; /*text-price-old-card*/
+  --text-card-secondary: #c48c46; /*text-price-card*/
+  --bg-card: linear-gradient(
+    rgba(255, 251, 251, 0.945) 0%,
+    rgb(245, 245, 245) 100%
+  );
+  /* --bg-card: #221c1c; */
+  --color-sale: #c92127;
+}
+
+.btn-primary {
+  background-color: var(--accent-color) !important;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #003468;
+  --bs-btn-border-color: #003468;
+  --bs-btn-hover-color: var(--bg-default);
+  --bs-btn-hover-bg: #003468;
+  --bs-btn-hover-border-color: #003468;
+  --bs-btn-active-color: var(--bg-default);
+  --bs-btn-active-bg: #003468;
+  --bs-btn-active-border-color: #003468;
+}
+
+.text-primary {
+  color: var(--accent-color) !important;
+}
+
+.text-secondary {
+  color: var(--text-card-secondary) !important;
+}
+
+p,
+h4,
+input {
+  margin: 0 !important;
+}
+
+aside .nav-link:not(.nav-link:hover, .nav-link.active) {
+  color: var(--accent-color) !important;
+}
+
+aside .sidebar .nav-link:hover {
+  background: hsla(210, 100%, 20%, 0.651);
+  color: var(--bg-default) !important;
+}
+
+
+.sidebar .nav-link.active {
+  background-color: var(--accent-color) !important;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+aside .sidebar hr {
+    margin: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+.shadow-md{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+}
+
+.content-header h2 span:first-child{
+    color: var(--text-color-secondary);
+}
+
+.content-header h2 span:last-child{
+    color: var(--accent-color);
+}
+
+#group-infomation-user .form-control{
+    box-shadow: none !important;
+    outline: none !important;
+    border-color: var(--accent-color) !important;
+}
+
