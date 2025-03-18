@@ -100,6 +100,13 @@ Route::middleware('client')->group(function () {
     // Detail Product Page
     Route::get('/detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
 
+    // Detail-infomation-user
+    Route::prefix('detail')->group(function () {
+        Route::get('/user/profile/{id}', [DetailController::class, 'profile'])->name('detail.profile');
+        Route::post('/user/profile/{id}/update', [DetailController::class, 'profileUpdate'])->name('detail.profile.update');
+    });
+
+
     //Cart Page
     Route::post('/cart/add-to-cart', [CartClientController::class, 'addCart'])->name('client.cart.add');
     Route::get('/cart/show-cart', [CartClientController::class, 'showCart'])->name('client.cart.show');

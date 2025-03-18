@@ -62,7 +62,7 @@
                 </div>
             </div>
         </section>
-        @if (!$dataVoucher)
+        @if ($dataVoucher)
             <section class="my-5" id="group-voucher">
                 <div class="container">
                     <div class="title-group pb-3 text-primary px-5">

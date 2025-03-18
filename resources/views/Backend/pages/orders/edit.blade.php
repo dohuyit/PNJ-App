@@ -30,7 +30,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table-hover table-bordered text-center">
                                     <thead>
                                         <tr>
                                             <th scope="col">STT</th>
@@ -51,11 +51,11 @@
                                                 $totalItemPrice = $itemDetail->unit_price * $itemDetail->quantity;
                                                 $subTotal += $totalItemPrice;
                                             @endphp
-                                            <tr>
+                                            <tr class="table-secondary">
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>
                                                     <img src="{{ Storage::url($itemDetail->variant->product->product_image) }}"
-                                                        alt="" width="80" class="img-thumbnail">
+                                                        alt="" width="80">
                                                 </td>
                                                 <td>
                                                     <p class="w-10">{{ $itemDetail->variant->product->product_name }}

@@ -157,7 +157,8 @@ class OrderClientController extends Controller
             ]);
 
 
-            // dd($order);
+
+            // dd($orderDataMail);
 
             // Tạo chi tiết đơn hàng
             foreach ($cartItems as $item) {
@@ -170,6 +171,16 @@ class OrderClientController extends Controller
                 ]);
             }
 
+            $orderDataMail = $order->load([
+                'orderItems.variant.product',
+                'city',
+                'district',
+                'ward',
+                'paymentMethod',
+                'orderStatus'
+            ]);
+
+            // dd($orderDataMail);
 
 
             if (Session::has('voucher_id')) {
@@ -186,7 +197,7 @@ class OrderClientController extends Controller
             Session::forget(['voucher_id', 'voucher_code', 'discount_amount', 'final_price', 'selected_cart_items', 'sessionCart', 'total_price']);
             Session::put('order_success', true);
 
-            Mail::to($order->email)->send(new OrderConfirmationMail($order));
+            Mail::to($order->email)->send(new OrderConfirmationMail($orderDataMail));
 
             switch ($request->payment) {
                 case 1:
@@ -204,7 +215,11 @@ class OrderClientController extends Controller
 
             return redirect()->route('client.order.success')->with('success', 'Đặt hàng thành công!');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            dd(
+                $e->getMessage(),
+                $e->getLine(),
+                $e->getFile()
+            );
             return redirect()->back()
                 ->with('error', 'Có lỗi xảy ra khi đặt hàng: ');
         }

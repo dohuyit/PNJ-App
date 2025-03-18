@@ -41,7 +41,7 @@
                         @if (session()->has('client_auth'))
                             <p class="fs-6 d-flex flex-column">
                                 <span>Xin chào</span>
-                                <span>Đỗ Quốc Huy</span>
+                                <span>{{ session()->get('client_auth')->username }}</span>
                             </p>
                         @else
                             <span class="fs-6">Tài khoản của tôi</span>
@@ -53,7 +53,7 @@
                                     class="card-dropdown after-login card p-3 shadow-lg d-flex justify-content-start align-items-center ">
                                     <ul class="list-unstyled mb-0">
                                         <li>
-                                            <a href="#"
+                                            <a href="{{ route('detail.profile', session()->get('client_auth')->id) }}"
                                                 class="dropdown-item d-flex align-items-center gap-2 py-2">
                                                 <span><i class="text-secondary fa-solid fa-house-user"></i></span>
                                                 <span>Thông tin cá nhân</span>

@@ -1,10 +1,10 @@
 <aside class="main-sidebar p-3 col-md-2 shadow-md">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link d-block text-center mb-3">
+    <div class="d-block text-center mb-3">
         <a href="{{ route('client.home') }}" class="py-2 logo-outer">
             <img src="{{ asset('frontend/image/pnj.com.vn.png') }}" class="img-fluid" alt="logo-pnj" width="150" />
         </a>
-    </a>
+    </div>
 
     <!-- Sidebar -->
     <div class="sidebar">

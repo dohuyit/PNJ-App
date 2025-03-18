@@ -7,13 +7,20 @@ use App\Models\AttributeGroup;
 use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Collection;
+use App\Models\District;
 use App\Models\JewelryLine;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductType;
+use App\Models\User;
 use App\Models\Variant;
+use App\Models\Ward;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class DetailController extends Controller
 {
@@ -54,5 +61,66 @@ class DetailController extends Controller
         }
         // dd($dataDetail);
         return view('frontend.detail', array_merge($navbarData, compact('dataDetail', 'albumImageProduct')));
+    }
+
+    public function profile($id)
+    {
+        $customer = User::with([
+            'city',
+            'district',
+            'ward'
+        ])
+            ->findOrFail($id);
+        $cities = City::all();
+        $districts = District::where('city_id', $customer->city_id)->get();
+        $wards = Ward::where('district_id', $customer->district_id)->get();
+        // dd($customer);
+
+        Session::forget('client_auth');
+
+        Session::put('client_auth', $customer);
+
+        return view('frontend.detail-user', compact(
+            'customer',
+            'cities',
+            'districts',
+            'wards'
+        ));
+    }
+
+    public function profileUpdate(Request $request, string $id)
+    {
+        // dd($request->all());
+        try {
+            $customer = User::query()->findOrFail($id);
+            DB::transaction(function () use ($request, $customer) {
+                $dataCustomer = [
+                    'username' => $request->username,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'birthday' => $request->birthday,
+                    'gender' => $request->gender,
+                    'address' => $request->address,
+                    'city_id' => $request->city_id,
+                    'district_id' => $request->district_id,
+                    'ward_id' => $request->ward_id,
+                ];
+
+                if ($request->hasFile('avatar')) {
+                    if ($customer->avatar) {
+                        Storage::delete($customer->avatar);
+                    }
+                    $dataCustomer['avatar'] = Storage::put('Users', $request->file('avatar'));
+                }
+
+                // dd($dataCustomer);
+
+                $customer->update($dataCustomer);
+            });
+
+            return redirect()->route('detail.profile', $customer->id)->with('success', 'Cập nhật thông tin khách hàng thành công');
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
     }
 }
