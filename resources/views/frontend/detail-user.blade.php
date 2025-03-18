@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="content">
-                            <form action="{{ route('detail.profile.update', $customer->id) }}" method="post"
+                            <form action="{{ route('user.profile.update', $customer->id) }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
                                 {{-- @method('PUT') --}}

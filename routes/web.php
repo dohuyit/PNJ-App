@@ -102,8 +102,10 @@ Route::middleware('client')->group(function () {
 
     // Detail-infomation-user
     Route::prefix('detail')->group(function () {
-        Route::get('/user/profile/{id}', [DetailController::class, 'profile'])->name('detail.profile');
-        Route::post('/user/profile/{id}/update', [DetailController::class, 'profileUpdate'])->name('detail.profile.update');
+        Route::get('/user/profile/{id}', [DetailController::class, 'profile'])->name('user.profile');
+        Route::post('/user/profile/update/{id}', [DetailController::class, 'profileUpdate'])->name('user.profile.update');
+        Route::get('orders/by-customer/{id}', [DetailController::class, 'listOrdersByCustomer'])->name('orders.byCustomer');
+        Route::get('orders/details/{id}', [DetailController::class, 'detailOrdersByCustomer'])->name('orders.details');
     });
 
 

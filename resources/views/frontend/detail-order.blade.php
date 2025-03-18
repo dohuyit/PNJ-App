@@ -57,188 +57,80 @@
 
                                 <!-- Danh sách đơn hàng -->
                                 <div class="order-list">
-                                    <div class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden">
-                                        <div
-                                            class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
-                                            <div>
-                                                <span class="text-muted me-3">#MH23051789</span>
-                                                <span class="badge bg-warning text-dark rounded-pill px-3">Đang vận
-                                                    chuyển</span>
-                                            </div>
-                                            <div class="text-end">
-                                                <span class="text-muted">Đặt hàng: 12/03/2025</span>
-                                            </div>
-                                        </div>
+                                    @if ($listOrders)
+                                        @foreach ($listOrders as $order)
+                                            <div class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden">
+                                                <div
+                                                    class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
+                                                    <div>
+                                                        <span class="text-muted me-3">{{ $order->order_code }}</span>
+                                                        <span
+                                                            class="badge bg-warning text-dark rounded-pill px-3">{{ $order->paymentMethod->name }}</span>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <span
+                                                            class="text-muted">{{ \Carbon\Carbon::parse($order->date)->format('d-m-Y') }}</span>
 
-                                        <div class="card-body p-4">
-                                            <div class="row g-3">
-                                                <div class="col-md-1">
-                                                    <div class="product-img text-center w-100">
-                                                        <img src="./image/products/pro1.png" alt="Product" class="w-100">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-7">
-                                                    <h5 class="product-title fw-bold mb-2">Nhẫn kim cương The One
-                                                    </h5>
-                                                    <p class="product-desc text-muted mb-2">Vàng 18K | PNJ Diamond
-                                                        Collection</p>
-                                                    <div class="product-meta">
-                                                        <span class="me-3">Size: 7</span>
-                                                        <span>SL: 1</span>
-                                                    </div>
-                                                    <div class="product-price mt-2">
-                                                        <h5 class="text-primary fw-bold">25.500.000₫</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 d-flex align-items-center justify-content-end">
-                                                    <div class="action-buttons">
-                                                        <button
-                                                            class="btn btn-sm btn-outline-primary rounded-pill me-2">Theo
-                                                            dõi</button>
-                                                        <button class="btn btn-sm btn-primary rounded-pill">Chi
-                                                            tiết</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="card-footer bg-white text-end border-top py-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <span class="delivery-info text-success">
-                                                        <i class="fas fa-truck me-2"></i>Dự kiến giao hàng:
-                                                        15/03/2025
-                                                    </span>
+                                                <div class="card-body p-4">
+                                                    @foreach ($order->orderItems as $key => $orderItem)
+                                                        <div class="row g-3 mb-2">
+                                                            <div class="col-md-1">
+                                                                <div class="product-img text-center w-100">
+                                                                    <img src="{{ Storage::url($orderItem->variant->product->product_image) }}"
+                                                                        alt="Product" class="w-100">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-11">
+                                                                <h5 class="product-title fw-bold mb-2">
+                                                                    {{ $orderItem->variant->product->product_name }}
+                                                                </h5>
+                                                                <p class="product-desc text-muted mb-2">
+                                                                    {{ $orderItem->variant->product->jewelryLine->name }}
+                                                                </p>
+                                                                <div class="product-meta">
+                                                                    @if ($orderItem->variant->attribute->attributegroups->name == 'Size')
+                                                                        <span class="me-3">Size:
+                                                                            {{ $orderItem->variant->attribute->name }}</span>
+                                                                    @endif
+                                                                    <span>SL: {{ $orderItem->quantity }}</span>
+                                                                </div>
+                                                                <div class="product-price mt-2">
+                                                                    <h5 class="text-primary fw-bold">
+                                                                        {{ formatPrice($orderItem->unit_price) }}</h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
-                                                <div>
-                                                    <span class="me-3">Tổng tiền:</span>
-                                                    <span class="fw-bold fs-5 text-primary">25.500.000₫</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden">
-                                        <div
-                                            class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
-                                            <div>
-                                                <span class="text-muted me-3">#MH23051789</span>
-                                                <span class="badge bg-warning text-dark rounded-pill px-3">Đang vận
-                                                    chuyển</span>
-                                            </div>
-                                            <div class="text-end">
-                                                <span class="text-muted">Đặt hàng: 12/03/2025</span>
-                                            </div>
-                                        </div>
 
-                                        <div class="card-body p-4">
-                                            <div class="row g-3">
-                                                <div class="col-md-1">
-                                                    <div class="product-img text-center w-100">
-                                                        <img src="./image/products/pro1.png" alt="Product"
-                                                            class="w-100">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <h5 class="product-title fw-bold mb-2">Nhẫn kim cương The One
-                                                    </h5>
-                                                    <p class="product-desc text-muted mb-2">Vàng 18K | PNJ Diamond
-                                                        Collection</p>
-                                                    <div class="product-meta">
-                                                        <span class="me-3">Size: 7</span>
-                                                        <span>SL: 1</span>
-                                                    </div>
-                                                    <div class="product-price mt-2">
-                                                        <h5 class="text-primary fw-bold">25.500.000₫</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 d-flex align-items-center justify-content-end">
-                                                    <div class="action-buttons">
-                                                        <button
-                                                            class="btn btn-sm btn-outline-primary rounded-pill me-2">Theo
-                                                            dõi</button>
-                                                        <button class="btn btn-sm btn-primary rounded-pill">Chi
-                                                            tiết</button>
+                                                <div class="card-footer bg-white text-end border-top py-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                                                <i class="fas fa-info-circle"></i>
+                                                                <span class="ms-1">Chi tiết đơn hàng</span>
+                                                            </a>
+                                                            <a href="#" class="btn btn-outline-danger btn-sm">
+                                                                <i class="fa-solid fa-ban"></i>
+                                                                <span class="ms-1">Hủy đơn hàng</span>
+                                                            </a>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div>
+                                                                <span class="me-3">Tổng tiền:</span>
+                                                                <span class="fw-bold fs-5 text-primary">25.500.000₫</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="card-footer bg-white text-end border-top py-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <span class="delivery-info text-success">
-                                                        <i class="fas fa-truck me-2"></i>Dự kiến giao hàng:
-                                                        15/03/2025
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <span class="me-3">Tổng tiền:</span>
-                                                    <span class="fw-bold fs-5 text-primary">25.500.000₫</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden">
-                                        <div
-                                            class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
-                                            <div>
-                                                <span class="text-muted me-3">#MH23051789</span>
-                                                <span class="badge bg-warning text-dark rounded-pill px-3">Đang vận
-                                                    chuyển</span>
-                                            </div>
-                                            <div class="text-end">
-                                                <span class="text-muted">Đặt hàng: 12/03/2025</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="card-body p-4">
-                                            <div class="row g-3">
-                                                <div class="col-md-1">
-                                                    <div class="product-img text-center w-100">
-                                                        <img src="./image/products/pro1.png" alt="Product"
-                                                            class="w-100">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <h5 class="product-title fw-bold mb-2">Nhẫn kim cương The One
-                                                    </h5>
-                                                    <p class="product-desc text-muted mb-2">Vàng 18K | PNJ Diamond
-                                                        Collection</p>
-                                                    <div class="product-meta">
-                                                        <span class="me-3">Size: 7</span>
-                                                        <span>SL: 1</span>
-                                                    </div>
-                                                    <div class="product-price mt-2">
-                                                        <h5 class="text-primary fw-bold">25.500.000₫</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 d-flex align-items-center justify-content-end">
-                                                    <div class="action-buttons">
-                                                        <button
-                                                            class="btn btn-sm btn-outline-primary rounded-pill me-2">Theo
-                                                            dõi</button>
-                                                        <button class="btn btn-sm btn-primary rounded-pill">Chi
-                                                            tiết</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="card-footer bg-white text-end border-top py-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <span class="delivery-info text-success">
-                                                        <i class="fas fa-truck me-2"></i>Dự kiến giao hàng:
-                                                        15/03/2025
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <span class="me-3">Tổng tiền:</span>
-                                                    <span class="fw-bold fs-5 text-primary">25.500.000₫</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        @endforeach
+                                    @else
+                                        <p class="text-muted">Bạn chưa có đơn hàng nào !</p>
+                                    @endif
                                 </div>
 
                                 <div class="pagination-product mt-4">

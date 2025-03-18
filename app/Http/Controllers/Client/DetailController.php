@@ -11,6 +11,7 @@ use App\Models\City;
 use App\Models\Collection;
 use App\Models\District;
 use App\Models\JewelryLine;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductType;
@@ -122,5 +123,28 @@ class DetailController extends Controller
         } catch (\Throwable $e) {
             dd($e->getMessage());
         }
+    }
+
+    public function listOrdersByCustomer($id)
+    {
+        $customer = User::with([
+            'city',
+            'district',
+            'ward'
+        ])
+            ->findOrFail($id);
+
+        $listOrders = Order::with([
+            'orderItems.variant.product.jewelryLine',
+            'orderItems.variant.attribute.attributegroups',
+            'city',
+            'district',
+            'ward',
+            'paymentMethod',
+            'orderStatus'
+        ])
+            ->where('user_id', $customer->id)->get();
+
+        return view('frontend.detail-order', compact('listOrders'));
     }
 }

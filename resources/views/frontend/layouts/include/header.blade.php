@@ -53,14 +53,14 @@
                                     class="card-dropdown after-login card p-3 shadow-lg d-flex justify-content-start align-items-center ">
                                     <ul class="list-unstyled mb-0">
                                         <li>
-                                            <a href="{{ route('detail.profile', session()->get('client_auth')->id) }}"
+                                            <a href="{{ route('user.profile', session()->get('client_auth')->id) }}"
                                                 class="dropdown-item d-flex align-items-center gap-2 py-2">
                                                 <span><i class="text-secondary fa-solid fa-house-user"></i></span>
                                                 <span>Thông tin cá nhân</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#"
+                                            <a href="{{ route('orders.byCustomer', session()->get('client_auth')->id) }}"
                                                 class="dropdown-item py-2 d-flex align-items-center gap-2">
                                                 <span><i class="text-secondary fa-solid fa-truck-fast"></i></span>
                                                 <span>Tra cứu đơn hàng</span>
