@@ -19,6 +19,7 @@ use App\Models\ProductType;
 use App\Models\ProductVoucher;
 use App\Models\Voucher;
 use App\Models\Ward;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -422,5 +423,16 @@ class OrderClientController extends Controller
         } catch (\Throwable $e) {
             dd($e->getMessage());
         }
+    }
+
+    public function exportInvoice($orderId)
+    {
+        $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
+
+        // dd($order);
+
+        $pdf = PDF::loadView('backend.pages.orders.invoice', compact('order'));
+
+        return $pdf->download('Hóa_Đơn_Mua_Hàng_PNJ_' . random_int(10000, 99999) . '.pdf');
     }
 }

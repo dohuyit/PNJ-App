@@ -60,11 +60,6 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/get-product-types/{categoryId}', [ProductController::class, 'getProductTypes']);
 
-        Route::get('/export-invoice/{orderId}', [OrderController::class, 'exportInvoice'])->name('order.export.invoice');
-
-
-
-
         // Quản lí tài khoản khách hàng và admin
         Route::prefix('account')->group(function () {
             // Tài khoản quản trị
@@ -106,6 +101,7 @@ Route::middleware('client')->group(function () {
         Route::post('/user/profile/update/{id}', [DetailController::class, 'profileUpdate'])->name('user.profile.update');
         Route::get('orders/by-customer/{id}', [DetailController::class, 'listOrdersByCustomer'])->name('orders.byCustomer');
         Route::get('orders/details/{id}', [DetailController::class, 'detailOrdersByCustomer'])->name('orders.details');
+        Route::get('/export-invoice/{orderId}', [OrderClientController::class, 'exportInvoice'])->name('order.export.invoice');
     });
 
 

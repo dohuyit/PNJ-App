@@ -5,7 +5,7 @@ use Carbon\Carbon;
 if (!function_exists('formatPrice')) {
     function formatPrice($amount)
     {
-        return number_format($amount, 0, ',', '.') . '₫';
+        return number_format($amount, 0, ',', '.') . 'đ';
     }
 }
 

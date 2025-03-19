@@ -23,6 +23,16 @@ class AuthClientController extends Controller
     {
         $dataLogin = $request->only(['email', 'password']);
 
+        $user = User::where('email', $dataLogin['email'])->first();
+
+        if (!$user) {
+            return back()->with("error", "Email hoặc Mật khẩu không đúng!");
+        }
+
+        if ($user->google_id) {
+            return back()->with("error", "Tài khoản đăng nhập không hợp lệ!");
+        }
+
         $remember_token = $request->has('remember');
         if (Auth::attempt($dataLogin, $remember_token)) {
             if (Auth::user()->role_id == '2') {

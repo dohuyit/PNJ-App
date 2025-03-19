@@ -57,7 +57,7 @@
 
                                 <!-- Danh sách đơn hàng -->
                                 <div class="order-list">
-                                    @if ($listOrders)
+                                    @if ($listOrders && $listOrders->isNotEmpty())
                                         @foreach ($listOrders as $order)
                                             <div class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden">
                                                 <div
@@ -109,7 +109,8 @@
                                                 <div class="card-footer bg-white text-end border-top py-3">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div class="d-flex align-items-center gap-3">
-                                                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                                            <a href="{{ route('orders.details', $order->id) }}"
+                                                                class="btn btn-outline-primary btn-sm">
                                                                 <i class="fas fa-info-circle"></i>
                                                                 <span class="ms-1">Chi tiết đơn hàng</span>
                                                             </a>
@@ -121,7 +122,8 @@
                                                         <div class="d-flex align-items-center gap-3">
                                                             <div>
                                                                 <span class="me-3">Tổng tiền:</span>
-                                                                <span class="fw-bold fs-5 text-primary">25.500.000₫</span>
+                                                                <span
+                                                                    class="fw-bold fs-5 text-primary">{{ formatPrice($order->total_amount) }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -129,7 +131,7 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <p class="text-muted">Bạn chưa có đơn hàng nào !</p>
+                                        <p class="text-center text-muted">Bạn chưa có đơn hàng nào !</p>
                                     @endif
                                 </div>
 

@@ -25,22 +25,49 @@
                             <!-- Thông tin đơn hàng -->
                             <div class="card luxury-card mb-4">
                                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0 fw-bold">Thông tin đơn hàng #PNJ202403172498</h5>
-                                    <span class="badge status-badge">Đã giao hàng</span>
+                                    <h5 class="mb-0 fw-bold">Thông tin đơn hàng {{ '#' . $detailOrder->order_code }}</h5>
+                                    @php
+                                        $statusClasses = [
+                                            1 => 'status-pending',
+                                            2 => 'status-confirmed',
+                                            3 => 'status-processing',
+                                            4 => 'status-shipping',
+                                            5 => 'status-delivered',
+                                            6 => 'status-cancelled',
+                                            7 => 'status-returned',
+                                        ];
+                                    @endphp
+                                    @if ($detailOrder->status_id == 5)
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a href="{{ route('client.home') }}"
+                                                class="btn btn-outline-primary rounded-pill">Mua lại</a>
+                                            <span
+                                                class="status-badge {{ $statusClasses[$detailOrder->orderStatus->id] ?? 'status-pending' }}">
+                                                {{ $detailOrder->orderStatus->name }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <span
+                                            class="status-badge {{ $statusClasses[$detailOrder->orderStatus->id] ?? 'status-pending' }}">
+                                            {{ $detailOrder->orderStatus->name }}
+                                        </span>
+                                    @endif
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-4 mb-3">
                                             <p class="text-muted mb-1">Ngày đặt hàng</p>
-                                            <p class="fw-bold mb-0">15/03/2025</p>
+                                            <p class="fw-bold mb-0">
+                                                {{ \Carbon\Carbon::parse($detailOrder->date)->format('d-m-Y') }}</p>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <p class="text-muted mb-1">Phương thức thanh toán</p>
-                                            <p class="fw-bold mb-0">Thanh toán bằng thẻ</p>
+                                            <p class="fw-bold mb-0">{{ $detailOrder->paymentMethod->name }}</p>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <p class="text-muted mb-1">Tổng giá trị</p>
-                                            <p class="fw-bold mb-0 price-highlight">5.990.000 ₫</p>
+                                            <p class="fw-bold mb-0 price-highlight">
+                                                {{ formatPrice($detailOrder->total_amount) }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -55,24 +82,19 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <p class="text-muted mb-1">Người nhận</p>
-                                            <p class="fw-bold mb-0">Nguyễn Văn A</p>
+                                            <p class="fw-bold mb-0">{{ $detailOrder->name }}</p>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <p class="text-muted mb-1">Số điện thoại</p>
-                                            <p class="fw-bold mb-0">098 765 4321</p>
+                                            <p class="fw-bold mb-0">{{ $detailOrder->phone }}</p>
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <p class="text-muted mb-1">Địa chỉ giao hàng</p>
-                                            <p class="fw-bold mb-0">123 Nguyễn Văn Linh, Phường Tân Phong, Quận 7, TP. Hồ
-                                                Chí Minh</p>
+                                            <p class="fw-bold mb-0">{{ $detailOrder->address }}</p>
                                         </div>
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-12 mb-3">
                                             <p class="text-muted mb-1">Phương thức vận chuyển</p>
                                             <p class="fw-bold mb-0">Giao hàng nhanh</p>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <p class="text-muted mb-1">Ngày giao hàng</p>
-                                            <p class="fw-bold mb-0">17/03/2025</p>
                                         </div>
                                     </div>
                                 </div>
@@ -96,25 +118,37 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="product-image-container m-auto">
-                                                            <img src="https://via.placeholder.com/80" alt="Sản phẩm"
-                                                                class="product-image ">
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="product-name-container">
-                                                            <h6 class="product-name mb-1">Nhẫn Kim cương Vàng 18K PNJ
-                                                                DD00W000123</h6>
-                                                            <p class="product-variant mb-0">Loại: Nhẫn | Màu sắc: Vàng |
-                                                                Size: 15</p>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-center">1</td>
-                                                    <td>5.990.000 ₫</td>
-                                                    <td class="fw-bold price-highlight">5.990.000 ₫</td>
-                                                </tr>
+                                                @foreach ($detailOrder->orderItems as $orderItem)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="product-image-container m-auto">
+                                                                <img src="{{ Storage::url($orderItem->variant->product->product_image) }}"
+                                                                    alt="Sản phẩm" class="product-image ">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="product-name-container">
+                                                                <h6 class="product-name mb-1">
+                                                                    {{ $orderItem->variant->product->product_name }}</h6>
+                                                                <p class="product-variant mb-0">Loại:
+                                                                    {{ $orderItem->variant->product->productType->name }} |
+                                                                    Dòng hàng:
+                                                                    {{ $orderItem->variant->product->jewelryLine->name }}
+                                                                    @if ($orderItem->variant->attribute->attributegroups->name == 'Size')
+                                                                        |
+                                                                        Size: {{ $orderItem->variant->attribute->name }}
+                                                                    @endif
+
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">{{ $orderItem->quantity }}</td>
+                                                        <td>{{ formatPrice($orderItem->unit_price) }}</td>
+                                                        <td class="fw-bold price-highlight">
+                                                            {{ formatPrice($orderItem->total_price) }}</td>
+                                                    </tr>
+                                                @endforeach
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -134,7 +168,8 @@
                                                 <i class="fas fa-receipt text-muted"></i>
                                                 <span>Tạm tính</span>
                                             </div>
-                                            <div class="amount">5.990.000 ₫</div>
+                                            <div class="amount">
+                                                {{ formatPrice($detailOrder->orderItems->sum('total_price')) }}</div>
                                         </div>
 
                                         <div class="info-row">
@@ -143,7 +178,11 @@
                                                 <span>Phí vận chuyển</span>
                                             </div>
                                             <div class="amount">
-                                                <span class="shipping-badge">Miễn phí</span>
+                                                @if ($detailOrder->shipping_fee > 0)
+                                                    {{ formatPrice($detailOrder->shipping_fee) }}
+                                                @else
+                                                    <span class="shipping-badge">Miễn phí</span>
+                                                @endif
                                             </div>
                                         </div>
 
@@ -152,16 +191,12 @@
                                                 <i class="fas fa-tags text-muted"></i>
                                                 <span>Giảm giá</span>
                                             </div>
-                                            <div class="amount text-danger">- 0 ₫</div>
-                                        </div>
-
-                                        <div class="info-row">
-                                            <div class="label-group">
-                                                <i class="fas fa-money-bill text-muted"></i>
-                                                <span>Phương thức thanh toán</span>
-                                            </div>
-                                            <div class="amount">
-                                                <span class="payment-method-badge">COD</span>
+                                            <div class="amount text-danger">
+                                                @if ($detailOrder->discount_amount > 0)
+                                                    - {{ formatPrice($detailOrder->discount_amount) }}
+                                                @else
+                                                    - 0 ₫
+                                                @endif
                                             </div>
                                         </div>
 
@@ -170,21 +205,20 @@
                                                 <i class="fas fa-coins text-muted"></i>
                                                 <span>Tổng thanh toán</span>
                                             </div>
-                                            <div class="amount price-highlight">5.990.000 ₫</div>
+                                            <div class="amount price-highlight">
+                                                {{ formatPrice($detailOrder->total_amount) }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Nút tác vụ -->
-                            <div class="d-flex justify-content-between mt-4">
-                                <a href="#" class="btn btn-back">
-                                    <i class="fas fa-arrow-left me-2"></i>Quay lại lịch sử đơn hàng
-                                </a>
+                            <div class="d-flex justify-content-end mt-4">
                                 <div>
-                                    <button class="btn btn-outline-luxury me-2">
+                                    <a href="{{ route('order.export.invoice', $detailOrder->id) }}"
+                                        class="btn btn-outline-luxury me-2">
                                         <i class="fas fa-print me-2"></i>In đơn hàng
-                                    </button>
+                                    </a>
                                     <button class="btn btn-luxury">
                                         <i class="fas fa-headset me-2"></i>Liên hệ hỗ trợ
                                     </button>
@@ -200,77 +234,25 @@
                                     <div class="position-relative tracking-timeline pb-4">
                                         <div class="timeline-track"></div>
 
-                                        <div class="timeline-item">
-                                            <div class="timeline-point point-success">
-                                                <i class="fas fa-check text-white"></i>
+                                        @foreach ($orderStatuses as $index => $orderStatus)
+                                            <div
+                                                class="mb-5 d-flex align-items-center timeline-item {{ $index + 1 <= $detailOrder->status_id ? 'active' : '' }}">
+                                                <div
+                                                    class="timeline-point {{ $index + 1 <= $detailOrder->status_id ? 'point-success' : '' }}">
+                                                    <i class="fas fa-check text-white"></i>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <h6 class="timeline-title mb-0">{{ $orderStatus->name }}</h6>
+                                                    <p class="timeline-date mb-0">
+                                                        {{ \Carbon\Carbon::parse($detailOrder->updated_at)->format('d/m/Y H:i:s') }}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="timeline-content">
-                                                <h6 class="timeline-title mb-1">Đã giao hàng</h6>
-                                                <p class="timeline-date mb-0">17/03/2025 - 10:30</p>
-                                                <p class="timeline-desc mb-3">Đơn hàng đã được giao đến địa chỉ người nhận.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <div class="timeline-point point-success">
-                                                <i class="fas fa-check text-white"></i>
-                                            </div>
-                                            <div class="timeline-content">
-                                                <h6 class="timeline-title mb-1">Đang vận chuyển</h6>
-                                                <p class="timeline-date mb-0">16/03/2025 - 08:45</p>
-                                                <p class="timeline-desc mb-3">Đơn hàng đang được vận chuyển đến địa chỉ
-                                                    người nhận.</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <div class="timeline-point point-success">
-                                                <i class="fas fa-check text-white"></i>
-                                            </div>
-                                            <div class="timeline-content">
-                                                <h6 class="timeline-title mb-1">Đã xác nhận</h6>
-                                                <p class="timeline-date mb-0">15/03/2025 - 14:20</p>
-                                                <p class="timeline-desc mb-3">Đơn hàng của bạn đã được xác nhận và đang
-                                                    chuẩn bị giao hàng.</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="timeline-item">
-                                            <div class="timeline-point point-success">
-                                                <i class="fas fa-check text-white"></i>
-                                            </div>
-                                            <div class="timeline-content">
-                                                <h6 class="timeline-title mb-1">Đặt hàng thành công</h6>
-                                                <p class="timeline-date mb-0">15/03/2025 - 09:15</p>
-                                                <p class="timeline-desc mb-0">Đơn hàng của bạn đã được đặt thành công.</p>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Đánh giá sản phẩm -->
-                            <div class="card luxury-card mt-4">
-                                <div class="card-header bg-white">
-                                    <h5 class="mb-0 fw-bold">Đánh giá sản phẩm</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center py-4">
-                                        <img src="https://via.placeholder.com/80" alt="Sản phẩm"
-                                            class="mb-3 review-product-image">
-                                        <h6 class="product-name mb-3">Nhẫn Kim cương Vàng 18K PNJ DD00W000123</h6>
-                                        <div class="rating mb-3">
-                                            <i class="fas fa-star star-icon"></i>
-                                            <i class="fas fa-star star-icon"></i>
-                                            <i class="fas fa-star star-icon"></i>
-                                            <i class="fas fa-star star-icon"></i>
-                                            <i class="fas fa-star star-icon"></i>
-                                        </div>
-                                        <button class="btn btn-luxury-outline mt-2">Đánh giá sản phẩm</button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </section>
                 </div>

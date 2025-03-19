@@ -24,8 +24,10 @@ body {
     /*text-price-old-card*/
     --text-card-secondary: #c48c46;
     /*text-price-card*/
-    --bg-card: linear-gradient(rgba(255, 251, 251, 0.945) 0%,
-            rgb(245, 245, 245) 100%);
+    --bg-card: linear-gradient(
+        rgba(255, 251, 251, 0.945) 0%,
+        rgb(245, 245, 245) 100%
+    );
     /* --bg-card: #221c1c; */
     --color-sale: #c92127;
 }
@@ -68,7 +70,6 @@ aside .sidebar .nav-link:hover {
     color: var(--bg-default) !important;
 }
 
-
 .sidebar .nav-link.active {
     background-color: var(--accent-color) !important;
     color: #fff;
@@ -83,7 +84,8 @@ aside .sidebar hr {
 
 .shadow-md {
     /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important; */
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
     /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important; */
 }
 
@@ -99,7 +101,8 @@ aside .sidebar hr {
 .luxury-card {
     border: none;
     border-radius: 10px;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
     transition: all 0.3s ease;
     overflow: hidden;
 }
@@ -119,14 +122,60 @@ aside .sidebar hr {
 
 /* Status badge */
 .status-badge {
-    background: linear-gradient(45deg, #4CAF50, #8BC34A);
     color: white;
     padding: 8px 15px;
     font-weight: 500;
     border-radius: 20px;
+    text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 0.5px;
+    display: inline-block;
+    min-width: 120px;
+    text-align: center;
+}
+
+/* Màu sắc cho từng trạng thái đơn hàng */
+.status-pending {
+    /* Chờ xác nhận */
+    background: linear-gradient(45deg, #ff9800, #ffb74d);
+    box-shadow: 0 2px 5px rgba(255, 152, 0, 0.2);
+}
+
+.status-confirmed {
+    /* Đã xác nhận */
+    background: linear-gradient(45deg, #03a9f4, #29b6f6);
+    box-shadow: 0 2px 5px rgba(3, 169, 244, 0.2);
+}
+
+.status-processing {
+    /* Đang xử lý */
+    background: linear-gradient(45deg, #673ab7, #9575cd);
+    box-shadow: 0 2px 5px rgba(103, 58, 183, 0.2);
+}
+
+.status-shipping {
+    /* Đang giao hàng */
+    background: linear-gradient(45deg, #ffeb3b, #fbc02d);
+    box-shadow: 0 2px 5px rgba(255, 235, 59, 0.2);
+    color: #333;
+}
+
+.status-delivered {
+    /* Đã giao hàng */
+    background: linear-gradient(45deg, #4caf50, #8bc34a);
     box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2);
+}
+
+.status-cancelled {
+    /* Đã hủy */
+    background: linear-gradient(45deg, #f44336, #e57373);
+    box-shadow: 0 2px 5px rgba(244, 67, 54, 0.2);
+}
+
+.status-returned {
+    /* Hoàn trả */
+    background: linear-gradient(45deg, #9e9e9e, #bdbdbd);
+    box-shadow: 0 2px 5px rgba(158, 158, 158, 0.2);
 }
 
 /* Price highlight */
@@ -287,21 +336,37 @@ aside .sidebar hr {
     padding-left: 40px;
 }
 
+/* Track background (gray) */
 .timeline-track {
     position: absolute;
     top: 15px;
     bottom: 15px;
     left: 15px;
     width: 2px;
-    background: linear-gradient(to bottom, #003468, #005a91);
+    background: #ccc;
     border-radius: 5px;
 }
 
+/* Track overlay (blue - extends only to active items) */
+.timeline-track::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to bottom, #003468, #005a91);
+    border-radius: 5px;
+    height: 0;
+    transition: height 0.5s ease-in-out;
+}
+
+/* Timeline item */
 .timeline-item {
     position: relative;
     margin-bottom: 30px;
 }
 
+/* Timeline point */
 .timeline-point {
     position: absolute;
     left: -40px;
@@ -313,14 +378,12 @@ aside .sidebar hr {
     justify-content: center;
     z-index: 1;
     box-shadow: 0 0 0 5px white, 0 0 0 6px rgba(180, 136, 11, 0.2);
+    background: #ccc; /* Màu xám cho các bước chưa hoàn thành */
 }
 
-.point-success {
+/* Điểm màu xanh cho các bước hoàn thành */
+.timeline-item.active .timeline-point {
     background: linear-gradient(to bottom, #003468, #005a91);
-}
-
-.timeline-content {
-    padding-bottom: 15px;
 }
 
 .timeline-title {
@@ -350,15 +413,21 @@ aside .sidebar hr {
 }
 
 .star-icon {
-    color: #FFD700;
+    color: #ffd700;
     font-size: 1.2rem;
     margin: 0 2px;
 }
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .luxury-card {
@@ -391,7 +460,7 @@ aside .sidebar hr {
 }
 
 .card-header h5:before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 50%;
@@ -403,13 +472,10 @@ aside .sidebar hr {
     border-radius: 5px;
 }
 
-h5, h6, .fw-bold {
+h5,
+h6,
+.fw-bold {
     letter-spacing: 0.5px;
-}
-
-.status-badge {
-    text-transform: uppercase;
-    font-size: 0.75rem;
 }
 
 .payment-info {
@@ -445,7 +511,8 @@ h5, h6, .fw-bold {
     font-weight: 500;
 }
 
-.shipping-badge, .payment-method-badge {
+.shipping-badge,
+.payment-method-badge {
     background-color: #e8f5e9;
     color: #2e7d32;
     padding: 6px 12px;

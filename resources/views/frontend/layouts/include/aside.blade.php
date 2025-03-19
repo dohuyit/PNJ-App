@@ -11,7 +11,8 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('user.profile', ['id' => session()->get('client_auth')->id]) }}"
+                        class="nav-link {{ request()->routeIs(['user.profile']) ? 'active' : '' }}">
                         <i class="fa-solid fa-user"></i>
                         <span class="ms-2">Thông tin tài khoản</span>
                     </a>
@@ -25,7 +26,8 @@
                 </li>
                 <hr>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('orders.byCustomer', ['id' => session()->get('client_auth')->id]) }}"
+                        class="nav-link {{ request()->routeIs(['orders.byCustomer', 'orders.details']) ? 'active' : '' }}">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                         <span class="ms-2">Lịch sử mua hàng</span>
                     </a>

@@ -12,6 +12,7 @@ use App\Models\Collection;
 use App\Models\District;
 use App\Models\JewelryLine;
 use App\Models\Order;
+use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductType;
@@ -108,10 +109,10 @@ class DetailController extends Controller
                 ];
 
                 if ($request->hasFile('avatar')) {
-                    if ($customer->avatar) {
-                        Storage::delete($customer->avatar);
+                    if ($customer->avatar && Storage::disk('public')->exists($customer->avatar)) {
+                        Storage::disk('public')->delete($customer->avatar);
                     }
-                    $dataCustomer['avatar'] = Storage::put('Users', $request->file('avatar'));
+                    $dataCustomer['avatar'] = Storage::disk('public')->put('Users', $request->file('avatar'));
                 }
 
                 // dd($dataCustomer);
@@ -119,7 +120,7 @@ class DetailController extends Controller
                 $customer->update($dataCustomer);
             });
 
-            return redirect()->route('detail.profile', $customer->id)->with('success', 'Cập nhật thông tin khách hàng thành công');
+            return redirect()->route('user.profile', $customer->id)->with('success', 'Cập nhật thông tin khách hàng thành công');
         } catch (\Throwable $e) {
             dd($e->getMessage());
         }
@@ -146,5 +147,29 @@ class DetailController extends Controller
             ->where('user_id', $customer->id)->get();
 
         return view('frontend.detail-order', compact('listOrders'));
+    }
+
+    public function detailOrdersByCustomer($id)
+    {
+        $detailOrder = Order::with(
+            'orderItems.variant.product.jewelryLine',
+            'orderItems.variant.attribute.attributegroups',
+            'city',
+            'district',
+            'ward',
+            'paymentMethod',
+            'orderStatus'
+        )
+            ->find($id);
+
+        if (!$detailOrder) {
+            return redirect()->back()->with('error', 'Đơn hàng không tồn tại!');
+        }
+
+        // dd($detailOrder);
+
+        $orderStatuses = OrderStatus::limit(5)->get();
+
+        return view('frontend.detail-info-order', compact('detailOrder', 'orderStatuses'));
     }
 }

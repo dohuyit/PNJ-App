@@ -10,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -71,26 +72,13 @@ class OrderController extends Controller
         return view('backend.pages.orders.edit', compact('dataOrder', 'listStatus'));
     }
 
-    public function exportInvoice($orderId)
-    {
-        $order = Order::with('orderItems.variant.product')->findOrFail($orderId);
-
-        // dd($order);
-
-        $pdf = PDF::loadView('backend.pages.orders.invoice', compact('order'));
-
-        return $pdf->download('Hóa_Đơn_Mua_Hàng_PNJ_' . random_int(10000, 99999) . '.pdf');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateOrderRequest $request, Order $order)
     {
         try {
             DB::transaction(function () use ($order, $request) {
                 $order->update([
                     'status_id' => $request->status_id,
+                    'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
                 ]);
             });
 
