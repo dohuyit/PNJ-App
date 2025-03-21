@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\Auth\AuthClientController;
 use App\Http\Controllers\Client\Auth\AuthSocialController;
 use App\Http\Controllers\Client\CartClientController;
+use App\Http\Controllers\Client\ChatbotController;
 use App\Http\Controllers\Client\DetailCategoryController;
 use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\Client\HomeController;
@@ -126,6 +127,9 @@ Route::middleware('client')->group(function () {
 
     Route::get('/category/{type}/{id}', [DetailCategoryController::class, 'show'])->name('category.show');
 
+    // Chatbot Gemini
+    Route::get('/chatbot', [ChatbotController::class, 'index']);
+    Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage']);
 
     // Authentication client
     Route::get('login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');

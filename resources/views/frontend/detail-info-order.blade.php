@@ -244,7 +244,7 @@
                                                 <div class="timeline-content">
                                                     <h6 class="timeline-title mb-0">{{ $orderStatus->name }}</h6>
                                                     <p class="timeline-date mb-0">
-                                                        {{ \Carbon\Carbon::parse($detailOrder->updated_at)->format('d/m/Y H:i:s') }}
+                                                        {{ $index + 1 <= $detailOrder->status_id ? \Carbon\Carbon::parse($detailOrder->updated_at)->format('d/m/Y H:i:s') : 'N/A' }}
                                                     </p>
                                                 </div>
                                             </div>
