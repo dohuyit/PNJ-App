@@ -420,6 +420,11 @@ input {
     flex: 1;
 }
 
+.shadow-md {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
+}
+
 #comment-product h2 {
     font-size: 20px;
 }
@@ -443,39 +448,37 @@ input {
     color: var(--accent-color);
 }
 
-/* From Uiverse.io by BiliBC034 */
-.rating:not(:checked) > .radio-star {
-    position: absolute;
-    appearance: none;
+.rating {
+    display: flex;
+    flex-direction: row-reverse; /* Đảo ngược thứ tự sao */
+    justify-content: center;
+    font-size: 30px;
+    gap: 5px; /* Khoảng cách giữa các sao */
 }
 
-.rating:not(:checked) > .label-star {
-    float: right;
+/* Ẩn input radio */
+.rating .radio-star {
+    display: none;
+}
+
+/* Thiết lập mặc định cho sao */
+.rating .label-star {
     cursor: pointer;
-    font-size: 25px;
-    color: #666;
+    color: #ccc; /* Màu xám nhạt */
+    transition: color 0.2s ease-in-out;
 }
 
-.rating:not(:checked) > .label-star:before {
-    content: "★";
-}
-
-.rating > .label-star:checked + .label-star:hover,
-.rating > .label-star:checked + .label-star:hover ~ .label-star,
-.rating > .label-star:checked ~ .label-star:hover,
-.rating > .label-star:checked ~ .label-star:hover ~ .label-star,
-.rating > .label-star:hover ~ .label-star:checked ~ .label-star {
-    color: #e58e09;
-}
-
-.rating:not(:checked) > .label-star:hover,
-.rating:not(:checked) > .label-star:hover ~ .label-star {
+/* Hover hiệu ứng: Khi di chuột, các sao sẽ sáng lên */
+.rating .label-star:hover,
+.rating .label-star:hover ~ .label-star {
     color: #ff9e0b;
 }
 
-.rating > .label-star:checked ~ .label-star {
+/* Khi radio được chọn, các sao từ vị trí đó trở về bên trái sẽ sáng */
+.rating .radio-star:checked ~ .label-star {
     color: #ffa723;
 }
+
 .pagination-comment {
     display: flex; /* Sử dụng flexbox để căn giữa */
     justify-content: center; /* Căn giữa theo chiều ngang */
@@ -508,6 +511,17 @@ input {
 
 .page-link.active {
     background-color: var(--accent-color) !important;
+}
+
+.empty-comments-icon {
+    height: 80px;
+    width: 80px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .swiper {
@@ -564,6 +578,7 @@ input {
 .card .card-title a {
     font-size: 14px;
     display: -webkit-box;
+    overflow: hidden;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     color: var(--text-card-color) !important;

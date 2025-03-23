@@ -171,7 +171,7 @@
                                 <div class="swiper-wrapper">
                                     @foreach ($dataNewProducts as $product)
                                         <div class="swiper-slide card">
-                                            <a href="{{ route('client.detail', $product->id) }}">
+                                            <a href="{{ route('client.product', $product->id) }}">
                                                 <div class="card-img position-relative">
                                                     <img src="{{ Storage::url($product->product_image) }}"
                                                         class="card-img-top" alt="" />
@@ -187,7 +187,7 @@
                                                 <div class="card-body p-2">
                                                     <h5 class="card-title">
                                                         <a
-                                                            href="{{ route('client.detail', $product->id) }}">{{ $product->product_name }}</a>
+                                                            href="{{ route('client.product', $product->id) }}">{{ $product->product_name }}</a>
                                                     </h5>
                                                     <div
                                                         class="card-text product-price mb-2 d-flex align-items-center justify-content-center gap-2">

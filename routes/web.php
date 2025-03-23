@@ -92,9 +92,11 @@ Route::middleware('client')->group(function () {
     Route::get('/get-product-by-collections/{id}', [HomeController::class, 'getProductByCollections'])
         ->name('client.home.getProductclt');
     Route::get('/jewelry-line/{id}', [HomeController::class, 'getJewelryLines']);
+    Route::get('/search-data', [DetailController::class, 'searchData'])->name('client.search');
 
     // Detail Product Page
-    Route::get('/detail-product/{id}', [DetailController::class, 'show'])->name('client.detail');
+    Route::get('/detail-product/{id}', [DetailController::class, 'showDetailProduct'])->name('client.product');
+    Route::post('/detail-product/comment', [DetailController::class, 'commentProcess'])->name('product.comment.process');
 
     // Detail-infomation-user
     Route::prefix('detail')->group(function () {

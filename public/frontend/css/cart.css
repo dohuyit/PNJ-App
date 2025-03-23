@@ -65,6 +65,16 @@ input {
     height: 40px;
 }
 
+.auth-group p span:first-child {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.auth-group p span:last-child {
+    font-size: 14px;
+}
+
 /* .header-top :is(.function-outer, .user-outer) a {
   display: flex;
   justify-content: center;

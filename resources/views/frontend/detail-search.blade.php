@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Thông tin khách hàng')
+@section('title', 'Tìm kiếm sản phẩm')
 
 @section('content')
     @include('frontend.layouts.include.header')
@@ -191,10 +191,10 @@
                     </aside>
                     <div class="content col-md-9">
                         <div class="header-content d-flex justify-content-between align-items-center">
-                            <h3 class="mb-0">Kết quả tìm kiếm cho <span>Vàng</span></h3>
-                            <span class="fst-italic">7274 sản phẩm</span>
+                            <h3 class="mb-0">Kết quả tìm kiếm cho <span>{{ $query }}</span></h3>
+                            <span class="fst-italic">{{ $products->count() }} sản phẩm</span>
                             <div class="group-select">
-                                <select name="" id="" class="form-select">
+                                <select name="" id="" class="form-select shadow-none">
                                     <option value="">Mặc định</option>
                                     <option value="#">Giá từ thấp đến cao</option>
                                     <option value="#">Giá từ cao đến thấp</option>
@@ -204,531 +204,56 @@
                             </div>
                         </div>
                         <div class="body-content row g-3 my-4">
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
+                            @foreach ($products as $product)
+                                <div class="col-md-4">
+                                    <div class="card text-center">
+                                        <a href="{{ route('client.detail', $product->id) }}">
+                                            <div class="card-img position-relative">
+                                                <img src="{{ Storage::url($product->product_image) }}"
+                                                    class="card-img-top" alt="" />
+                                                <img src="{{ asset('frontend/image/new-icon-3-w29.svg') }}"
+                                                    class="img-sub-new" alt="" />
+                                                <img class="img-sub-fast"
+                                                    src="{{ asset('frontend/image/PNJfast-Giaotrong3h.svg') }}"
+                                                    alt="" />
+                                                <img class="img-sub-icon"
+                                                    src="{{ asset('frontend/image/icon-tragop-2.svg') }}"
+                                                    alt="" />
                                             </div>
-                                        </div>
+                                            <div class="card-body p-2">
+                                                <h5 class="card-title">
+                                                    <a
+                                                        href="{{ route('client.detail', $product->id) }}">{{ $product->product_name }}</a>
+                                                </h5>
+                                                <div
+                                                    class="card-text product-price mb-2 d-flex align-items-center justify-content-center gap-2">
+                                                    @if ($product->sale_price != $product->sale_price)
+                                                        <span
+                                                            class="original-price text-decoration-line-through fst-italic">{{ formatPrice($product->original_price) }}</span>
+                                                        <span
+                                                            class="sale-price">{{ formatPrice($product->sale_price) }}</span>
+                                                    @else
+                                                        <span
+                                                            class="sale-price">{{ formatPrice($product->sale_price) }}</span>
+                                                    @endif
+                                                </div>
+                                                <div
+                                                    class="product-order-and-rating d-flex align-items-center justify-content-between">
+                                                    <div class="item-rating">
+                                                        <span>
+                                                            <i class="fa-solid fa-star text-warning"></i>
+                                                        </span>
+                                                        <span>5</span>
+                                                    </div>
+                                                    <div class="item-order">
+                                                        <span>200+ đã bán</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-center">
-                                    <div class="card-img position-relative">
-                                        <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                        <img class="img-sub-new" src="./image/new-icon-3-w29.svg" alt="" />
-                                        <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="" />
-                                        <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="" />
-                                    </div>
-                                    <div class="card-body p-2">
-                                        <h5 class="card-title">
-                                            <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                                TPXMW000045</a>
-                                        </h5>
-                                        <p class="card-text product-price mb-4">6.801.000đ</p>
-                                        <div
-                                            class="product-order-and-rating d-flex align-items-center justify-content-end">
-                                            <!-- <div class="item-rating">
-                                                                                      <span>
-                                                                                          <i class="fa-solid fa-star text-warning"></i>
-                                                                                      </span>
-                                                                                      <span>5</span>
-                                                                                  </div> -->
-                                            <div class="item-order">
-                                                <span>200+ đã bán</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -739,5 +264,5 @@
 @endsection
 
 @push('link')
-    <link rel="stylesheet" href="{{ asset('frontend/css/detail-user.css') }}" />
+    <link rel="stylesheet" href="{{ asset('frontend/css/detail-search.css') }}" />
 @endpush

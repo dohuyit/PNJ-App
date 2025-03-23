@@ -62,6 +62,7 @@ swiper(".myBestseller", 4, 10, 3000);
 swiper(".myCollection", 4, 10, 4500);
 swiper(".myProducts", 4, 10, 4500);
 swiper(".myNewProductJewelryLines", 3, 10, 3000);
+swiper(".ProductRelated", 4, 10, 2500);
 
 function swiperSecond() {
     var swiper = new Swiper(".sliderCollection", {

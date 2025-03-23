@@ -403,36 +403,43 @@
                                             <div class="infor-product mt-2">
                                                 <p class="fw-bold m-0 text-center">{{ $dataDetail->product_name }}</p>
                                             </div>
-                                            <form action="" method="post">
+                                            <form action="{{ route('product.comment.process') }}" method="post">
+                                                @csrf
                                                 <div class="modal-rating">
                                                     <div class="rating d-flex justify-content-center">
                                                         <input class="radio-star" type="radio" id="star5"
-                                                            name="rate" value="5" />
-                                                        <label class="label-star" for="star5" title="text"></label>
+                                                            name="rate" value="5">
+                                                        <label class="label-star" for="star5" title="5 sao">★</label>
+
                                                         <input class="radio-star" type="radio" id="star4"
-                                                            name="rate" value="4" />
-                                                        <label class="label-star" for="star4" title="text"></label>
+                                                            name="rate" value="4">
+                                                        <label class="label-star" for="star4" title="4 sao">★</label>
+
                                                         <input class="radio-star" type="radio" id="star3"
-                                                            name="rate" value="3" />
-                                                        <label class="label-star" for="star3" title="text"></label>
+                                                            name="rate" value="3">
+                                                        <label class="label-star" for="star3" title="3 sao">★</label>
+
                                                         <input class="radio-star" type="radio" id="star2"
-                                                            name="rate" value="2" />
-                                                        <label class="label-star" for="star2" title="text"></label>
+                                                            name="rate" value="2">
+                                                        <label class="label-star" for="star2" title="2 sao">★</label>
+
                                                         <input class="radio-star" type="radio" id="star1"
-                                                            name="rate" value="1" />
-                                                        <label class="label-star" for="star1" title="text"></label>
+                                                            name="rate" value="1">
+                                                        <label class="label-star" for="star1" title="1 sao">★</label>
                                                     </div>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <input type="hidden" name="product_id"
+                                                        value="{{ $dataDetail->id }}">
                                                     <div class="mb-3">
                                                         <label for="review" class="form-label fw-bold">Chia sẻ của bạn
                                                             về
                                                             sản phẩm*</label>
-                                                        <textarea class="form-control" id="review" rows="8" placeholder="Nhập đánh giá của bạn"></textarea>
+                                                        <textarea class="form-control" name="content" id="review" rows="8" placeholder="Nhập đánh giá của bạn"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer border-0">
-                                                    <button type="button" class="btn btn-primary w-100">GỬI ĐÁNH
+                                                    <button type="submit" class="btn btn-primary w-100">GỬI ĐÁNH
                                                         GIÁ</button>
                                                 </div>
                                             </form>
@@ -494,94 +501,64 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="body-comment mt-4">
-                            <div class="item-comment my-3 p-2 d-flex align-items-center gap-4 shadow-sm rounded-2">
-                                <div class="infor-user flex-equal">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img class="rounded-circle" src="./image/avatar-default.jpg" alt="user-avatar"
-                                            width="50" height="50">
-                                        <div class="user-name">
-                                            <p class="m-0">Nguyễn Thị Hồng</p>
-                                            <p class="m-0 text-warning">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
+                        @if ($listComments->isNotEmpty())
+                            <div class="body-comment mt-4">
+                                @foreach ($listComments as $comment)
+                                    <div class="item-comment my-3 p-2 d-flex align-items-center gap-4 shadow-md rounded-2">
+                                        <div class="infor-user flex-equal">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img class="rounded-circle"
+                                                    src="{{ $comment->users->avatar ? Storage::url($comment->users->avatar) : asset('frontend/image/avatar-default.jpg') }}"
+                                                    alt="user-avatar" width="50" height="50">
+                                                <div class="user-name">
+                                                    <p class="m-0">{{ $comment->users->username }}</p>
+                                                    <p class="m-0 text-warning">
+                                                        @for ($i = 0; $i < $comment->rating; $i++)
+                                                            <i class="fa-solid fa-star"></i>
+                                                        @endfor
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content flex-equal">
+                                            <p>{{ $comment->content_comment }}</p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="pagination-comment">
+                                <ul class="pagination justify-content-center gap-2">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link active" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        @else
+                            <div class="no-comments-container my-2 shadow-none">
+                                <div class="container-fluid">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body text-center py-5">
+                                            <div class="empty-comments-icon mb-2">
+                                                <i class="fa-regular fa-comment-dots fa-3x text-secondary"></i>
+                                            </div>
+                                            <h5 class="text-muted mb-2">Chưa có bình luận nào</h5>
+                                            <p class="text-muted mb-4">Hãy là người đầu tiên chia sẻ ý kiến về sản phẩm này
                                             </p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="content flex-equal">
-                                    <p>Sản phẩm thực tế hơi nhỏ hơn mình tưởng tượng chút, nhưng mà cũng rất ưng ý,
-                                        Hôm khuya lướt web mới phát hiện có chương trình săn mã giảm 30%, thể là
-                                        mình canh giật ngay mã giảm và hốt được 1 em mặt dây rất cưng</p>
-                                </div>
                             </div>
-                            <div class="item-comment my-3 p-2 d-flex align-items-center gap-4 shadow-sm rounded-2">
-                                <div class="infor-user flex-equal">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img class="rounded-circle" src="./image/avatar-default.jpg" alt="user-avatar"
-                                            width="50" height="50">
-                                        <div class="user-name">
-                                            <p class="m-0">Nguyễn Thị Hồng</p>
-                                            <p class="m-0 text-warning">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content flex-equal">
-                                    <p>Sản phẩm thực tế hơi nhỏ hơn mình tưởng tượng chút, nhưng mà cũng rất ưng ý,
-                                        Hôm khuya lướt web mới phát hiện có chương trình săn mã giảm 30%, thể là
-                                        mình canh giật ngay mã giảm và hốt được 1 em mặt dây rất cưng</p>
-                                </div>
-                            </div>
-                            <div class="item-comment my-3 p-2 d-flex align-items-center gap-4 shadow-sm rounded-2">
-                                <div class="infor-user flex-equal">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img class="rounded-circle" src="./image/avatar-default.jpg" alt="user-avatar"
-                                            width="50" height="50">
-                                        <div class="user-name">
-                                            <p class="m-0">Nguyễn Thị Hồng</p>
-                                            <p class="m-0 text-warning">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="content flex-equal">
-                                    <p>Sản phẩm thực tế hơi nhỏ hơn mình tưởng tượng chút, nhưng mà cũng rất ưng ý,
-                                        Hôm khuya lướt web mới phát hiện có chương trình săn mã giảm 30%, thể là
-                                        mình canh giật ngay mã giảm và hốt được 1 em mặt dây rất cưng</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pagination-comment">
-                            <ul class="pagination justify-content-center gap-2">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -592,164 +569,55 @@
                     <h2 class="fs-4 fw-normal">Sản phẩm tương tự</h2>
                 </div>
                 <div class="body-swiper px-5 position-relative">
-                    <div class="swiper myProducts pb-2">
+                    <div class="swiper ProductRelated pb-2">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                    <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="">
-                                    <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                            TPXMW000045</a>
-                                    </h5>
-                                    <p class="card-text product-price">6.801.000đ</p>
-                                    <div
-                                        class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                            </span>
-                                            <span>5</span>
+                            @foreach ($relatedProducts as $product)
+                                <div class="swiper-slide card">
+                                    <a href="{{ route('client.product', $product->id) }}">
+                                        <div class="card-img position-relative">
+                                            <img src="{{ Storage::url($product->product_image) }}" class="card-img-top"
+                                                alt="" />
+                                            <img src="{{ asset('frontend/image/new-icon-3-w29.svg') }}"
+                                                class="img-sub-new" alt="" />
+                                            <img class="img-sub-fast"
+                                                src="{{ asset('frontend/image/PNJfast-Giaotrong3h.svg') }}"
+                                                alt="" />
+                                            <img class="img-sub-icon"
+                                                src="{{ asset('frontend/image/icon-tragop-2.svg') }}" alt="" />
                                         </div>
-                                        <div class="item-order">
-                                            <span>200+ đã bán</span>
+                                        <div class="card-body p-2">
+                                            <h5 class="card-title">
+                                                <a
+                                                    href="{{ route('client.product', $product->id) }}">{{ $product->product_name }}</a>
+                                            </h5>
+                                            <div
+                                                class="card-text product-price mb-2 d-flex align-items-center justify-content-center gap-2">
+                                                @if ($product->sale_price != $product->sale_price)
+                                                    <span
+                                                        class="original-price text-decoration-line-through fst-italic">{{ formatPrice($product->original_price) }}</span>
+                                                    <span
+                                                        class="sale-price">{{ formatPrice($product->sale_price) }}</span>
+                                                @else
+                                                    <span
+                                                        class="sale-price">{{ formatPrice($product->sale_price) }}</span>
+                                                @endif
+                                            </div>
+                                            <div
+                                                class="product-order-and-rating d-flex align-items-center justify-content-between">
+                                                <div class="item-rating">
+                                                    <span>
+                                                        <i class="fa-solid fa-star text-warning"></i>
+                                                    </span>
+                                                    <span>5</span>
+                                                </div>
+                                                <div class="item-order">
+                                                    <span>200+ đã bán</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                    <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="">
-                                    <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                            TPXMW000045</a>
-                                    </h5>
-                                    <p class="card-text product-price">6.801.000đ</p>
-                                    <div
-                                        class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                            </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div class="item-order">
-                                            <span>200+ đã bán</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                    <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="">
-                                    <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                            TPXMW000045</a>
-                                    </h5>
-                                    <p class="card-text product-price">6.801.000đ</p>
-                                    <div
-                                        class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                            </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div class="item-order">
-                                            <span>200+ đã bán</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                    <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="">
-                                    <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                            TPXMW000045</a>
-                                    </h5>
-                                    <p class="card-text product-price">6.801.000đ</p>
-                                    <div
-                                        class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                            </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div class="item-order">
-                                            <span>200+ đã bán</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                    <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="">
-                                    <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                            TPXMW000045</a>
-                                    </h5>
-                                    <p class="card-text product-price">6.801.000đ</p>
-                                    <div
-                                        class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                            </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div class="item-order">
-                                            <span>200+ đã bán</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide card">
-                                <div class="card-img position-relative">
-                                    <img src="./image/products/pro1.png" class="card-img-top" alt="" />
-                                    <img class="img-sub-fast" src="./image/PNJfast-Giaotrong3h.svg" alt="">
-                                    <img class="img-sub-icon" src="./image/icon-tragop-2.svg" alt="">
-                                </div>
-                                <div class="card-body p-2">
-                                    <h5 class="card-title">
-                                        <a href="#">Bông tai Vàng trắng 14K đính đá Topaz PNJ
-                                            TPXMW000045</a>
-                                    </h5>
-                                    <p class="card-text product-price">6.801.000đ</p>
-                                    <div
-                                        class="product-order-and-rating d-flex align-items-center justify-content-between">
-                                        <div class="item-rating">
-                                            <span>
-                                                <i class="fa-solid fa-star text-warning"></i>
-                                            </span>
-                                            <span>5</span>
-                                        </div>
-                                        <div class="item-order">
-                                            <span>200+ đã bán</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <!-- Navigation buttons -->

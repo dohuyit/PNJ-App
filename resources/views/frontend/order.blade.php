@@ -246,8 +246,8 @@
                                 <div id="voucherMessage" class="mb-2"></div>
 
                                 <div class="mt-2 input-group">
-                                    <input type="text" name="voucher_code" id="voucher_code" class="form-control"
-                                        placeholder="Nhập mã giảm giá...">
+                                    <input type="text" name="voucher_code" id="voucher_code"
+                                        class="form-control shadow-none" placeholder="Nhập mã giảm giá...">
                                     <button type="button" id="applyVoucherBtn" class="btn btn-primary">Sử dụng</button>
                                 </div>
 
@@ -269,16 +269,15 @@
                                                         <span>Nhập mã </span>
                                                         <strong>
                                                             <span>
-                                                                <span>TOKYO60</span>
+                                                                <span></span>
                                                             </span>
                                                         </strong>
                                                     </div>
                                                     <div class="voucher-item-des">
-                                                        <span>Cho đơn hàng từ 199,000đ</span>
+                                                        <span></span>
                                                     </div>
                                                     <div class="voucher-item-date">
-                                                        <span class="expire fw-bold">Hết hạn:
-                                                            15/03/2025
+                                                        <span class="expire fw-bold">
                                                         </span>
                                                     </div>
                                                 </div>

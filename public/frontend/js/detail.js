@@ -21,3 +21,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+// Raiting component
+
+document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll(".radio-star");
+
+    stars.forEach((star) => {
+        star.addEventListener("change", function () {
+            const value = this.value;
+
+            // Xóa tất cả các class active trước
+            document.querySelectorAll(".label-star").forEach((label) => {
+                label.style.color = "#666";
+            });
+
+            // Đánh dấu tất cả các sao từ vị trí chọn về bên trái
+            for (let i = 1; i <= value; i++) {
+                document.querySelector(`label[for="star${i}"]`).style.color =
+                    "#ffa723";
+            }
+        });
+    });
+});

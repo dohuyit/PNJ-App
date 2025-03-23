@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Collection;
+use App\Models\Comment;
 use App\Models\CustomerVoucher;
 use App\Models\District;
 use App\Models\JewelryLine;
@@ -22,6 +23,7 @@ use App\Models\User;
 use App\Models\Variant;
 use App\Models\Ward;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -41,7 +43,7 @@ class DetailController extends Controller
         ];
     }
 
-    public function show($id)
+    public function showDetailProduct($id)
     {
         $navbarData = $this->showDataNavbar();
 
@@ -49,13 +51,26 @@ class DetailController extends Controller
             $query->where('name', 'Size');
         })->pluck('id');
 
+
+
+        $listComments = Comment::with('users')
+            ->where('user_id', $id)
+            ->where('status_comment', 0)
+            ->get();
+
+        // dd($listComments);
+
         $dataDetail = Product::with([
             'variants' => function ($query) use ($variantIds) {
                 $query->whereIn('id', $variantIds)->with('attribute');
             },
         ])->find($id);
 
-        // dd($dataDetail->variants);
+        $relatedProducts = Product::where('product_type_id', $dataDetail->product_type_id)
+            ->where('id', '!=', $dataDetail->id)
+            ->get();
+
+        // dd($relatedProducts);
 
         $albumImageProduct = ProductImage::query()->where('product_id', $id)->get();
         // dd($albumImageProduct);
@@ -64,7 +79,7 @@ class DetailController extends Controller
             abort(404);
         }
         // dd($dataDetail);
-        return view('frontend.detail', array_merge($navbarData, compact('dataDetail', 'albumImageProduct')));
+        return view('frontend.detail', array_merge($navbarData, compact('dataDetail', 'albumImageProduct', 'listComments', 'relatedProducts')));
     }
 
     public function profile($id)
@@ -217,5 +232,43 @@ class DetailController extends Controller
         });
 
         return view('frontend.detail-voucher', compact('validVouchers', 'usedVouchers', 'expiredVouchers'));
+    }
+
+    public function searchData(Request $request)
+    {
+
+        // dd($request->all());
+        $query = $request->input('input-search');
+        $navbarData = $this->showDataNavbar();
+
+        // Tìm kiếm trong tên sản phẩm hoặc mô tả sản phẩm
+        $products = Product::where('product_name', 'LIKE', "%$query%")
+            ->orWhere('description', 'LIKE', "%$query%")
+            ->get();
+
+        return view('frontend.detail-search', array_merge($navbarData, compact('products', 'query')));
+    }
+
+    public function commentProcess(Request $request)
+    {
+        // dd($request->all());
+        try {
+            DB::transaction(function () use ($request) {
+                $dataComments = [
+                    'product_id' => $request->product_id,
+                    'user_id' => Auth::user()->id,
+                    'content_comment' => $request->content,
+                    'rating' => $request->rate
+                ];
+
+                // dd($dataComments);
+
+                Comment::query()->create($dataComments);
+            });
+
+            return redirect()->route('client.product', Auth::user()->id)->with('success', 'bình luận sản phẩm đã được gửi!');
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
     }
 }

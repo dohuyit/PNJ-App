@@ -124,9 +124,10 @@
                 </div>
                 <!-- Search Bar -->
                 <div class="item-search d-flex align-items-center justify-content-center">
-                    <form class="d-flex align-items-center">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm..." />
-                        <button class="btn-search-mobile px-2">
+                    <form action="#" class="d-flex align-items-center" method="get">
+                        <input type="text" class="form-control" name="input-search"
+                            placeholder="Tìm kiếm sản phẩm..." />
+                        <button type="submit" class="btn-search-mobile px-2">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </form>
@@ -211,10 +212,11 @@
                     </ul>
                 </div>
                 <div class="col-md-4 p-0">
-                    <form class="d-flex align-items-center justify-content-end">
-                        <input type="text" name="" id="" class="form-control"
+                    <form action="{{ route('client.search') }}" class="d-flex align-items-center justify-content-end"
+                        method="GET">
+                        <input type="text" name="input-search" id="" class="form-control"
                             placeholder="Tìm kiếm..." />
-                        <button class="btn btn-light btn-search">
+                        <button type="submit" class="btn btn-light btn-search">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
                     </form>

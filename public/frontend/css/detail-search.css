@@ -24,8 +24,10 @@ body {
     /*text-price-old-card*/
     --text-card-secondary: #c48c46;
     /*text-price-card*/
-    --bg-card: linear-gradient(rgba(255, 251, 251, 0.945) 0%,
-            rgb(245, 245, 245) 100%);
+    --bg-card: linear-gradient(
+        rgba(255, 251, 251, 0.945) 0%,
+        rgb(245, 245, 245) 100%
+    );
     /* --bg-card: #221c1c; */
     --color-sale: #c92127;
 }
@@ -266,14 +268,13 @@ input {
     border-radius: 10px;
 }
 
-
 .filter-group h5 {
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 12px;
     text-transform: uppercase;
-    position: relative; 
-    padding-left: 15px; 
+    position: relative;
+    padding-left: 15px;
 }
 
 .filter-group h5::before {
@@ -283,9 +284,9 @@ input {
     top: 50%;
     transform: translateY(-50%);
     width: 3px;
-    height: 100% !important; 
-    background-color: var(--accent-color); 
-  }
+    height: 100% !important;
+    background-color: var(--accent-color);
+}
 
 .filter-item {
     margin-bottom: 8px;
@@ -352,6 +353,7 @@ input {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    overflow: hidden;
     color: var(--text-card-color) !important;
     line-height: 22px;
     font-weight: 300 !important;
@@ -393,7 +395,6 @@ input {
 }
 
 /* =========== END MAIN ========= */
-
 
 /** FOOTER **/
 
@@ -467,7 +468,6 @@ footer .certification img {
 }
 
 @media (max-width: 1199.98px) {
-
     /* 1. HEADER */
     .header-lg,
     .navbar-lg {
