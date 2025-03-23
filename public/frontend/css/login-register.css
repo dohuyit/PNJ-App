@@ -81,7 +81,7 @@ input {
   opacity: 10%;
 } */
 
-.wrapper {
+.wrapper-form {
     display: flex;
     justify-content: center;
     align-items: center;

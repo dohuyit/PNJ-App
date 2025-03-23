@@ -288,14 +288,23 @@ class OrderClientController extends Controller
             }
 
             if ($voucher->type == 2) {
+                $user = Session::get('client_auth');
                 $validUser = CustomerVoucher::where('voucher_id', $voucher->id)
-                    ->where('user_id', auth()->id())
-                    ->exists();
+                    ->where('user_id', $user->id)
+                    ->first();
 
                 if (!$validUser) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Mã giảm giá không hợp lệ cho tài khoản của bạn!'
+                    ]);
+                }
+
+                // Kiểm tra số lần sử dụng của user với voucher này
+                if ($validUser->uses >= $voucher->max_uses_user) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Bạn đã sử dụng hết số lần cho phép của mã giảm giá này!'
                     ]);
                 }
             }

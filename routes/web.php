@@ -103,6 +103,8 @@ Route::middleware('client')->group(function () {
         Route::get('orders/by-customer/{id}', [DetailController::class, 'listOrdersByCustomer'])->name('orders.byCustomer');
         Route::get('orders/details/{id}', [DetailController::class, 'detailOrdersByCustomer'])->name('orders.details');
         Route::get('/export-invoice/{orderId}', [OrderClientController::class, 'exportInvoice'])->name('order.export.invoice');
+
+        Route::get('voucher/getVoucherByUser/{id}', [DetailController::class, 'getVoucherByUser'])->name('voucher.getVoucher');
     });
 
 
@@ -132,11 +134,11 @@ Route::middleware('client')->group(function () {
     Route::post('/chatbot/send', [ChatbotController::class, 'sendMessage']);
 
     // Authentication client
-    Route::get('login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');
-    Route::get('register', [AuthClientController::class, 'showRegisterForm'])->name('client.register.form');
-    Route::post('login-process', [AuthClientController::class, 'login'])->name('client.login.process');
-    Route::post('register-process', [AuthClientController::class, 'register'])->name('client.register.process');
-    Route::get('logout', [AuthClientController::class, 'logout'])->name('client.logout.process');
+    Route::get('auth/login', [AuthClientController::class, 'showLoginForm'])->name('client.login.form');
+    Route::get('auth/register', [AuthClientController::class, 'showRegisterForm'])->name('client.register.form');
+    Route::post('auth/login-process', [AuthClientController::class, 'login'])->name('client.login.process');
+    Route::post('auth/register-process', [AuthClientController::class, 'register'])->name('client.register.process');
+    Route::get('auth/logout', [AuthClientController::class, 'logout'])->name('client.logout.process');
 
 
     Route::get('auth/google', [AuthSocialController::class, 'redirectToGoogle'])->name('auth.google');

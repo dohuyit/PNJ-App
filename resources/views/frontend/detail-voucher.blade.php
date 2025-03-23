@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Thông tin khách hàng')
+@section('title', 'Mã giảm giá của tôi')
 
 @section('content')
     <div class="container-fluid">
@@ -15,7 +15,7 @@
                                 <h2 class="fs-5 py-2">
                                     <span>Trang chủ</span>
                                     <span>/</span>
-                                    <span>Thông tin tài khoản</span>
+                                    <span>Mã giảm giá của tôi</span>
                                 </h2>
                             </div>
                         </div>
@@ -28,19 +28,19 @@
                                             <li class="nav-item" role="presentation">
                                                 <button class="nav-link active" id="available-tab" data-bs-toggle="pill"
                                                     data-bs-target="#available" type="button" role="tab">
-                                                    Có thể sử dụng (4)
+                                                    Có thể sử dụng ({{ $validVouchers->count() }})
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation">
                                                 <button class="nav-link" id="used-tab" data-bs-toggle="pill"
                                                     data-bs-target="#used" type="button" role="tab">
-                                                    Đã sử dụng (2)
+                                                    Đã sử dụng ({{ $usedVouchers->count() }})
                                                 </button>
                                             </li>
                                             <li class="nav-item" role="presentation">
                                                 <button class="nav-link" id="expired-tab" data-bs-toggle="pill"
                                                     data-bs-target="#expired" type="button" role="tab">
-                                                    Đã hết hạn (1)
+                                                    Đã hết hạn ({{ $expiredVouchers->count() }})
                                                 </button>
                                             </li>
                                         </ul>
@@ -49,190 +49,99 @@
                                             <!-- Vouchers available -->
                                             <div class="tab-pane fade show active" id="available" role="tabpanel">
                                                 <div class="row g-4">
-                                                    <!-- Voucher 1 -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center">
-                                                                        <h3 class="fw-bold mb-0">20%</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <span class="voucher-badge badge bg-success">Mới</span>
-                                                                    <h5 class="card-title">Giảm 20% cho trang sức vàng</h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>GOLD20MAR</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đơn tối thiểu:
-                                                                        <strong>5.000.000đ</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Hạn sử dụng:
-                                                                        <strong>31/03/2025</strong>
-                                                                    </p>
-                                                                    <button class="btn btn-sm btn-outline-dark mt-2">Sử
-                                                                        dụng ngay</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    @foreach ($validVouchers as $dataItem)
+                                                        <div class="col-md-6">
+                                                            <div class="voucher-card shadow-md">
+                                                                <div class="row g-0">
+                                                                    <div
+                                                                        class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
+                                                                        <div class="text-center">
+                                                                            <h3 class="fw-bold mb-0">
+                                                                                @if ($dataItem->voucher->is_fixed == 0)
+                                                                                    {{ intval($dataItem->voucher->discount_amount) }}%
+                                                                                @else
+                                                                                    {{ formatPrice($dataItem->voucher->discount_amount) }}
+                                                                                @endif
 
-                                                    <!-- Voucher 2 -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center">
-                                                                        <h3 class="fw-bold mb-0">500K</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
+                                                                            </h3>
+                                                                            <p class="mb-0">GIẢM GIÁ</p>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <h5 class="card-title">Giảm 500.000đ cho nhẫn cưới</h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>WEDDING500</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đơn tối thiểu:
-                                                                        <strong>10.000.000đ</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Hạn sử dụng:
-                                                                        <strong>15/04/2025</strong>
-                                                                    </p>
-                                                                    <button class="btn btn-sm btn-outline-dark mt-2">Sử
-                                                                        dụng ngay</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                    <div class="col-8 voucher-right p-3">
+                                                                        @if ($dataItem->voucher->created_at >= now()->subDays(1))
+                                                                            <span
+                                                                                class="voucher-badge badge bg-success">Mới</span>
+                                                                        @elseif ($dataItem->voucher->end_date <= now()->addDays(2) && $dataItem->voucher->end_date > now())
+                                                                            <span
+                                                                                class="voucher-badge badge bg-warning text-dark">Sắp
+                                                                                hết hạn</span>
+                                                                        @endif
 
-                                                    <!-- Voucher 3 -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center">
-                                                                        <h3 class="fw-bold mb-0">15%</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <span
-                                                                        class="voucher-badge badge bg-warning text-dark">Sắp
-                                                                        hết hạn</span>
-                                                                    <h5 class="card-title">Giảm 15% cho trang sức bạc</h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>SILVER15</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đơn tối thiểu:
-                                                                        <strong>1.000.000đ</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Hạn sử dụng:
-                                                                        <strong>20/03/2025</strong>
-                                                                    </p>
-                                                                    <button class="btn btn-sm btn-outline-dark mt-2">Sử
-                                                                        dụng ngay</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
-                                                    <!-- Voucher 4 -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center text-white">
-                                                                        <h3 class="fw-bold mb-0">10%</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
+                                                                        <h5 class="card-title mb-3">
+                                                                            {{ $dataItem->voucher->voucher_name }}
+                                                                        </h5>
+                                                                        <p class="card-text small mb-1">Mã:
+                                                                            <strong>{{ $dataItem->voucher->voucher_code }}</strong>
+                                                                        </p>
+                                                                        <p class="card-text small mb-1">Đơn tối thiểu:
+                                                                            <strong>{{ formatPrice($dataItem->voucher->min_order_value) }}</strong>
+                                                                        </p>
+                                                                        <p class="card-text small mb-1">Hạn sử dụng:
+                                                                            <strong>{{ \Carbon\Carbon::parse($dataItem->voucher->end_date)->format('d-m-Y') }}</strong>
+                                                                        </p>
+                                                                        <a href="{{ route('client.home') }}"
+                                                                            class="btn btn-sm btn-outline-dark mt-2">Sử
+                                                                            dụng ngay</a>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <h5 class="card-title">Giảm 10% cho trang sức kim cương
-                                                                    </h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>DIAMOND10</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đơn tối thiểu:
-                                                                        <strong>20.000.000đ</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Hạn sử dụng:
-                                                                        <strong>30/04/2025</strong>
-                                                                    </p>
-                                                                    <button class="btn btn-sm btn-outline-dark mt-2">Sử
-                                                                        dụng ngay</button>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
 
                                             <!-- Used Vouchers -->
                                             <div class="tab-pane fade" id="used" role="tabpanel">
                                                 <div class="row g-4">
-                                                    <!-- Used Voucher 1 -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center text-white">
-                                                                        <h3 class="fw-bold mb-0">30%</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <span class="voucher-badge badge bg-secondary">Đã sử
-                                                                        dụng</span>
-                                                                    <h5 class="card-title">Giảm 30% cho nhẫn bạc</h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>SILVER30</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đã sử dụng:
-                                                                        <strong>12/02/2025</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đơn hàng:
-                                                                        <strong>#35670</strong>
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    @foreach ($usedVouchers as $dataItem)
+                                                        <div class="col-md-6">
+                                                            <div class="voucher-card shadow-md">
+                                                                <div class="row g-0">
+                                                                    <div
+                                                                        class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
+                                                                        <div class="text-center">
+                                                                            <h3 class="fw-bold mb-0">
+                                                                                @if ($dataItem->voucher->is_fixed == 0)
+                                                                                    {{ intval($dataItem->voucher->discount_amount) }}%
+                                                                                @else
+                                                                                    {{ formatPrice($dataItem->voucher->discount_amount) }}
+                                                                                @endif
 
-                                                    <!-- Used Voucher 2 -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center text-white">
-                                                                        <h3 class="fw-bold mb-0">100K</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
+                                                                            </h3>
+                                                                            <p class="mb-0">GIẢM GIÁ</p>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <span class="voucher-badge badge bg-secondary">Đã sử
-                                                                        dụng</span>
-                                                                    <h5 class="card-title">Giảm 100.000đ không điều kiện
-                                                                    </h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>WELCOME100</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đã sử dụng:
-                                                                        <strong>01/03/2025</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Đơn hàng:
-                                                                        <strong>#36421</strong>
-                                                                    </p>
+                                                                    <div class="col-8 voucher-right p-3">
+                                                                        <span class="voucher-badge badge bg-secondary">Đã sử
+                                                                            dụng</span>
+                                                                        <h5 class="card-title mb-3">
+                                                                            {{ $dataItem->voucher->voucher_name }}
+                                                                        </h5>
+                                                                        <p class="card-text small mb-1">Mã:
+                                                                            <strong>{{ $dataItem->voucher->voucher_code }}</strong>
+                                                                        </p>
+                                                                        <p class="card-text small mb-1">Đơn tối thiểu:
+                                                                            <strong>{{ formatPrice($dataItem->voucher->min_order_value) }}</strong>
+                                                                        </p>
+                                                                        <p class="card-text small mb-1">Hạn sử dụng:
+                                                                            <strong>{{ \Carbon\Carbon::parse($dataItem->voucher->end_date)->format('d-m-Y') }}</strong>
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
 
@@ -240,31 +149,40 @@
                                             <div class="tab-pane fade" id="expired" role="tabpanel">
                                                 <div class="row g-4">
                                                     <!-- Expired Voucher -->
-                                                    <div class="col-md-6">
-                                                        <div class="voucher-card shadow-md expired">
-                                                            <div class="row g-0">
-                                                                <div
-                                                                    class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
-                                                                    <div class="text-center text-white">
-                                                                        <h3 class="fw-bold mb-0">25%</h3>
-                                                                        <p class="mb-0">GIẢM GIÁ</p>
+                                                    @foreach ($expiredVouchers as $dataItem)
+                                                        <div class="col-md-6">
+                                                            <div class="voucher-card shadow-md expired">
+                                                                <div class="row g-0">
+                                                                    <div
+                                                                        class="col-4 voucher-left p-3 d-flex align-items-center justify-content-center">
+                                                                        <div class="text-center text-white">
+                                                                            <h3 class="fw-bold mb-0">
+                                                                                @if ($dataItem->voucher->is_fixed == 0)
+                                                                                    {{ intval($dataItem->voucher->discount_amount) }}%
+                                                                                @else
+                                                                                    {{ formatPrice($dataItem->voucher->discount_amount) }}
+                                                                                @endif
+
+                                                                            </h3>
+                                                                            <p class="mb-0">GIẢM GIÁ</p>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-8 voucher-right p-3">
-                                                                    <span class="voucher-badge badge bg-danger">Hết
-                                                                        hạn</span>
-                                                                    <h5 class="card-title">Giảm 25% cho mua hàng ngày sinh
-                                                                        nhật</h5>
-                                                                    <p class="card-text small mb-1">Mã:
-                                                                        <strong>BIRTHDAY25</strong>
-                                                                    </p>
-                                                                    <p class="card-text small mb-1">Hết hạn:
-                                                                        <strong>01/03/2025</strong>
-                                                                    </p>
+                                                                    <div class="col-8 voucher-right p-3">
+                                                                        <span class="voucher-badge badge bg-danger">Hết
+                                                                            hạn</span>
+                                                                        <h5 class="card-title">
+                                                                            {{ $dataItem->voucher->voucher_name }}</h5>
+                                                                        <p class="card-text small mb-1">Mã:
+                                                                            <strong>{{ $dataItem->voucher->voucher_code }}</strong>
+                                                                        </p>
+                                                                        <p class="card-text small mb-1">Hết hạn:
+                                                                            <strong>{{ \Carbon\Carbon::parse($dataItem->voucher->end_date)->format('d-m-Y') }}</strong>
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
@@ -358,5 +276,5 @@
 @endsection
 
 @push('link')
-    <link rel="stylesheet" href="{{ asset('frontend/css/detail-order.css') }}" />
+    <link rel="stylesheet" href="{{ asset('frontend/css/detail-voucher.css') }}" />
 @endpush

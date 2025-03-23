@@ -482,7 +482,9 @@
 @endsection
 
 @push('link')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('frontend/css/chatbot.css') }}" />
 @endpush
 
 @push('script')

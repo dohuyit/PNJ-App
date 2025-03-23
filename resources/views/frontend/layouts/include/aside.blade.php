@@ -19,7 +19,8 @@
                 </li>
                 <hr>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('voucher.getVoucher', ['id' => session()->get('client_auth')->id]) }}"
+                        class="nav-link {{ request()->routeIs(['voucher.getVoucher']) ? 'active' : '' }}">
                         <i class="fa-solid fa-tag"></i>
                         <span class="ms-2">Mã giảm giá của tôi</span>
                     </a>
@@ -41,7 +42,7 @@
                 </li>
                 <hr>
                 <li class="nav-item logout">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('client.logout.process') }}" class="nav-link">
                         <i class="fas fa-sign-out-alt"></i>
                         <span class="ms-2">Đăng xuất</span>
                     </a>

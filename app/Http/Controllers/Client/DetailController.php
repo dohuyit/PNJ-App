@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Collection;
+use App\Models\CustomerVoucher;
 use App\Models\District;
 use App\Models\JewelryLine;
 use App\Models\Order;
@@ -16,6 +17,7 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductType;
+use App\Models\ProductVoucher;
 use App\Models\User;
 use App\Models\Variant;
 use App\Models\Ward;
@@ -144,7 +146,7 @@ class DetailController extends Controller
             'paymentMethod',
             'orderStatus'
         ])
-            ->where('user_id', $customer->id)->get();
+            ->where('user_id', $customer->id)->orderBy('id', 'desc')->get();
 
         return view('frontend.detail-order', compact('listOrders'));
     }
@@ -171,5 +173,49 @@ class DetailController extends Controller
         $orderStatuses = OrderStatus::limit(5)->get();
 
         return view('frontend.detail-info-order', compact('detailOrder', 'orderStatuses'));
+    }
+
+    public function getVoucherByUser($id)
+    {
+        // Lấy danh sách voucher của user
+        $listVouchers = CustomerVoucher::with('voucher')
+            ->where('user_id', $id)
+            ->get();
+
+        // dd($listVouchers);
+
+        // Voucher có thể sử dụng
+        $validVouchers = $listVouchers->filter(function ($customerVoucher) {
+            $voucher = $customerVoucher->voucher;
+
+            // dd($customerVoucher->uses);
+
+            return
+                $voucher->uses < $voucher->max_uses_user
+                && $voucher->end_date > now()
+                && $voucher->start_date <= now();
+        });
+
+        // dd($validVouchers);
+
+        // Voucher đã sử dụng hết
+        $usedVouchers = $listVouchers->filter(function ($customerVoucher) {
+            $voucher = $customerVoucher->voucher;
+
+            return ($voucher->uses >= $voucher->max_uses  // Voucher đã dùng hết tổng số lần
+                || ($voucher->max_uses_user && $voucher->uses >= $voucher->max_uses_user))  // Hoặc user đã dùng hết số lần cho phép
+                && $voucher->end_date > now()  // Chưa hết hạn
+                && $voucher->start_date <= now();  // Đã đến thời gian sử dụng
+        });
+
+        // dd($usedVouchers);
+
+        // Voucher đã hết hạn hoặc chưa đến hạn
+        $expiredVouchers = $listVouchers->filter(function ($customerVoucher) {
+            $voucher = $customerVoucher->voucher;
+            return $voucher->end_date <= now() || $voucher->start_date > now();
+        });
+
+        return view('frontend.detail-voucher', compact('validVouchers', 'usedVouchers', 'expiredVouchers'));
     }
 }

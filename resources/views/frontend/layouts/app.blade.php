@@ -20,39 +20,19 @@
 <body class="overflow-x-hidden">
     <div class="wrapper">
         @yield('content')
-        <x-chatbot />
     </div>
+
+    @if (Request::is('/'))
+        <x-chatbot />
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        @if (session('success'))
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 1800
-            });
-        @elseif (session('error'))
-            // Swal.fire({
-            //     position: "center",
-            //     icon: "error",
-            //     title: "{{ session('error') }}",
-            //     showConfirmButton: false,
-            //     timer: 1800
-            // });
-
-            Swal.fire({
-                icon: "error",
-                title: "Lỗi...",
-                text: "{{ session('error') }}",
-            });
-        @endif
-    </script>
+    <x-alert />
 
     @stack('script')
 </body>

@@ -123,9 +123,17 @@
             </div>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <img src="" class="img-circle mr-2" alt="User Image" style="width: 30px; height: 30px" />
-                <span class="text-dark">Xin chào,Đỗ Huy </span>
+            <a class="nav-link" data-toggle="dropdown" href="#" class="d-flex align-items-cneter">
+                @php
+                    $user = session()->get('admin_auth');
+                    $avatar =
+                        $user && $user->avatar
+                            ? Storage::url($user->avatar)
+                            : asset('frontend/image/avatar-default.jpg');
+                @endphp
+                <img src="{{ $avatar }}" class="img-circle mr-2" alt="User Image" width="30"
+                    height="30" />
+                <span class="text-dark">Xin chào, {{ $user->username ?? 'Khách' }}</span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-right mt-2" style="width: 200px">
