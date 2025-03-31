@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\District>
  */
-class CategoryFactory extends Factory
+class DistrictFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +18,8 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->words(2, true),
-            'description' => fake()->paragraph(2),
-            'is_active' => fake()->boolean(80),
+            'name' => fake()->streetName,
+            'city_id' => City::factory(),
         ];
     }
 }

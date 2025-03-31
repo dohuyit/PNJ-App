@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CollectionController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\JewelryLineController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
@@ -58,6 +59,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('order', OrderController::class);
         Route::resource('voucher', VoucherController::class);
         Route::resource('banner', BannerController::class);
+        Route::resource('comment', CommentController::class);
 
         Route::get('/get-product-types/{categoryId}', [ProductController::class, 'getProductTypes']);
 
@@ -126,6 +128,9 @@ Route::middleware('client')->group(function () {
     // VNPAY Payment
     Route::get('/order/vnpay/return', [OrderClientController::class, 'vnpayReturn'])->name('client.order.vnpay');
 
+    // MOMO Payment
+    Route::get('/order/momo/return', [OrderClientController::class, 'momoReturn'])->name('client.order.momo');
+
     Route::post('/order/apply-voucher', [OrderClientController::class, 'applyVoucher'])->name('order.apply.voucher');
     Route::post('/order/remove-voucher', [OrderClientController::class, 'removeVoucher'])->name('order.remove.voucher');
 
@@ -148,7 +153,4 @@ Route::middleware('client')->group(function () {
 
     Route::get('auth/facebook', [AuthSocialController::class, 'redirectToFacebook'])->name('auth.facebook');
     Route::get('auth/facebook/callback', [AuthSocialController::class, 'handleFacebookCallback']);
-
-    Route::get('auth/set-password', [AuthSocialController::class, 'showSetPasswordForm'])->name('password.set');
-    Route::post('auth/set-password/process', [AuthSocialController::class, 'processPassword'])->name('password.process');
 });

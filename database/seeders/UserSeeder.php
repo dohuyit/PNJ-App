@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,11 +14,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = \Faker\Factory::create();
-        $arrRoleIds = DB::table("roles")->pluck("id");
-        $list = [];
-
-        $row = [
+        // Thêm bản ghi đầu tiên (admin)
+        User::create([
             'username' => 'admin',
             'password' => bcrypt('123456'),
             'gender' => 0,
@@ -28,35 +26,14 @@ class UserSeeder extends Seeder
             'remember_token' => '',
             'activate_code' => '',
             'role_id' => 1,
-            'city_id' => NULL,
-            'district_id' => NULL,
-            'ward_id' => NULL,
+            'city_id' => null,
+            'district_id' => null,
+            'ward_id' => null,
             'status' => 0,
-            'created_at' => date('Y-m-d H:i:s'),
-        ];
-        array_push($list, $row);
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
-        for ($i = 0; $i < 10; $i++) {
-            $row = [
-                'username' => $faker->word(),
-                'password' => bcrypt('123456'),
-                'gender' => $faker->randomElement([0, 1]),
-                'email' => $faker->email(),
-                'birthday' => $faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
-                'avatar' => 'Stores/Avatar/avatar-df.jpg',
-                'phone' => $faker->phoneNumber(),
-                'remember_token' => '',
-                'activate_code' => $faker->uuid(),
-                'role_id' => $faker->randomElement($arrRoleIds),
-                'city_id' => NULL,
-                'district_id' => NULL,
-                'ward_id' => NULL,
-                'status' => 0,
-                'created_at' => date('Y-m-d H:i:s'),
-            ];
-            array_push($list, $row);
-        }
-
-        DB::table("users")->insert($list);
+        User::factory(10)->create();
     }
 }

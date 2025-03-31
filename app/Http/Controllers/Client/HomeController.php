@@ -19,7 +19,7 @@ class HomeController extends Controller
     private function showDataNavbar()
     {
         return [
-            'categories' => Category::pluck('name', 'id'),
+            'categories' => Category::query()->take(5)->pluck('name', 'id'),
             'productTypes' => ProductType::where('category_id', 1)->pluck('name', 'id'),
             'jewelryLines' => JewelryLine::where('is_wedding', 1)->pluck('name', 'id'),
             'collections' => Collection::where('is_wedding_collection', 1)->pluck('name', 'id'),

@@ -200,8 +200,8 @@
                                             </div>
                                         </li>
                                         <li class="submenu-banner">
-                                            <a href="{{ $subBanner->link }}">
-                                                <img src="{{ Storage::url($subBanner->banner_image) }}"
+                                            <a href="{{ $subBanner->link ?? '#' }}">
+                                                <img src="{{ Storage::url($subBanner->banner_image) ?? '' }}"
                                                     alt="" />
                                             </a>
                                         </li>

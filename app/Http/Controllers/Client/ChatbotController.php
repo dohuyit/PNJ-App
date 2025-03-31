@@ -18,7 +18,6 @@ class ChatbotController extends Controller
     {
         $userMessage = $request->input('message');
 
-        // Lấy dữ liệu sản phẩm từ database
         $products = Product::all()->toArray();
         $productsJson = json_encode($products, JSON_PRETTY_PRINT);
 

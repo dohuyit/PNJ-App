@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
+use App\Models\ShopImport;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class ShopImportDetailFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'import_id' => ShopImport::factory(),
+            'product_id' => Product::factory(),
+            'quantity' => $this->faker->numberBetween(1, 100),
+            'unit_price' => $this->faker->randomFloat(2, 5, 500),
         ];
     }
 }

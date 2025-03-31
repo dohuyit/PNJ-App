@@ -84,10 +84,8 @@ class CartClientController extends Controller
 
     public function showCart()
     {
-
         $user = session('client_auth');
 
-        // dd($user);
         if (!$user) {
             return redirect()->route('client.login.form');
         }
@@ -97,6 +95,7 @@ class CartClientController extends Controller
             return view('frontend.cart', ['dataCarts' => []]);
         }
 
+        // Lấy dữ liệu navbar
         $navbarData = $this->showDataNavbar();
 
         $dataCarts = CartItem::where('cart_id', $cart->id)
@@ -124,13 +123,16 @@ class CartClientController extends Controller
             })
             ->get();
 
-        $dataCategoryParentNav = Category::pluck('name', 'id');
-        $dataProductTypesNav = ProductType::where('category_id', 1)->pluck('name', 'id');
-        $dataJewelryLinesNav = JewelryLine::where('is_wedding', 1)->pluck('name', 'id');
-        $dataCollectionsNav = Collection::where('is_wedding_collection', 1)->pluck('name', 'id');
-        $dataBrandsNav = Brand::pluck('name', 'id');
+        // Gộp tất cả dữ liệu vào một mảng
+        $data = array_merge($navbarData, [
+            'dataCarts' => $dataCarts,
+            'attributes' => $attributes,
+            'selectedSizes' => $selectedSizes
+        ]);
 
-        return view('frontend.cart', array_merge($navbarData, compact('dataCarts', 'attributes', 'selectedSizes')));
+        // dd($data);
+
+        return view('frontend.cart', $data);
     }
 
     public function delete(Request $request)

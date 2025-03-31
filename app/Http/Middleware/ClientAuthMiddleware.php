@@ -19,7 +19,10 @@ class ClientAuthMiddleware
         if (Auth::check()) {
             $restrictedRoutes = ['client.login.form', 'client.register.form'];
 
-            // dd($request->route()->getName());
+            if (session('password_updated')) {
+                session()->forget('password_updated');
+                return $next($request);
+            }
 
             if (in_array($request->route()->getName(), $restrictedRoutes)) {
                 return redirect()->route('client.home')->with('error', 'Bạn đã đăng nhập, không thể truy cập trang này!');

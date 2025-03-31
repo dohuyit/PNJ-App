@@ -17,7 +17,10 @@ class ShopStoreFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'code' => 'CODE-' . uniqid(),
+            'name' => fake()->word(),
+            'description' => fake()->text(),
+            'image' => fake()->imageUrl(800, 400, 'wallpaper')
         ];
     }
 }

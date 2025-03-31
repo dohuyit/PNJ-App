@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -31,13 +32,9 @@ class AuthSocialController extends Controller
             } else {
                 return redirect()->route('client.login.form')->with('error', 'Đăng nhập thất bại');
             }
-            if (session()->has('set_password')) {
-                $idUser = Session::get('idNewUserByGoogle', null);
-                return view('frontend.auth.set-password', compact('idUser'));
-            }
             return redirect()->route('client.home')->with('success', 'Đăng nhập thành công');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            Log::error('Lỗi Google Auth: ' . $e->getMessage());
             return redirect()->route('client.login.form')->with('error', 'Lỗi đăng nhập Google.');
         }
     }
@@ -55,10 +52,6 @@ class AuthSocialController extends Controller
                 'google_id' => $googleInfo->getId(),
                 'password' => bcrypt(random_int(10000, 99999)),
             ]);
-            session([
-                'set_password' => true,
-                'idNewUserByGoogle' => $user->id
-            ]);
         }
         return $user;
     }
@@ -67,41 +60,5 @@ class AuthSocialController extends Controller
     public function redirectToFacebook()
     {
         return Socialite::driver('facebook')->redirect();
-    }
-
-    public function showSetPasswordForm()
-    {
-        // Nếu chưa đăng nhập hoặc không có session đặt mật khẩu thì quay về trang chủ
-        if (!Auth::check() || !session()->has('set_password')) {
-            return redirect()->route('client.home');
-        }
-
-        return view('frontend.auth.set-password');
-    }
-
-    public function processPassword(Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('client.login.form');
-        }
-
-        $request->validate([
-            'password' => 'required|min:6',
-            'confirm-password' => 'required|same:password',
-        ]);
-
-        $idUser = $request->input('id');
-
-        $updated = User::where('id', $idUser)->update([
-            'password' => bcrypt($request->input('password'))
-        ]);
-
-        Session::forget(['set_password', 'idNewUserByGoogle']);
-
-        if ($updated) {
-            return redirect()->route('client.login.form')->with('success', 'Mật khẩu đã được cập nhật thành công.');
-        } else {
-            return back()->with('error', 'Cập nhật mật khẩu thất bại. Vui lòng thử lại.');
-        }
     }
 }

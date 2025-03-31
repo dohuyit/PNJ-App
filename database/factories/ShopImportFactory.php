@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\ShopStore;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class ShopImportFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'store_id' => ShopStore::factory(),
+            'user_id' => User::factory(),
+            'import_date' => fake()->dateTime()
         ];
     }
 }

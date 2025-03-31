@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\AttributeGroup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class AttributeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'group_attribute_id' =>  AttributeGroup::factory(),
+            'name' => fake()->word(),
+            'is_wedding' => random_int(0, 1)
         ];
     }
 }

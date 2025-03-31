@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('name', 255);
             $table->string('email', 255);
-            $table->integer('phone');
+            $table->string('phone', 15);
             $table->date('date');
             $table->decimal('total_amount', 12, 2);
             $table->decimal('discount_amount', 12, 2)->nullable();

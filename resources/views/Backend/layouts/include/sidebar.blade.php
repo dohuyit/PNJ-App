@@ -1,21 +1,12 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-        <img src="{{ asset('backend/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
-    </a>
-
+<aside class="main-sidebar sidebar-light-primary elevation-3">
     <!-- Sidebar -->
     <div class="sidebar">
+
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="{{ asset('backend/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
-            </div>
-            <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
-            </div>
+        <div class=" mt-3 pb-3 mb-3 d-flex">
+            <a href="{{ route('index') }}" class="brand-link">
+                <img src="{{ asset('frontend/image/pnj.com.vn.png') }}" alt="PNJ Logo" class="w-75">
+            </a>
         </div>
 
         <!-- Sidebar Menu -->
@@ -196,6 +187,15 @@
                         <i class="fas fa-images"></i>
                         <p class="ml-2">
                             Quản lí banner
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item {{ request()->routeIs('comment.index') ? 'menu-open' : 'menu-close' }}">
+                    <a href="{{ route('comment.index') }}"
+                        class="nav-link {{ request()->routeIs('comment.index') ? 'active' : '' }}">
+                        <i class="fas fa-comments"></i>
+                        <p class="ml-2">
+                            Quản lí bình luận
                         </p>
                     </a>
                 </li>

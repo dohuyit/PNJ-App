@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -14,47 +15,9 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $listComments = Comment::all();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCommentRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCommentRequest $request, Comment $comment)
-    {
-        //
+        return view('backend.pages.comments.list', compact('listComments'));
     }
 
     /**
@@ -62,6 +25,14 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        try {
+            DB::transaction(function () use ($comment) {
+                $comment->delete();
+            });
+
+            return redirect()->route('comment.index')->with('success', 'Xóa bình luận thành công!');
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
     }
 }

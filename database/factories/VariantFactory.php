@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Attribute;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class VariantFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'product_id' => Product::factory(),
+            'attribute_id' => Attribute::factory(),
+            'price_variant' => $this->faker->randomFloat(2, 10, 100),
         ];
     }
 }

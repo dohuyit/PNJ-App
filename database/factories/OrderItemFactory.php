@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Order;
+use App\Models\Variant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,16 @@ class OrderItemFactory extends Factory
      */
     public function definition(): array
     {
+        $unitPrice = $this->faker->randomFloat(2, 10, 500);
+        $quantity = $this->faker->numberBetween(1, 10);
+        $totalPrice = $unitPrice * $quantity;
+
         return [
-            //
+            'order_id' => Order::factory(),
+            'variant_id' => Variant::factory(),
+            'unit_price' => $unitPrice,
+            'quantity' => $quantity,
+            'total_price' => $totalPrice,
         ];
     }
 }

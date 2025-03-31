@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('collections', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('image_thumbnail')->nullable();
             $table->text('description')->nullable();
             $table->string('banner_image')->nullable();

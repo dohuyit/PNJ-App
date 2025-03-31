@@ -17,7 +17,13 @@ class BrandFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->word(),
+            'image_thumbnail' => fake()->imageUrl(255, 255, 'jewelry'),
+            'banner_image' => fake()->imageUrl(800, 400, 'jewelry'),
+            'description' => fake()->text(),
+            'is_active' => fake()->boolean(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
