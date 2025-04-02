@@ -161,7 +161,7 @@ class DetailController extends Controller
             'paymentMethod',
             'orderStatus'
         ])
-            ->where('user_id', $customer->id)->orderBy('id', 'desc')->get();
+            ->where('user_id', $customer->id)->orderBy('id', 'desc')->paginate(3);
 
         return view('frontend.detail-order', compact('listOrders'));
     }

@@ -43,6 +43,7 @@ Route::prefix('admin')->group(function () {
     Route::get('login', [AuthAdminController::class, 'showLoginForm'])->name('admin.login.form');
     Route::post('login-process', [AuthAdminController::class, 'login'])->name('admin.login.process');
     Route::get('logout', [AuthAdminController::class, 'logout'])->name('admin.logout.process');
+    Route::get('logout/success', [AuthAdminController::class, 'viewLogout'])->name('admin.logout.success');
 
 
     Route::middleware('admin')->group(function () {
@@ -121,9 +122,10 @@ Route::middleware('client')->group(function () {
 
     //Order Page
 
-    Route::post('/order/checkout', [OrderClientController::class, 'checkOut'])->name('client.order.checkout');
+    Route::post('/order/checkout', [OrderClientController::class, 'checkout'])->name('client.order.checkout');
     Route::post('/order/order-process', [OrderClientController::class, 'orderProcess'])->name('client.order.process');
     Route::get('/order/order-success', [OrderClientController::class, 'showOrderSuccess'])->name('client.order.success');
+    Route::post('/order/destroy-order/{id}', [OrderClientController::class, 'destroyOrder'])->name('client.order.destroy-order');
 
     // VNPAY Payment
     Route::get('/order/vnpay/return', [OrderClientController::class, 'vnpayReturn'])->name('client.order.vnpay');

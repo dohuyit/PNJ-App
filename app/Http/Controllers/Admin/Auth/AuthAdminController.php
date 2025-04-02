@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AuthLoginRequest;
+use App\Http\Requests\Auth\AuthLoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,6 +37,11 @@ class AuthAdminController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('admin.login.form')->with('success', 'Đăng xuất thành công');
+        return redirect()->route('admin.logout.success')->with('success', 'Đăng xuất thành công');
+    }
+
+    public function viewLogout()
+    {
+        return view('backend.auth.logout');
     }
 }

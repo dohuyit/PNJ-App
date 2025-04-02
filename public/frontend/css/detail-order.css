@@ -24,8 +24,10 @@ body {
     /*text-price-old-card*/
     --text-card-secondary: #c48c46;
     /*text-price-card*/
-    --bg-card: linear-gradient(rgba(255, 251, 251, 0.945) 0%,
-            rgb(245, 245, 245) 100%);
+    --bg-card: linear-gradient(
+        rgba(255, 251, 251, 0.945) 0%,
+        rgb(245, 245, 245) 100%
+    );
     /* --bg-card: #221c1c; */
     --color-sale: #c92127;
 }
@@ -68,7 +70,6 @@ aside .sidebar .nav-link:hover {
     color: var(--bg-default) !important;
 }
 
-
 .sidebar .nav-link.active {
     background-color: var(--accent-color) !important;
     color: #fff;
@@ -83,7 +84,8 @@ aside .sidebar hr {
 
 .shadow-md {
     /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important; */
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px !important;
     /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important; */
 }
 
@@ -118,22 +120,84 @@ aside .sidebar hr {
     border-radius: 50px;
 }
 
-.badge.bg-warning {
-    background-color: #fff8e6 !important;
-    color: #ffc107 !important;
-    border: 1px solid #ffeeba;
+
+
+/* Hover effects */
+.badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Card styles for cancelled orders */
+.card.cancelled {
+    opacity: 0.8;
+    background-color: #fff5f5;
+}
+
+.card.cancelled .card-header {
+    background-color: #fff5f5 !important;
+}
+
+.card.cancelled .card-body {
+    background-color: #fff5f5;
+}
+
+/* Payment method badges */
+.badge.bg-danger,
+.badge.bg-info,
 .badge.bg-success {
-    background-color: #e6fff0 !important;
-    color: #28a745 !important;
-    border: 1px solid #c3e6cb;
+    margin-right: 0.5rem;
+}
+
+/* Order code style */
+.text-muted {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Date style */
+.text-end .text-muted {
+    font-size: 0.85rem;
+}
+
+/* Card hover effect */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Cancelled order specific styles */
+.card.cancelled:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.1);
+}
+
+.badge.bg-danger {
+    background-color: #f1c7c7 !important; /* Nền hồng nhạt */
+    color: #c70d0d !important; /* Màu chữ hồng đậm */
+    border: 1px solid #eb4d4d; /* Viền hồng nhẹ */
+}
+
+.badge.bg-pink {
+    background-color: #fde4ec !important; /* Nền hồng nhạt */
+    color: #d82d8b !important; /* Màu chữ hồng đậm */
+    border: 1px solid #f8aacb; /* Viền hồng nhẹ */
 }
 
 .badge.bg-info {
     background-color: #e6f7ff !important;
     color: #17a2b8 !important;
     border: 1px solid #bee5eb;
+}
+
+.badge.bg-success {
+    background-color: #b8eed5 !important;
+    color: #198754;
+    border: 1px solid #beebd6;
 }
 
 .product-img img {
@@ -205,7 +269,7 @@ aside .sidebar hr {
     align-items: center;
 }
 
-.page-link.active {
+.page-item.active .page-link {
     background-color: var(--accent-color) !important;
 }
 

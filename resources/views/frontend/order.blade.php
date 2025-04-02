@@ -4,7 +4,7 @@
 @section('content')
     <main id="main">
         <section id="main-order">
-            <form action="{{ route('client.order.process') }}" method="post">
+            <form action="{{ route('client.order.process') }}" method="POST">
                 @csrf
                 <div class="container my-5">
                     <div class="row">
@@ -30,16 +30,25 @@
                                         <label class="form-label">Họ và Tên</label>
                                         <input type="text" name="name" class="form-control" placeholder="Họ và tên *"
                                             value="{{ session('client_auth')->username }}" />
+                                        @error('name')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control" placeholder="Email"
                                             value="{{ session('client_auth')->email }}" />
+                                        @error('email')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
                                         <input type="text" name="phone" class="form-control"
                                             placeholder="Số điện thoại *" value="{{ session('client_auth')->phone }}" />
+                                        @error('phone')
+                                            <span class="text-danger mt-1">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ngày sinh</label>
@@ -100,6 +109,9 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('city_id')
+                                                <span class="text-danger mt-1">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Quận / Huyện</label>
@@ -111,6 +123,9 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('district_id')
+                                                <span class="text-danger mt-1">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Phường / Xã</label>
@@ -122,11 +137,17 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('ward_id')
+                                                <span class="text-danger mt-1">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Địa chỉ</label>
                                             <input type="text" class="form-control" placeholder="Địa chỉ"
                                                 name="address" />
+                                            @error('address')
+                                                <span class="text-danger mt-3">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label">Ghi chú</label>

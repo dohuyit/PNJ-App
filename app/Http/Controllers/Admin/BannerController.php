@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreBannerRequest;
+use App\Http\Requests\Admin\UpdateBannerRequest;
 use App\Models\Banner;
-use App\Http\Requests\StoreBannerRequest;
-use App\Http\Requests\UpdateBannerRequest;
 use App\Models\Brand;
 use App\Models\Collection;
 use App\Models\JewelryLine;
@@ -19,7 +19,7 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $listBanners = Banner::all();
+        $listBanners = Banner::query()->orderBy('position')->get();
         return view('backend.pages.banners.list', compact('listBanners'));
     }
 

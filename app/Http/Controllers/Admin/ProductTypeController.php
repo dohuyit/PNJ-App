@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreProductTypeRequest;
+use App\Http\Requests\Admin\UpdateProductTypeRequest;
 use App\Models\ProductType;
-use App\Http\Requests\StoreProductTypeRequest;
-use App\Http\Requests\UpdateProductTypeRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;

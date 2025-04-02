@@ -11,6 +11,7 @@ use App\Models\OrderStatus;
 use App\Models\PaymentMethod;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -34,28 +35,6 @@ class OrderController extends Controller
         return view('backend.pages.orders.list', compact('orderItemsData'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create() {}
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOrderRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order) {}
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Order $order)
     {
 
@@ -72,7 +51,7 @@ class OrderController extends Controller
         return view('backend.pages.orders.edit', compact('dataOrder', 'listStatus'));
     }
 
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(Request $request, Order $order)
     {
         try {
             DB::transaction(function () use ($order, $request) {

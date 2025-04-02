@@ -59,13 +59,27 @@
                                 <div class="order-list">
                                     @if ($listOrders && $listOrders->isNotEmpty())
                                         @foreach ($listOrders as $order)
-                                            <div class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden">
+                                            <div
+                                                class="card border-0 shadow-md mb-4 rounded-3 overflow-hidden {{ $order->status_id == 6 ? 'cancelled' : '' }}">
                                                 <div
                                                     class="card-header bg-white border-bottom d-flex justify-content-between align-items-center py-3">
                                                     <div>
                                                         <span class="text-muted me-3">{{ $order->order_code }}</span>
-                                                        <span
-                                                            class="badge bg-warning text-dark rounded-pill px-3">{{ $order->paymentMethod->name }}</span>
+                                                        @if ($order->paymentMethod->name == 'Thanh toán MOMO')
+                                                            <span
+                                                                class="badge bg-pink rounded-pill px-3">{{ $order->paymentMethod->name }}</span>
+                                                        @elseif($order->paymentMethod->name == 'Thanh toán VNPAY')
+                                                            <span
+                                                                class="badge bg-info rounded-pill px-3">{{ $order->paymentMethod->name }}</span>
+                                                        @else
+                                                            <span
+                                                                class="badge bg-success rounded-pill px-3">{{ $order->paymentMethod->name }}</span>
+                                                        @endif
+
+                                                        @if ($order->status_id == 6)
+                                                            <span class="badge bg-danger rounded-pill px-3 ms-2">Đã
+                                                                hủy</span>
+                                                        @endif
                                                     </div>
                                                     <div class="text-end">
                                                         <span
@@ -114,10 +128,18 @@
                                                                 <i class="fas fa-info-circle"></i>
                                                                 <span class="ms-1">Chi tiết đơn hàng</span>
                                                             </a>
-                                                            <a href="#" class="btn btn-outline-danger btn-sm">
-                                                                <i class="fa-solid fa-ban"></i>
-                                                                <span class="ms-1">Hủy đơn hàng</span>
-                                                            </a>
+                                                            @if ($order->status_id == 1)
+                                                                <form
+                                                                    action="{{ route('client.order.destroy-order', $order->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <button type="submit"
+                                                                        class="btn btn-outline-danger btn-sm">
+                                                                        <i class="fa-solid fa-ban"></i>
+                                                                        <span class="ms-1">Hủy đơn hàng</span>
+                                                                    </button>
+                                                                </form>
+                                                            @endif
                                                         </div>
                                                         <div class="d-flex align-items-center gap-3">
                                                             <div>
@@ -135,23 +157,53 @@
                                     @endif
                                 </div>
 
-                                <div class="pagination-product mt-4">
-                                    <ul class="pagination justify-content-center gap-2">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                @if ($listOrders->hasPages())
+                                    <div class="pagination-product mt-4">
+                                        <ul class="pagination justify-content-center gap-2">
+                                            {{-- Nút Previous --}}
+                                            @if ($listOrders->onFirstPage())
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            @else
+                                                <li class="page-item">
+                                                    <a class="page-link" href="{{ $listOrders->previousPageUrl() }}"
+                                                        aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+
+                                            {{-- Các trang --}}
+                                            @foreach ($listOrders->links()->elements[0] as $page => $url)
+                                                <li
+                                                    class="page-item {{ $listOrders->currentPage() == $page ? 'active' : '' }}">
+                                                    <a class="page-link"
+                                                        href="{{ $url }}">{{ $page }}</a>
+                                                </li>
+                                            @endforeach
+
+                                            {{-- Nút Next --}}
+                                            @if ($listOrders->hasMorePages())
+                                                <li class="page-item">
+                                                    <a class="page-link" href="{{ $listOrders->nextPageUrl() }}"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            @else
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                @endif
+
                             </div>
 
                             <!-- Thống kê đơn hàng -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\PaymentRequest;
 use App\Mail\OrderConfirmationMail;
 use App\Models\Banner;
 use App\Models\Brand;
@@ -75,8 +76,6 @@ class OrderClientController extends Controller
             return $item->variant->price_variant * $item->quantity;
         });
 
-        // Thêm Log để debug
-        Log::info('Setting total_price in session: ' . $subTotal);
 
         $cities = City::all();
         $districts = District::where('city_id', $user->city_id)->get();
@@ -109,13 +108,10 @@ class OrderClientController extends Controller
         return view('frontend.order-success', array_merge($navbarData));
     }
 
-    public function orderProcess(Request $request)
+    public function orderProcess(PaymentRequest $request)
     {
-
-        // dd($request->all());
+        dd($request->all());
         try {
-            // DB::beginTransaction();
-
             $user = Session::get('client_auth');
             if (!$user) {
                 return redirect()->route('client.login.form')
@@ -202,7 +198,9 @@ class OrderClientController extends Controller
 
             switch ($request->payment) {
                 case 1:
-                    return redirect()->route('client.order.success')->with('success', 'Đặt hàng thành công!');
+                    return redirect()->route('client.order.success', ['order_id' => $order->id])
+                        ->with('success', 'Đặt hàng thành công!');
+
                 case 2:
                     return $this->processVNPayPayment($order);
                     break;
@@ -223,6 +221,23 @@ class OrderClientController extends Controller
             );
             return redirect()->back()
                 ->with('error', 'Có lỗi xảy ra khi đặt hàng: ');
+        }
+    }
+
+    public function destroyOrder($id)
+    {
+        try {
+            $order = Order::findOrFail($id);
+
+            if ($order->status_id !== 1) {
+                return redirect()->back()->with('error', 'Không thể hủy đơn hàng này!');
+            }
+
+            $order->update(['status_id' => 6]);
+
+            return redirect()->back()->with('success', 'Đơn hàng đã được hủy thành công!');
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
         }
     }
 
@@ -425,9 +440,8 @@ class OrderClientController extends Controller
                         'transaction_code' => $request->vnp_TransactionNo
                     ]
                 );
-                // Session::put('order_success', true);
-                return redirect()->route('client.order.success', $order->id)
-                    ->with('success', 'Thanh toán thành công');
+                return redirect()->route('client.order.success', ['order_id' => $order->id])
+                    ->with('success', 'Đặt hàng thành công!');
             }
         } catch (\Throwable $e) {
             dd($e->getMessage());
@@ -509,12 +523,12 @@ class OrderClientController extends Controller
                 $order = Order::where('order_code', $request->orderId)->firstOrFail();
 
                 $order->update([
-                    'payment_status' => 2, 
-                    'transaction_code' => $request->transId 
+                    'payment_status' => 2,
+                    'transaction_code' => $request->transId
                 ]);
 
-                return redirect()->route('client.order.success', $order->id)
-                    ->with('success', 'Thanh toán thành công!');
+                return redirect()->route('client.order.success', ['order_id' => $order->id])
+                    ->with('success', 'Đặt hàng thành công!');
             }
         } catch (\Throwable $e) {
             dd($e->getMessage());

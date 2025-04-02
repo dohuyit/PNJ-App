@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: #2e9aff;
+    background-image: linear-gradient(
+        118deg,
+        #2e9aff 0%,
+        #5cc4f7 50%,
+        #86fffd 100%
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.wrapper-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.card-body {
+    background-color: #ffffff;
+    width: 400px;
+    padding: 3rem 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-body:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-body article {
+    margin-top: 2rem;
+}
+
+.card-body h3 {
+    color: #404f89;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.card-body p {
+    color: #6f7285;
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+}
+
+form {
+    width: 100%;
+}
+
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 1.2rem 0;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 1.6rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-submit i {
+    margin-right: 0.8rem;
+}
+
+.btn-submit:hover {
+    background-color: #43a047;
+    transform: scale(1.05);
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+.btn-home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    padding: 1rem 0;
+    width: 100%;
+    background-color: #f50057;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 1.6rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-home i {
+    margin-right: 0.8rem;
+}
+
+.btn-home:hover {
+    background-color: #d4004d;
+}
+
+.btn-home:active {
+    transform: scale(0.98);
+}

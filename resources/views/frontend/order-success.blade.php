@@ -20,7 +20,11 @@
                             <i class="fa-solid fa-house"></i>
                             <span class="ms-2">Quay Lại Trang Chủ</span>
                         </a>
-                        <a href="order-tracking.html" class="btn btn-outline-dark btn-custom ms-2">
+                        <?php
+                        $orderId = request()->query('order_id');
+                        ?>
+                        <a href="{{ route('orders.details', ['id' => $orderId]) }}"
+                            class="btn btn-outline-dark btn-custom ms-2">
                             <i class="fa-solid fa-truck"></i>
                             <span class="ms-2">Xem Đơn Hàng</span>
                         </a>
