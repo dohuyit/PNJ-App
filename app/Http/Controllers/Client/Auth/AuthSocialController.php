@@ -40,25 +40,60 @@ class AuthSocialController extends Controller
     }
 
     // Tạo hoặc lấy người dùng từ cơ sở dữ liệu
-    private function findOrCreateUser($googleInfo)
+    private function findOrCreateUser($googleInfo = null, $facebookInfo = null)
     {
-        $user = User::where('email', $googleInfo->email)->first();
-        // dd($user);
-        if (!$user) {
-            $user = User::create([
-                'username' => $googleInfo->getName(),
-                'email' => $googleInfo->getEmail(),
-                'role_id' => 2,
-                'google_id' => $googleInfo->getId(),
-                'password' => bcrypt(random_int(10000, 99999)),
-            ]);
+        if ($googleInfo) {
+            $user = User::where('email', $googleInfo->email)->first();
+            // dd($user);
+            if (!$user) {
+                $user = User::create([
+                    'username' => $googleInfo->getName(),
+                    'email' => $googleInfo->getEmail(),
+                    'role_id' => 2,
+                    'google_id' => $googleInfo->getId(),
+                    'password' => bcrypt(random_int(10000, 99999)),
+                ]);
+            }
+        } elseif ($facebookInfo) {
+            $user = User::where('email', $facebookInfo->email)->first();
+            // dd($user);
+            if (!$user) {
+                $user = User::create([
+                    'username' => $facebookInfo->getName(),
+                    'email' => $facebookInfo->getEmail(),
+                    'role_id' => 2,
+                    'facebook_id' => $facebookInfo->getId(),
+                    'password' => bcrypt(random_int(10000, 99999)),
+                ]);
+            }
         }
+
         return $user;
     }
+
 
 
     public function redirectToFacebook()
     {
         return Socialite::driver('facebook')->redirect();
+    }
+
+    public function handleFacebookCallback()
+    {
+        try {
+            $facebookUser = Socialite::driver('facebook')->user();
+            // dd($facebookUser);
+            $user = $this->findOrCreateUser(null, $facebookUser);
+            if ($user->role_id == 2) {
+                Auth::login($user);
+                Session::put('client_auth', Auth::user());
+            } else {
+                return redirect()->route('client.login.form')->with('error', 'Đăng nhập thất bại');
+            }
+            return redirect()->route('client.home')->with('success', 'Đăng nhập thành công');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()->route('client.login.form')->with('error', 'Lỗi đăng nhập Google.');
+        }
     }
 }

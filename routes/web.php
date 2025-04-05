@@ -46,6 +46,8 @@ Route::prefix('admin')->group(function () {
     Route::get('logout/success', [AuthAdminController::class, 'viewLogout'])->name('admin.logout.success');
 
 
+
+
     Route::middleware('admin')->group(function () {
         // Quản lí sản phẩm
         Route::resource('/', AdminController::class);
