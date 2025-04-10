@@ -35,6 +35,8 @@ Route::prefix('cart')->group(function () {
     Route::post('/update-size', [CartClientController::class, 'updateSize'])->name('client.cart.updateSize');
 });
 
+Route::get('/calculate-shipping-fee', [OrderClientController::class, 'calculateShippingFee']);
+
 // Route::middleware('client')->group(function () {
 //     Route::prefix('order')->group(function () {
 //         Route::post('/apply-voucher', [OrderClientController::class, 'applyVoucher'])->name('order.apply.voucher');
