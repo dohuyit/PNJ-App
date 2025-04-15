@@ -90,8 +90,10 @@
                     <!-- Đăng nhập bằng mã QR -->
                     <div id="qr-form" class="tab-pane fade">
                         <div class="text-center mt-4 mb-3">
+                            <!-- Vùng quét mã QR -->
+                            <div id="reader" style="width: 100%"></div>
                         </div>
-                        <p class="text-center">Quét mã QR để đăng nhập</p>
+                        <p class="text-center">Quét mã để đăng nhập</p>
                     </div>
                 </div>
             </div>
@@ -102,19 +104,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
 
-
-
     <script>
-        function onScanSuccess(qrCodeMessage) {
-            window.location.href = qrCodeMessage; // Chuyển hướng đến URL trong mã QR
+        // Hàm xử lý khi quét mã QR thành công
+        function onScanSuccess(decodedText, decodedResult) {
+            // Chuyển hướng đến URL với mã QR quét được
+            window.location.href = `/admin/login/barcode?token=${decodedText}`;
         }
 
+        // Khởi tạo và cấu hình Html5QrcodeScanner
         let html5QrcodeScanner = new Html5QrcodeScanner("reader", {
-            fps: 10,
-            qrbox: 250
+            fps: 10, // Tần suất quét
+            qrbox: 250 // Kích thước khung quét QR
         });
+
+        // Bắt đầu quét và khi quét thành công sẽ gọi hàm onScanSuccess
         html5QrcodeScanner.render(onScanSuccess);
     </script>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Password visibility toggle

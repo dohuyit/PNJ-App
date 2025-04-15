@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\AuthApiController;
+use App\Http\Controllers\Admin\Api\CategoryController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\CartClientController;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 // api banner
 Route::get('/banner/collections', [BannerController::class, 'getCollections']);
 Route::get('/banner/jewelry-lines', [BannerController::class, 'getJewelryLines']);
@@ -34,8 +37,6 @@ Route::prefix('cart')->group(function () {
     Route::post('/update-quantity', [CartClientController::class, 'updateQuantity'])->name('client.cart.updateQuantity');
     Route::post('/update-size', [CartClientController::class, 'updateSize'])->name('client.cart.updateSize');
 });
-
-Route::get('/calculate-shipping-fee', [OrderClientController::class, 'calculateShippingFee']);
 
 // Route::middleware('client')->group(function () {
 //     Route::prefix('order')->group(function () {

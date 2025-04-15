@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('remember_token')->nullable();
             $table->string('activate_code')->nullable();
+            $table->string('barcode_code')->nullable()->unique();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('city_id')->nullable(); // Thành phố
             $table->unsignedBigInteger('district_id')->nullable(); // Quận/Huyện

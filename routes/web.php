@@ -45,6 +45,9 @@ Route::prefix('admin')->group(function () {
     Route::get('logout', [AuthAdminController::class, 'logout'])->name('admin.logout.process');
     Route::get('logout/success', [AuthAdminController::class, 'viewLogout'])->name('admin.logout.success');
 
+    Route::get('login/barcode', [AuthAdminController::class, 'loginWithBarCode'])->name('admin.login.barcode');
+
+
 
 
 

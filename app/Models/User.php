@@ -26,6 +26,7 @@ class User extends Authenticatable
         'avatar',
         'phone',
         'address',
+        'barcode_code',
         'role_id',
         'city_id',
         'district_id',

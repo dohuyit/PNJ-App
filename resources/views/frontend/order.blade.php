@@ -340,7 +340,7 @@
                                 <div class="d-flex justify-content-between fw-bold">
                                     <p class="mb-0">TỔNG CỘNG</p>
                                     <p class="mb-0 text-secondary" id="finalPrice">
-                                        {{ formatPrice(Session::get('final_price', $subTotal)) }}
+                                        {{ formatPrice(Session::get('total_price', $subTotal)) }}
                                     </p>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100 mt-3">
@@ -362,52 +362,5 @@
 @endpush
 
 @push('script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const citySelect = document.getElementById('city');
-            const districtSelect = document.getElementById('district');
-            const shippingFeeDisplay = document.querySelector(
-                '.d-flex.justify-content-between.mt-2 p.mb-0.fw-bold.text-secondary');
-
-            function formatCurrency(amount) {
-                return amount.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                });
-            }
-
-            function updateShippingFee() {
-                const cityId = citySelect.value;
-                const districtId = districtSelect.value;
-
-                if (cityId && districtId) {
-                    fetch(`/api/calculate-shipping-fee?city_id=${cityId}&district_id=${districtId}`, {
-                            method: 'GET',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    'content'),
-                                'Accept': 'application/json'
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                shippingFeeDisplay.textContent = formatCurrency(data.shipping_fee);
-                            } else {
-                                shippingFeeDisplay.textContent = data.message ||
-                                    'Error calculating shipping fee';
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            shippingFeeDisplay.textContent = 'Error calculating shipping fee';
-                        });
-                }
-            }
-
-            citySelect.addEventListener('change', updateShippingFee);
-            districtSelect.addEventListener('change', updateShippingFee);
-        });
-    </script>
     <script src="{{ asset('frontend/js/order.js') }}"></script>
 @endpush

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreCategoryRequest extends FormRequest
 {
@@ -34,5 +36,17 @@ class StoreCategoryRequest extends FormRequest
             'banner_image.image' => 'File tải lên phải là hình ảnh.',
             'banner_image.mimes' => 'Hình ảnh phải có định dạng jpeg, png, jpg, gif.',
         ];
+    }
+
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'status' => false,
+                'message' => 'Dữ liệu không hợp lệ',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
     }
 }

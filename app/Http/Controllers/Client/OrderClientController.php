@@ -77,8 +77,8 @@ class OrderClientController extends Controller
             return $item->variant->price_variant * $item->quantity;
         });
 
-        $shippingFee = Session::get('shipping_fee', 0);
-        $finalTotal = $subTotal - $shippingFee ?? $subTotal;
+
+
 
         $cities = City::all();
         $districts = District::where('city_id', $user->city_id)->get();
@@ -89,7 +89,7 @@ class OrderClientController extends Controller
         Session::put([
             'selected_cart_items' => $selectedItemIds,
             'sessionCart' => $sessionCart,
-            'total_price' => $finalTotal
+            'total_price' => $subTotal
         ]);
 
         // Thêm Log để verify
@@ -113,6 +113,7 @@ class OrderClientController extends Controller
 
     public function orderProcess(PaymentRequest $request)
     {
+        // dd($request->all());
         try {
             $user = Session::get('client_auth');
             if (!$user) {
@@ -546,50 +547,5 @@ class OrderClientController extends Controller
         $pdf = PDF::loadView('backend.pages.orders.invoice', compact('order'));
 
         return $pdf->download('Hóa_Đơn_Mua_Hàng_PNJ_' . random_int(10000, 99999) . '.pdf');
-    }
-
-    public function calculateShippingFee(Request $request)
-    {
-        try {
-            $cityId = $request->input('city_id');
-            $districtId = $request->input('district_id');
-            $weight = $request->input('weight', 200); // Default weight in grams
-
-            $city = City::find($cityId);
-            $district = District::find($districtId);
-
-            if (!$city || !$district) {
-                return response()->json(['success' => false, 'message' => 'Invalid city or district']);
-            }
-
-            $token = '1M9aa6IBYSrFfVCgRRyRo3J16UhM0Tdz0jwjRee';
-
-            $response = Http::withHeaders([
-                'Token' => $token
-            ])->get('https://services.giaohangtietkiem.vn/services/shipment/fee', [
-                'pick_province' => 'Hà Nội',
-                'pick_district' => 'Quận Cầu Giấy',
-                'province'      => $city->name,
-                'district'      => $district->name,
-                'address'       => 'Example Address',
-                'weight'        => $weight,
-                'value'         => 100000,
-                'transport'     => 'road'
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $shippingFee = $data['fee']['ship_fee_only'] ?? null;
-
-                // Store the shipping fee in the session
-                Session::put('shipping_fee', $shippingFee);
-
-                return response()->json(['success' => true, 'shipping_fee' => $shippingFee]);
-            }
-
-            return response()->json(['success' => false, 'message' => 'Failed to calculate shipping fee']);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Server error: ' . $e->getMessage()], 500);
-        }
     }
 }

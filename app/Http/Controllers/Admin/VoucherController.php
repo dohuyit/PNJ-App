@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreVoucherRequest;
+use App\Http\Requests\Admin\UpdateVoucherRequest;
 use App\Models\Voucher;
-use App\Http\Requests\StoreVoucherRequest;
-use App\Http\Requests\UpdateVoucherRequest;
 use App\Models\CustomerVoucher;
 use App\Models\Product;
 use App\Models\ProductVoucher;

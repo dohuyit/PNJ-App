@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserAdminRequest;
+use App\Mail\AdminAccountCreatedMail;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Role;
@@ -13,7 +14,9 @@ use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 class UserController extends Controller
 {
@@ -22,7 +25,7 @@ class UserController extends Controller
      */
     public function indexAdminAccounts()
     {
-        $listAccountAdmin = User::where('role_id', '!=', 2)->get();
+        $listAccountAdmin = User::where('role_id', '!=', 2)->orderBy('id', 'desc')->get();
         $listRoleIsAdmin = Role::where('id', '!=', 2)->get();
 
         // dd($listRoleIsAdmin);
@@ -52,19 +55,40 @@ class UserController extends Controller
             DB::transaction(function () use ($request) {
                 $defaultPassword = ($request->role_id == 1) ? "adminpnj123" : "nvpnj456";
 
-                User::create([
+                $barcodeToken = bin2hex(random_bytes(8));
+
+                $user = User::create([
                     'username' => $request->username,
                     'email' => $request->email,
                     'password' => Hash::make($defaultPassword),
                     'role_id' => $request->role_id,
+                    'barcode_code' => $barcodeToken,
                 ]);
+
+                // ✅ Tạo ảnh barcode
+                $generator = new BarcodeGeneratorPNG();
+                $barcodeImage = $generator->getBarcode($barcodeToken, $generator::TYPE_CODE_128);
+
+                // ✅ Tên file và lưu vào storage
+                $barcodeFileName = 'barcodes/' . $barcodeToken . '.png';
+                Storage::disk('public')->put($barcodeFileName, $barcodeImage);
+
+                // ✅ Đường dẫn thực tế của ảnh
+                $barcodePath = Storage::disk('public')->path($barcodeFileName);
+
+                // ✅ Gửi email có đính kèm mã vạch
+                Mail::to($user->email)->send(new AdminAccountCreatedMail($user, $defaultPassword, $barcodePath));
             });
+
             return redirect()->back()->with('success', 'Tài khoản admin đã được thêm thành công.');
         } catch (\Throwable $e) {
             dd($e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại');
         }
     }
+
+
+
 
     public function updateAdminAccount(UpdateUserAdminRequest $request, string $id)
     {
@@ -156,14 +180,23 @@ class UserController extends Controller
     {
         try {
             $user = User::find($id);
+
+            // Kiểm tra nếu tài khoản là admin chính
             if ($user->role_id == 1) {
                 return redirect()->back()->with('error', 'Không thể xóa tài khoản admin chính');
             }
 
+            // Kiểm tra nếu tài khoản đang đăng nhập cố gắng xóa chính mình
+            if ($user->id == auth()->id()) {
+                return redirect()->back()->with('error', 'Không thể xóa tài khoản đang đăng nhập');
+            }
+
+            // Xóa avatar nếu có
             if ($user->avatar && Storage::exists($user->avatar)) {
                 Storage::delete($user->avatar);
             }
 
+            // Thực hiện xóa user trong transaction
             DB::transaction(function () use ($user) {
                 $user->delete();
             });
@@ -174,6 +207,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại');
         }
     }
+
 
     public function getDistricts($city_id)
     {

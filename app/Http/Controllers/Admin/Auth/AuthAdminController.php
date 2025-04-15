@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\AuthLoginRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -46,5 +47,20 @@ class AuthAdminController extends Controller
     public function viewLogout()
     {
         return view('backend.auth.logout');
+    }
+
+    public function loginWithBarCode(Request $request)
+    {
+        $token = $request->query('token');
+        // dd($token);
+        $user = User::where('barcode_code', $token)->first();
+        // dd($user);
+        if ($user) {
+            Auth::login($user);
+            $request->session()->put('admin_auth', Auth::user());
+            return redirect()->route("index")->with("success", "Đăng Nhập Thành Công!");
+        }
+
+        return redirect()->back()->with('error', 'Mã barcode không hợp lệ');
     }
 }
